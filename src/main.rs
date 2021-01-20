@@ -40,23 +40,29 @@ fn sort_types_fields(types:&HashMap<String, u32>, fields:&HashMap<String, u32>) 
   (ordered_types, ordered_fields)
 }
 
-fn register_Entry(entry:&Entry, types: &mut HashMap<String, u32>, fields: &mut HashMap<String, u32>){
+fn get_statistics(Entries:&Vec<Entry>) -> (HashMap<String, u32>, HashMap<String, u32> ){
+  let mut types: HashMap<String, u32> = HashMap::new();
+  let mut fields: HashMap<String, u32> = HashMap::new();
 
-  if types.contains_key(&entry.Type){
-    *types.get_mut(&entry.Type).unwrap() += 1;
-  }else{
-    types.insert(entry.Type.to_string(), 1);
-  }
-
-  for (field, _) in &entry.Fields_Values{
-    if fields.contains_key(field){
-      *fields.get_mut(field).unwrap() += 1;
+  for entry in Entries{
+    if types.contains_key(&entry.Type){
+      *types.get_mut(&entry.Type).unwrap() += 1;
     }else{
-      fields.insert(field.to_string(), 1);
+      types.insert(entry.Type.to_string(), 1);
+    }
+  
+    for (field, _) in &entry.Fields_Values{
+      if fields.contains_key(field){
+        *fields.get_mut(field).unwrap() += 1;
+      }else{
+        fields.insert(field.to_string(), 1);
+      }
     }
   }
+  (types, fields)
 }
 
+#[derive(PartialEq)]
 struct Entry {
   Type: String,
   Key: String,
@@ -117,7 +123,7 @@ fn read_bib(path:PathBuf, bib_lines:&mut Vec<String>){
 
 fn parse_file_field(original_value:&str) -> Vec<String>{
 
-  let vec:Vec<String> = original_value.split(';').map(|s| s.to_owned()).collect();
+  let vec:Vec<String> = original_value.split(";").map(|s| s.to_owned()).collect();
   let mut out:Vec<String> = vec![];
   for v in &vec{
     // v = &v.trim_end_matches(":PDF").trim_end_matches(":application/pdf").to_string();
@@ -127,10 +133,8 @@ fn parse_file_field(original_value:&str) -> Vec<String>{
   out
 }
 
-fn parse_bib(lines:&Vec<String> )->(Vec<Entry>, HashMap<String, u32>, HashMap<String, u32>){
+fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
   let mut Entries : Vec<Entry> = vec![];
-  let mut types: HashMap<String, u32> = HashMap::new();
-  let mut fields: HashMap<String, u32> = HashMap::new();
 
   let patterns : &[_] = &['{', '}','\t',',']; 
   let mut counter =0;
@@ -177,11 +181,10 @@ fn parse_bib(lines:&Vec<String> )->(Vec<Entry>, HashMap<String, u32>, HashMap<St
         }
         counter +=1
       }
-      register_Entry(Entries.last().unwrap(), &mut types, &mut fields);
     }
     counter +=1;
   }
-  (Entries, types, fields)
+  Entries
 }
 
 fn write_csv(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
@@ -196,11 +199,8 @@ fn write_csv(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
 
   write!(f,"\u{feff}"); // BOM, indicating uft8 for excel
 
-
-  
-
   // let fields_vec: Vec<> = ordered_fields.into_iter().map(|x| x).collect();
-  let top_row=String::from("type,key,") + (&ordered_fields.join(","));
+  let top_row=String::from("type,key,") + (&ordered_fields.join(",")) + ",file";
   writeln!(f, "{}", top_row).unwrap();
 
   for e in entries{
@@ -216,6 +216,7 @@ fn write_csv(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
         row.push(" ".to_string());
       }
     }
+    row.push(format!("\"{}\"",e.Files.join(",")));
     writeln!(f, "{}",row.join(",")).unwrap();
   }
 }
@@ -264,35 +265,35 @@ fn main() {
     read_bib(p, &mut bib_vec);
   }
 
-  let (Entries, types, fields) = parse_bib(&bib_vec);
+  let mut Entries = parse_bib(&bib_vec);
 
-  // let mut types_vec: Vec<_> = types.iter().collect();
-  // types_vec.sort_by(|a, b| a.1.cmp(b.1).reverse());
-  // for (key, value) in types_vec {
-  //   println!("{} {}", key, value);
-  // }
-
+  let (types, fields) = get_statistics(&Entries);
   let (ordered_types, ordered_fields) = sort_types_fields(&types, &fields);
 
+  remove_identical_Entries(& mut Entries);
 
-  // :Vec<String> = fields_vec.into_iter().map(|x| x.0).collect();
+  let (types, fields) = get_statistics(&Entries);
+  let (ordered_types, ordered_fields) = sort_types_fields(&types, &fields);
 
   write_bib("Complete.bib", &Entries);
   write_csv("Complete.csv", &Entries, &ordered_fields);
 }
 
+fn remove_identical_Entries(entries: & mut Vec<Entry>){
 
-// fn write_file(path: &str, content: &Vec<String>){
-//   let path = Path::new(path);
-//   let display = path.display();
+  let mut repeated: Vec<usize> = vec![];
+  for i in 0..entries.len(){
+    for j in i+1..entries.len(){
+      if entries[i] == entries[j] {
+        println!("{}", entries[i].Fields_Values["title"]);
+        println!("{}", entries[j].Fields_Values["title"]);
+        repeated.push(j);
+      }
+    }
+  }
 
-//   // Open a file in write-only mode, returns `io::Result<File>`
-//   let mut file = match File::create(&path) {
-//       Err(why) => panic!("couldn't create {}: {}", display, why),
-//       Ok(file) => file,
-//   };
-
-//   for line in content{
-//     writeln!(&mut file, "{}",line).unwrap();
-//   }
-// }
+  // let mut clean_entries:Vec<&Entry> = vec![];
+  for i in repeated{
+    entries.remove(i);
+  }
+}
