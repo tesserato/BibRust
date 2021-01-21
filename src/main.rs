@@ -7,7 +7,7 @@
 // let path_to_pdf = path::Path::new("biblatex.pdf");
 // let result = extract_text(path_to_pdf);
 
-use std::{hint::unreachable_unchecked, io, iter::{Map, Rev}, path::PathBuf, vec};
+use std::{char::ToLowercase, hint::unreachable_unchecked, io, iter::{Map, Rev}, path::PathBuf, vec};
 use std::io::BufReader;
 use std::fs::{self, DirEntry};
 use std::fs::File;
@@ -85,16 +85,33 @@ struct Entry {
   Files: Vec<String>,
   has_file:bool,
   Fields_Values: HashMap<String, String>,
+  Tags:Vec<String>,
+}
 
+fn Entry_to_String_bib(e: &Entry) -> String{
+
+  // type and key
+  let mut s = format!("@{}{{{},\n",e.Type, e.Key);
+  // authors
+  let mut t = e.Authors.iter().map(|x| format!("{} {}", x.first_name, x.last_name)).collect::<Vec<String>>().join(" and ");
+  s.push_str(&format!("author = {{{}}},\n", t));
+  // Fields & Values
+  t = e.Fields_Values.iter().map(|x| format!("{} = {{{}}},\n", x.0, x.1)).collect::<Vec<String>>().join("");
+  s.push_str(&t);
+
+
+  s.push_str("\n}");
+  s
 }
 
 fn create_Entry(Type:String, Key:String) -> Entry{
   Entry{
     Type:Type, 
     Key: Key,
-    Fields_Values: HashMap::new(),
     Authors: vec![],
+    Fields_Values: HashMap::new(),
     Files: vec![],
+    Tags: vec![],
     has_file:false
   }
 }
@@ -183,6 +200,12 @@ fn parse_author_field(original_value:&str) -> Vec<Author>{
   authors
 }
 
+fn parse_tags_field(original_value:&str) -> Vec<String>{
+  let mut tags: Vec<String> = 
+  original_value.replace(";", ",").split(",").map(|x| x.to_lowercase().trim().to_owned()).collect();
+  tags
+}
+
 fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
   let mut Entries : Vec<Entry> = vec![];
 
@@ -194,29 +217,34 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
       if vec.len() == 2 {
         let Type =vec[0].trim().trim_matches('@').to_lowercase();
         let Key =vec[1].trim().trim_matches(',');
-
         Entries.push(create_Entry(Type, Key.to_string())) ;
       }
       else{
-        println!("\n{}\n",lines[counter]);
+        println!("Problem: {}\n",lines[counter]);
       }
       counter +=1;
       while counter < lines.len() && lines[counter].trim() != "}"{
-
         let mut field_value=String::new();
-        while counter < lines.len() - 1 && !(lines[counter].trim().ends_with("}") && lines[counter+1].trim() == "}" ) && !lines[counter].trim().ends_with("},") {
+        while 
+        counter < lines.len() - 1 && 
+        !(lines[counter].trim().ends_with("}") && lines[counter+1].trim() == "}" ) && 
+        !lines[counter].trim().ends_with("},") 
+        {
           field_value.push_str(lines[counter].trim_matches('\n'));
           counter +=1;
         }
         field_value.push_str(lines[counter].trim_matches('\n'));
+        
         let vec: Vec<&str> = field_value.splitn(2,"=").collect();
         if vec.len() == 2 {
           let field:&str=&vec[0].trim().trim_matches(patterns).to_lowercase();
           let mut value=vec[1].trim().trim_matches(patterns);
+          let mut last_entry =Entries.last_mut().unwrap();
 
           match field {
-            "file" => Entries.last_mut().unwrap().Files = parse_file_field(value),
-            "author" => Entries.last_mut().unwrap().Authors = parse_author_field(value),
+            "file" => last_entry.Files = parse_file_field(value),
+            "author" => last_entry.Authors = parse_author_field(value),
+            "mendeley-tags" |"groups" | "keywords" => last_entry.Tags = parse_tags_field( value),
             _ => {
               if Entries.last().unwrap().Fields_Values.contains_key(field){
                 println!("Repeated entry at {}\n", field_value);
@@ -290,12 +318,7 @@ fn write_bib(path: &str, entries: & Vec<Entry>){
   };
 
   for e in entries{
-    writeln!(f, "@{}{{{},",e.Type, e.Key).unwrap();
-    for (field,value) in &e.Fields_Values{
-      writeln!(f, "{}={{{}}},",field, value).unwrap();
-    }
-    writeln!(f, "}}").unwrap();
-    writeln!(f, "").unwrap();
+    writeln!(f, "{}", Entry_to_String_bib(&e)).unwrap();
   }
 }
 
