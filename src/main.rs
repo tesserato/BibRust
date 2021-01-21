@@ -1,3 +1,4 @@
+
 use std::{hint::unreachable_unchecked, io, iter::{Map, Rev}, path::PathBuf, vec};
 use std::io::{BufReader};
 use std::fs::{self, DirEntry};
@@ -124,7 +125,8 @@ fn read_bib(path:PathBuf, bib_lines:&mut Vec<String>){
       inside_comment = true;
     }
     if !l.is_empty() && !inside_comment && !l.starts_with('%'){
-      bib_lines.push(l.to_string());
+
+      bib_lines.push(l.to_string().replace("“", "\"").replace("”", "\""));
     }
     if inside_comment && l.ends_with('}'){
       inside_comment = false;
@@ -201,7 +203,7 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
         field_value.push_str(lines[counter].trim_matches('\n'));
         let vec: Vec<&str> = field_value.splitn(2,"=").collect();
         if vec.len() == 2 {
-          let field=vec[0].trim().trim_matches(patterns);
+          let field:&str=&vec[0].trim().trim_matches(patterns).to_lowercase();
           let mut value=vec[1].trim().trim_matches(patterns);
 
           match field {
@@ -241,7 +243,7 @@ fn write_csv(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
   write!(f,"\u{feff}"); // BOM, indicating uft8 for excel
 
   // let fields_vec: Vec<> = ordered_fields.into_iter().map(|x| x).collect();
-  let top_row=String::from("file,type,key,author,") + (&ordered_fields.join(",")) + ",file";
+  let top_row=String::from("file?,type,key,author,") + (&ordered_fields.join(",")) + ",file";
   writeln!(f, "{}", top_row).unwrap();
 
   for e in entries{
@@ -257,7 +259,7 @@ fn write_csv(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
     for field in ordered_fields{
       if e.Fields_Values.contains_key(field){
         row.push(
-          format!("\"{}\"", e.Fields_Values[field].to_owned())
+          format!("\"{}\"", e.Fields_Values[field].to_owned().replace("\"", "\"\""))
         );
       }
       else{
@@ -298,6 +300,21 @@ fn paths_to_filenames(paths:&Vec<PathBuf>)->Vec<String>{
   filenames
 }
 
+fn write_raw_bib(path: &str, bib_vec : &Vec<String>){
+  let path = Path::new(path);
+  let display = path.display();
+
+  // Open a file in write-only mode, returns `io::Result<File>`
+  let mut f = match File::create(&path) {
+      Err(why) => panic!("couldn't create {}: {}", display, why),
+      Ok(file) => file,
+  };
+
+  for l in bib_vec{
+    writeln!(f, "{}",l).unwrap();
+  }
+}
+
 fn main() {
   let path="C:/Users/tesse/Desktop/Files/Dropbox/BIBrep/";
 
@@ -311,6 +328,7 @@ fn main() {
     println!("{:?}", p);
     read_bib(p, &mut bib_vec);
   }
+  write_raw_bib("Complete.txt", &mut bib_vec);
 
   let mut Entries = parse_bib(&bib_vec);
 
@@ -335,14 +353,25 @@ fn check_files(entries: & mut Vec<Entry>, doc_paths: & Vec<String>){
       if doc_paths.contains(&f){
         e.has_file = true;
       }
-      // else if e.Fields_Values.contains_key("author"){
-      //   let
-      // }
+      else if e.Authors.len()>0 && e.Fields_Values.contains_key("year") && e.Fields_Values.contains_key("title"){
+        let t = format!(
+          "{} {} - {}{}.pdf",
+          e.Fields_Values["year"],
+          e.Fields_Values["title"],
+          &e.Authors[0].last_name,
+          if e.Authors.len() > 1 { " et al" } else { "" }
+        );
+        // println!("{}", t);
+          if doc_paths.contains(&t){
+            e.has_file = true;
+            println!("{}", t);
+          }
+      }
     }
   }
 }
 
-fn remove_identical_Entries(entries: & mut Vec<Entry>){
+fn remove_identical_Entries(mut entries: & mut Vec<Entry>){
   // Remove identical entries
   let mut repeated: Vec<usize> = vec![];
   for i in 0..entries.len(){
@@ -353,8 +382,7 @@ fn remove_identical_Entries(entries: & mut Vec<Entry>){
         repeated.push(j);
       }
     }
-  }
-  
+  }  
   println!("Identical {}", &repeated.len());
 
   repeated.sort();
@@ -362,6 +390,7 @@ fn remove_identical_Entries(entries: & mut Vec<Entry>){
   for i in repeated{
     entries.remove(i);
   }
+
   // Remove entries were only key and/or type are different
   let mut repeated: Vec<usize> = vec![];
   for i in 0..entries.len(){
@@ -382,23 +411,91 @@ fn remove_identical_Entries(entries: & mut Vec<Entry>){
             }
           }
         }
-        // else {
-        //   let f1:HashSet<String> = entries[i].Fields_Values.iter().map(|x| x.0.to_owned()).collect();
-        //   let f2:HashSet<String> = entries[j].Fields_Values.iter().map(|x| x.0.to_owned()).collect();
-        //   let intersection:Vec<&String> = f1.intersection(&f2).to_owned().collect();
-        //   if intersection.len() == 0 {
-        //     println!("{}", entries[i].Fields_Values["title"]);
-        //     println!("{}", entries[j].Fields_Values["title"]);
-        //   }
-        // }
       }
     }
   }
+  println!("Differences in key and/or type {}", &repeated.len());
 
-  println!("Similar {}", &repeated.len());
   repeated.sort();
   repeated.reverse();
   for i in repeated{
     entries.remove(i);
   }
+  
+  remove_by_field( entries, "doi");// Check entries with same doi
+  remove_by_field( entries, "issn"); // Check entries with same issn
+  remove_by_field( entries, "isbn");// Check entries with same isbn
+  remove_by_field( entries, "url");// Check entries with same url
+  remove_by_field( entries, "shorttitle");// Check entries with same shorttitle
+  remove_by_field( entries, "pmid");// Check entries with same pmid
+  remove_by_field( entries, "abstract");// Check entries with same abstract
+  remove_by_field( entries, "eprint");// Check entries with same eprint
+  remove_by_field( entries, "arxivid");// Check entries with same arxivid
+
+
+
+
+  println!("");
+}
+
+fn remove_by_field(mut entries: & mut Vec<Entry>, field:&str){
+  // Check entries with same doi
+  let mut repeated: Vec<usize> = vec![];
+  for i in 0..entries.len(){
+    for j in i+1..entries.len(){
+      if 
+      entries[i].Fields_Values.contains_key(field) &&
+      entries[j].Fields_Values.contains_key(field) &&
+      entries[i].Fields_Values[field] == entries[j].Fields_Values[field]
+      {
+        let merged = merge(&mut entries, i, j);
+        if merged{
+          repeated.push(j);
+        }
+      }
+    }
+  }
+
+  println!("Same {}, compatible {}", field, &repeated.len());
+  repeated.sort();
+  repeated.reverse();
+  for i in repeated{
+    entries.remove(i);
+  }
+}
+
+fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
+  // let e1 = &mut entries[i];
+  // let e2 = &entries[j];
+  let f1:HashSet<String> = entries[i].Fields_Values.iter().map(|x| x.0.to_owned()).collect();
+  let f2:HashSet<String> = entries[j].Fields_Values.iter().map(|x| x.0.to_owned()).collect();
+  let intersection = f1.intersection(&f2).to_owned();
+  let common_fields:Vec<&String> = intersection.collect();
+  let mut eq = true;
+  for field in common_fields{
+    if entries[i].Fields_Values[field] != entries[j].Fields_Values[field]{
+      eq = false;
+      break;
+    }
+  }
+  if eq{
+    // println!("{}", entries[i].Fields_Values["title"]);
+    // println!("{}\n", entries[j].Fields_Values["title"]);
+    let mut files_to_add:Vec<String> = vec![];
+    for file in &entries[j].Files{
+      if !&entries[i].Files.contains(file){
+        files_to_add.push(file.to_string());
+      }
+    }
+    entries[i].Files.append(&mut files_to_add);
+
+
+    for field in f2.difference(&f1){
+      let value =entries[j].Fields_Values.get_mut(field).unwrap().to_string();
+      if let Some(x) = entries[i].Fields_Values.get_mut(field) {
+        *x = value;
+      }
+    }
+  }
+  eq
 }
