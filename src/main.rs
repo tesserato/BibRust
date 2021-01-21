@@ -1,6 +1,14 @@
+// extern crate pdf_extract;
+// extern crate lopdf;
+// use pdf_extract::*;
+// use lopdf::*;
+// use std::path;
+// use std::env;
+// let path_to_pdf = path::Path::new("biblatex.pdf");
+// let result = extract_text(path_to_pdf);
 
 use std::{hint::unreachable_unchecked, io, iter::{Map, Rev}, path::PathBuf, vec};
-use std::io::{BufReader};
+use std::io::BufReader;
 use std::fs::{self, DirEntry};
 use std::fs::File;
 use std::io::prelude::*;
@@ -316,10 +324,12 @@ fn write_raw_bib(path: &str, bib_vec : &Vec<String>){
 }
 
 fn main() {
-  let path="C:/Users/tesse/Desktop/Files/Dropbox/BIBrep/";
+  let path="bibs";
 
   let mut bib_paths= vec![];
   let mut doc_paths= vec![];
+  recursive_paths(path, &mut bib_paths, &mut doc_paths);
+  let path="C:/Users/tesse/Desktop/Files/Dropbox/BIBrep/";
   recursive_paths(path, &mut bib_paths, &mut doc_paths);
 
   
