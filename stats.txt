@@ -1,5 +1,5 @@
-Found a total of 1307 entries (776 with doi):
-article 798
+Found a total of 1305 entries (774 with doi, 56 with files, 480 whith url):
+article 796
 book 276
 inproceedings 77
 misc 54
@@ -13,29 +13,29 @@ thesis 5
 mvbook 4
 phdthesis 4
 software 1
-techreport 1
 reference 1
+techreport 1
 
 Fields:
-title 1307
-year 1138
-pages 1021
-abstract 1013
-doi 777
-volume 767
-issn 733
-journal 680
-number 639
+title 1305
+year 1137
+pages 1020
+abstract 1012
+doi 775
+volume 766
+issn 731
+journal 679
+number 638
 keywords 585
 publisher 525
-isbn 492
+isbn 491
 url 481
 booktitle 332
 shorttitle 215
-archiveprefix 175
-arxivid 175
-eprint 175
-pmid 139
+arxivid 174
+archiveprefix 174
+eprint 174
+pmid 138
 annote 137
 edition 132
 address 124
@@ -48,3 +48,4 @@ howpublished 15
 organization 7
 school 4
 translator 3
+qualityassured 1

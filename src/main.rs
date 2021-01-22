@@ -24,6 +24,8 @@ fn get_statistics(Entries:&Vec<Entry>) -> (Vec<String>,Vec<String>){
   let mut types: HashMap<String, u32> = HashMap::new();
   let mut fields: HashMap<String, u32> = HashMap::new();
   let mut has_doi:usize = 0;
+  let mut has_file:usize = 0;
+  let mut has_url:usize = 0;
 
   for entry in Entries{
     if types.contains_key(&entry.Type){
@@ -31,12 +33,17 @@ fn get_statistics(Entries:&Vec<Entry>) -> (Vec<String>,Vec<String>){
     }else{
       types.insert(entry.Type.to_string(), 1);
     }
+
+    if entry.has_file{
+      has_file += 1;
+    }
   
     for (field, _) in &entry.Fields_Values{
       if fields.contains_key(field){
         *fields.get_mut(field).unwrap() += 1;
         match field.as_ref() {
           "doi" => has_doi += 1,
+          "url" => has_url += 1,
           _ => continue ,
 
         }
@@ -53,7 +60,9 @@ fn get_statistics(Entries:&Vec<Entry>) -> (Vec<String>,Vec<String>){
     types_vec.push((t.to_string(), c));
   }  
 
-  println!("\nFound a total of {} entries ({} with doi):", Entries.len(), has_doi);
+  println!(
+    "\nFound a total of {} entries ({} with doi, {} with files, {} whith url):", 
+    Entries.len(), has_doi, has_file, has_url);
   let mut ordered_types:Vec<String> = Vec::new();
   types_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
   for (key, value) in types_vec {
