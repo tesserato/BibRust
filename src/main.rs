@@ -20,44 +20,10 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::str;
 
-
-fn sort_types_fields(types:&HashMap<String, u32>, fields:&HashMap<String, u32>) -> (Vec<String>,Vec<String>){
-  // let mut types_vec: Vec<(String, u32)>;
-  let mut types_vec: Vec<(String, u32)> = vec![];
-
-  for (t,c) in types{
-    types_vec.push((t.to_string(), *c));
-  }  
-
-  let mut ordered_types:Vec<String> = Vec::new();
-
-  types_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
-  for (key, value) in types_vec {
-    println!("{} {}", key, value);
-    ordered_types.push(key);
-  }
-
-  println!("");
-
-  let mut fields_vec: Vec<(String, u32)> = vec![];
-
-  for (t,c) in fields{
-    fields_vec.push((t.to_string(), *c));
-  }  
-
-  let mut ordered_fields:Vec<String> = Vec::new();
-
-  fields_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
-  for (key, value) in fields_vec {
-    println!("{} {}", key, value);
-    ordered_fields.push(key);
-  }
-  (ordered_types, ordered_fields)
-}
-
-fn get_statistics(Entries:&Vec<Entry>) -> (HashMap<String, u32>, HashMap<String, u32> ){
+fn get_statistics(Entries:&Vec<Entry>) -> (Vec<String>,Vec<String>){
   let mut types: HashMap<String, u32> = HashMap::new();
   let mut fields: HashMap<String, u32> = HashMap::new();
+  let mut has_doi:usize = 0;
 
   for entry in Entries{
     if types.contains_key(&entry.Type){
@@ -69,12 +35,48 @@ fn get_statistics(Entries:&Vec<Entry>) -> (HashMap<String, u32>, HashMap<String,
     for (field, _) in &entry.Fields_Values{
       if fields.contains_key(field){
         *fields.get_mut(field).unwrap() += 1;
+        match field.as_ref() {
+          "doi" => has_doi += 1,
+          _ => continue ,
+
+        }
       }else{
         fields.insert(field.to_string(), 1);
       }
     }
   }
-  (types, fields)
+  
+  // Sorting
+  let mut types_vec: Vec<(String, u32)> = vec![];
+
+  for (t,c) in types{
+    types_vec.push((t.to_string(), c));
+  }  
+
+  println!("\nFound a total of {} entries ({} with doi):", Entries.len(), has_doi);
+  let mut ordered_types:Vec<String> = Vec::new();
+  types_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
+  for (key, value) in types_vec {
+    println!("{} {}", key, value);
+    ordered_types.push(key);
+  }
+
+  println!("\nFields:");
+  let mut fields_vec: Vec<(String, u32)> = vec![];
+
+  for (t,c) in fields{
+    fields_vec.push((t.to_string(), c));
+  }  
+
+  let mut ordered_fields:Vec<String> = Vec::new();
+
+  fields_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
+  for (key, value) in fields_vec {
+    println!("{} {}", key, value);
+    ordered_fields.push(key);
+  }
+  println!("");
+  (ordered_types, ordered_fields)  
 }
 #[derive(PartialEq)]
 struct Author{
@@ -175,26 +177,6 @@ fn read_bib(path:PathBuf, bib_lines:&mut Vec<String>){
     }
   }
 }
-
-// fn parse_file_field(original_value:&str) -> Vec<String>{
-//   let vec:Vec<String> = original_value.split(";").map(|s| s.to_owned()).collect();
-//   let mut out:Vec<String> = vec![];
-//   for v in &vec{
-//     let clean = v
-//       .trim_end_matches(":PDF")
-//       .trim_end_matches(":pdf")
-//       .trim_end_matches(":application/pdf")
-//       .trim_matches(':')
-//       .replace("\\:", ":")
-//       .replace("\\", "/");
-//       println!("{}",clean);
-//       let path =Path::new(&clean);
-//     if path.exists(){
-//       out.push(path.as_os_str().to_str().unwrap().to_string());
-//     }
-//   }
-//   out
-// }
 
 fn parse_author_field(original_value:&str) -> Vec<Author>{
   let mut authors: Vec<Author> = vec![];
@@ -425,8 +407,8 @@ fn main() {
 
   check_files(&mut main_entries, &doc_paths);
 
-  let (types, fields) = get_statistics(&main_entries);
-  let (_, ordered_fields) = sort_types_fields(&types, &fields);
+  // let (types, fields) = get_statistics(&main_entries);
+  let (_, ordered_fields) = get_statistics(&main_entries);
 
   write_bib("Complete.bib", &main_entries);
   write_csv("Complete.csv", &main_entries, &ordered_fields);
@@ -498,7 +480,7 @@ fn remove_redundant_Entries(mut entries: & mut Vec<Entry>){
       }
     }
   }  
-  println!("Identical {}", &repeated.len());
+  println!("Removed {} Identical entries\n", &repeated.len());
   repeated.sort();
   repeated.reverse();
   for i in repeated{
@@ -610,6 +592,26 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
 }
 
 
+// fn parse_file_field(original_value:&str) -> Vec<String>{
+//   let vec:Vec<String> = original_value.split(";").map(|s| s.to_owned()).collect();
+//   let mut out:Vec<String> = vec![];
+//   for v in &vec{
+//     let clean = v
+//       .trim_end_matches(":PDF")
+//       .trim_end_matches(":pdf")
+//       .trim_end_matches(":application/pdf")
+//       .trim_matches(':')
+//       .replace("\\:", ":")
+//       .replace("\\", "/");
+//       println!("{}",clean);
+//       let path =Path::new(&clean);
+//     if path.exists(){
+//       out.push(path.as_os_str().to_str().unwrap().to_string());
+//     }
+//   }
+//   out
+// }
+
 // fn recursive_paths(path:&str, bib_paths:&mut Vec<PathBuf>, doc_paths:&mut Vec<PathBuf>){
 //   let exts=vec!["pdf","djvu,epub"];
 //   for entry in fs::read_dir(path).unwrap() {
@@ -639,4 +641,38 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
 //     // println!("{}", filenames.last().unwrap());
 //   }
 //   filenames
+// }
+
+// fn sort_types_fields(types:&HashMap<String, u32>, fields:&HashMap<String, u32>) -> (Vec<String>,Vec<String>){
+//   // let mut types_vec: Vec<(String, u32)>;
+//   let mut types_vec: Vec<(String, u32)> = vec![];
+
+//   for (t,c) in types{
+//     types_vec.push((t.to_string(), *c));
+//   }  
+
+//   let mut ordered_types:Vec<String> = Vec::new();
+
+//   types_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
+//   for (key, value) in types_vec {
+//     println!("{} {}", key, value);
+//     ordered_types.push(key);
+//   }
+
+//   println!("");
+
+//   let mut fields_vec: Vec<(String, u32)> = vec![];
+
+//   for (t,c) in fields{
+//     fields_vec.push((t.to_string(), *c));
+//   }  
+
+//   let mut ordered_fields:Vec<String> = Vec::new();
+
+//   fields_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
+//   for (key, value) in fields_vec {
+//     println!("{} {}", key, value);
+//     ordered_fields.push(key);
+//   }
+//   (ordered_types, ordered_fields)
 // }
