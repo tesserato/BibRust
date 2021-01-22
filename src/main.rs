@@ -1,3 +1,6 @@
+#![feature(str_split_once)]
+#![allow(non_snake_case)]
+
 // extern crate pdf_extract;
 // extern crate lopdf;
 // use pdf_extract::*;
@@ -15,6 +18,8 @@ use std::io::prelude::*;
 use std::path::Path;
 use std::collections::HashMap;
 use std::collections::HashSet;
+use std::str;
+
 
 fn sort_types_fields(types:&HashMap<String, u32>, fields:&HashMap<String, u32>) -> (Vec<String>,Vec<String>){
   // let mut types_vec: Vec<(String, u32)>;
@@ -88,19 +93,39 @@ struct Entry {
   Tags:Vec<String>,
 }
 
-fn Entry_to_String_bib(e: &Entry) -> String{
+fn Entry_to_String_bib(e: & Entry) -> String{
 
   // type and key
   let mut s = format!("@{}{{{},\n",e.Type, e.Key);
+  let mut t="".to_string();
+
   // authors
-  let mut t = e.Authors.iter().map(|x| format!("{} {}", x.first_name, x.last_name)).collect::<Vec<String>>().join(" and ");
-  s.push_str(&format!("author = {{{}}},\n", t));
+  if e.Authors.len() > 0 {
+    t = e.Authors.iter().map(|x| format!("{} {}", x.first_name, x.last_name)).collect::<Vec<String>>().join(" and ");
+    s.push_str(&format!("author = {{{}}},\n", t));
+  }
+
   // Fields & Values
-  t = e.Fields_Values.iter().map(|x| format!("{} = {{{}}},\n", x.0, x.1)).collect::<Vec<String>>().join("");
-  s.push_str(&t);
+  if e.Fields_Values.len() > 0 {
+    t = e.Fields_Values.iter().map(|x| format!("{} = {{{}}},\n", x.0, x.1)).collect::<Vec<String>>().join("");
+    s.push_str(&t);
+  }
 
+  //Files
+  if e.Files.len() > 0 {
+    t = e.Files.iter().map(|x| x.replace("\\", "/").replace(":", "\\:")).collect::<Vec<String>>().join(",");
+    s.push_str(&format!("file = {{{}}},\n", t));
+  }
 
-  s.push_str("\n}");
+  //Tags
+  if e.Tags.len() > 0 {
+    let mut tags = e.Tags.to_owned();
+    tags.sort();
+    t = tags.join(",");
+    s.push_str(&format!("keywords = {{{}}},\n", t));
+    s.push_str(&format!("mendeley-tags = {{{}}},\n", t));
+  }
+  s.push_str("}\n");
   s
 }
 
@@ -144,13 +169,17 @@ fn read_bib(path:PathBuf, bib_lines:&mut Vec<String>){
 
   let mut inside_comment=false;
   for line in file_buffer.lines(){
-    let l =line.unwrap();
+    let l = line.unwrap();
+
+    if std::str::from_utf8(l.as_bytes()).is_err(){
+      println!("utf8 error in {}", l);
+    }
+
     let l = l.trim();
     if l.to_lowercase().starts_with("@comment"){
       inside_comment = true;
     }
     if !l.is_empty() && !inside_comment && !l.starts_with('%'){
-
       bib_lines.push(l.to_string().replace("“", "\"").replace("”", "\""));
     }
     if inside_comment && l.ends_with('}'){
@@ -159,51 +188,76 @@ fn read_bib(path:PathBuf, bib_lines:&mut Vec<String>){
   }
 }
 
-fn parse_file_field(original_value:&str) -> Vec<String>{
-
-  let vec:Vec<String> = original_value.split(";").map(|s| s.to_owned()).collect();
-  let mut out:Vec<String> = vec![];
-  for v in &vec{
-    // v = &v.trim_end_matches(":PDF").trim_end_matches(":application/pdf").to_string();
-    let path = Path::new(&v.trim_end_matches(":PDF").trim_end_matches(":application/pdf").to_string()).to_owned();
-    out.push(path.file_name().unwrap().to_str().unwrap().to_string());
-  }
-  out
-}
+// fn parse_file_field(original_value:&str) -> Vec<String>{
+//   let vec:Vec<String> = original_value.split(";").map(|s| s.to_owned()).collect();
+//   let mut out:Vec<String> = vec![];
+//   for v in &vec{
+//     let clean = v
+//       .trim_end_matches(":PDF")
+//       .trim_end_matches(":pdf")
+//       .trim_end_matches(":application/pdf")
+//       .trim_matches(':')
+//       .replace("\\:", ":")
+//       .replace("\\", "/");
+//       println!("{}",clean);
+//       let path =Path::new(&clean);
+//     if path.exists(){
+//       out.push(path.as_os_str().to_str().unwrap().to_string());
+//     }
+//   }
+//   out
+// }
 
 fn parse_author_field(original_value:&str) -> Vec<Author>{
   let mut authors: Vec<Author> = vec![];
-  for fl in original_value.split("and"){
+  let patterns : &[_] = &['{', '}','\t',',',' '];
+  for fl in original_value.split("and").map(|x| x.trim()){
     if fl.contains(","){
-      let fl_vec: Vec<&str> = fl.split(",").collect();
-      if fl_vec.len() == 2 {
-        authors.push(Author{first_name:fl_vec[1].trim().to_string(), last_name:fl_vec[0].trim().to_string()})
-      }
-      else{
-        authors.push(Author{first_name:" ".to_string(), last_name:fl_vec[0].trim().to_string()})
-
-      }
+      let fl_vec = fl.rsplit_once(",").unwrap();
+      authors.push(Author{
+        first_name:fl_vec.1.trim().trim_matches(patterns).to_string(), 
+        last_name:fl_vec.0.trim().trim_matches(patterns).to_string()
+      })
     }
     else if fl.contains(" "){
-      let fl_vec: Vec<&str> = fl.split(" ").collect();
-      if fl_vec.len() == 2 {
-        authors.push(Author{first_name:fl_vec[0].trim().to_string(), last_name:fl_vec[1].trim().to_string()})
-      }
-      else{
-        authors.push(Author{first_name:" ".to_string(), last_name:fl_vec[0].trim().to_string()})
-      }
+      let fl_vec = fl.rsplit_once(" ").unwrap();
+      authors.push(Author{
+        first_name:fl_vec.0.trim().trim_matches(patterns).to_string(), 
+        last_name:fl_vec.1.trim().trim_matches(patterns).to_string()
+      })
     }
     else{
-      authors.push(Author{first_name:" ".to_string(), last_name:fl.trim().to_string()})
+      authors.push(Author{
+        first_name:"".to_string(), 
+      last_name:fl.trim().trim_matches(patterns).to_string()
+    })
     }
   }
   authors
 }
 
 fn parse_tags_field(original_value:&str) -> Vec<String>{
+  // let patterns : &[_] = &['{', '}','\t',',',' ',','];
   let mut tags: Vec<String> = 
-  original_value.replace(";", ",").split(",").map(|x| x.to_lowercase().trim().to_owned()).collect();
+    original_value
+      .replace(";", ",")
+      .split(",").map(|x| x.to_lowercase().trim_matches(|c:char| !c.is_alphabetic()).to_owned())
+      .filter(|s| !s.is_empty())
+      .collect();
   tags
+}
+
+fn parse_generic_field(original_value:&str) -> String{
+  let patterns : &[_] = &['\t',',',' '];
+  original_value
+  .trim()
+  .trim_matches(patterns)
+  .replace("{", "")
+  .replace("}", "")
+  // .replacen("{", "",1)
+  // .chars().rev().collect::<String>()
+  // .replacen("}", "",1)
+  // .chars().rev().collect::<String>()
 }
 
 fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
@@ -212,7 +266,8 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
   let patterns : &[_] = &['{', '}','\t',',']; 
   let mut counter =0;
   while counter < lines.len() {
-    if lines[counter].starts_with("@"){
+
+    if lines[counter].starts_with("@"){ // found entry
       let vec: Vec<&str> = lines[counter].splitn(2,"{").collect();
       if vec.len() == 2 {
         let Type =vec[0].trim().trim_matches('@').to_lowercase();
@@ -223,26 +278,27 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
         println!("Problem: {}\n",lines[counter]);
       }
       counter +=1;
-      while counter < lines.len() && lines[counter].trim() != "}"{
+      while counter < lines.len() && lines[counter].trim() != "}"{ // while inside entry
         let mut field_value=String::new();
         while 
         counter < lines.len() - 1 && 
         !(lines[counter].trim().ends_with("}") && lines[counter+1].trim() == "}" ) && 
-        !lines[counter].trim().ends_with("},") 
+        !lines[counter].trim().ends_with("},") && 
+        !lines[counter+1].contains("=")
         {
           field_value.push_str(lines[counter].trim_matches('\n'));
           counter +=1;
         }
         field_value.push_str(lines[counter].trim_matches('\n'));
-        
+
         let vec: Vec<&str> = field_value.splitn(2,"=").collect();
         if vec.len() == 2 {
           let field:&str=&vec[0].trim().trim_matches(patterns).to_lowercase();
-          let mut value=vec[1].trim().trim_matches(patterns);
-          let mut last_entry =Entries.last_mut().unwrap();
+          let mut value = &parse_generic_field(vec[1]);
+          let mut last_entry = Entries.last_mut().unwrap();
 
           match field {
-            "file" => last_entry.Files = parse_file_field(value),
+            "file" => last_entry.Files = vec![value.to_string()], //parse_file_field(value),
             "author" => last_entry.Authors = parse_author_field(value),
             "mendeley-tags" |"groups" | "keywords" => last_entry.Tags = parse_tags_field( value),
             _ => {
@@ -318,18 +374,18 @@ fn write_bib(path: &str, entries: & Vec<Entry>){
   };
 
   for e in entries{
-    writeln!(f, "{}", Entry_to_String_bib(&e)).unwrap();
+    writeln!(f, "{}", Entry_to_String_bib(e)).unwrap();
   }
 }
 
-fn paths_to_filenames(paths:&Vec<PathBuf>)->Vec<String>{
-  let mut filenames:Vec<String> = vec![];
-  for p in paths{
-    filenames.push(p.file_name().unwrap().to_str().unwrap().to_string());
-    // println!("{}", filenames.last().unwrap());
-  }
-  filenames
-}
+// fn paths_to_filenames(paths:&Vec<PathBuf>)->Vec<String>{
+//   let mut filenames:Vec<String> = vec![];
+//   for p in paths{
+//     filenames.push(p.file_name().unwrap().to_str().unwrap().to_string());
+//     // println!("{}", filenames.last().unwrap());
+//   }
+//   filenames
+// }
 
 fn write_raw_bib(path: &str, bib_vec : &Vec<String>){
   let path = Path::new(path);
@@ -368,13 +424,13 @@ fn main() {
   // let (types, fields) = get_statistics(&Entries);
   // let (ordered_types, ordered_fields) = sort_types_fields(&types, &fields);
 
-  remove_identical_Entries(& mut Entries);
+  remove_redundant_Entries(& mut Entries);
 
-  let p = paths_to_filenames(&doc_paths.to_owned());
-  check_files(& mut Entries, &p);
+  // let p = paths_to_filenames(&doc_paths.to_owned());
+  // check_files(& mut Entries, &p);
 
   let (types, fields) = get_statistics(&Entries);
-  let (ordered_types, ordered_fields) = sort_types_fields(&types, &fields);
+  let (_, ordered_fields) = sort_types_fields(&types, &fields);
 
   write_bib("Complete.bib", &Entries);
   write_csv("Complete.csv", &Entries, &ordered_fields);
@@ -404,7 +460,7 @@ fn check_files(entries: & mut Vec<Entry>, doc_paths: & Vec<String>){
   }
 }
 
-fn remove_identical_Entries(mut entries: & mut Vec<Entry>){
+fn remove_redundant_Entries(mut entries: & mut Vec<Entry>){
   // Remove identical entries
   let mut repeated: Vec<usize> = vec![];
   for i in 0..entries.len(){
@@ -464,11 +520,7 @@ fn remove_identical_Entries(mut entries: & mut Vec<Entry>){
   remove_by_field( entries, "abstract");// Check entries with same abstract
   remove_by_field( entries, "eprint");// Check entries with same eprint
   remove_by_field( entries, "arxivid");// Check entries with same arxivid
-
-
-
-
-  println!("");
+  // println!("");
 }
 
 fn remove_by_field(mut entries: & mut Vec<Entry>, field:&str){
@@ -479,7 +531,7 @@ fn remove_by_field(mut entries: & mut Vec<Entry>, field:&str){
       if 
       entries[i].Fields_Values.contains_key(field) &&
       entries[j].Fields_Values.contains_key(field) &&
-      entries[i].Fields_Values[field] == entries[j].Fields_Values[field]
+      entries[i].Fields_Values[field].to_lowercase() == entries[j].Fields_Values[field].to_lowercase()
       {
         let merged = merge(&mut entries, i, j);
         if merged{
@@ -506,7 +558,7 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
   let common_fields:Vec<&String> = intersection.collect();
   let mut eq = true;
   for field in common_fields{
-    if entries[i].Fields_Values[field] != entries[j].Fields_Values[field]{
+    if entries[i].Fields_Values[field].to_lowercase() != entries[j].Fields_Values[field].to_lowercase(){
       eq = false;
       break;
     }
@@ -520,8 +572,8 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
         files_to_add.push(file.to_string());
       }
     }
-    entries[i].Files.append(&mut files_to_add);
 
+    entries[i].Files.append(&mut files_to_add);
 
     for field in f2.difference(&f1){
       let value =entries[j].Fields_Values.get_mut(field).unwrap().to_string();
