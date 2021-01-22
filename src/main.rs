@@ -132,7 +132,7 @@ fn Entry_to_String_bib(e: & Entry) -> String{
     let mut tags = e.Tags.to_owned();
     tags.sort();
     t = tags.join(",");
-    s.push_str(&format!("keywords = {{{}}},\n", t));
+    // s.push_str(&format!("keywords = {{{}}},\n", t));
     s.push_str(&format!("mendeley-tags = {{{}}},\n", t));
   }
   s.push_str("}\n");
