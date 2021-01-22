@@ -12,9 +12,9 @@ electronic 6
 phdthesis 5
 mvbook 4
 inreference 3
-techreport 1
-software 1
 reference 1
+software 1
+techreport 1
 
 title 1573
 year 1331
@@ -51,16 +51,16 @@ __markedentry 17
 location 16
 howpublished 15
 note 11
-eventtitle 8
 organization 8
+eventtitle 8
 pagetotal 6
 eprinttype 5
 school 4
 translator 3
 shortjournal 2
 eprintclass 2
-editorbtype 1
-annotation 1
-n 1
 editorb 1
+n 1
 id 1
+annotation 1
+editorbtype 1
