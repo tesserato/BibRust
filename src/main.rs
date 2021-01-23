@@ -479,14 +479,18 @@ fn main() {
 fn get_files_from_entries(entries: &mut Vec<Entry>, other_entries: &Vec<Entry>){
   for e0 in entries{
     for e1 in other_entries{
-      if 
-      e1.has_file &&
-      e0.Fields_Values.contains_key("doi") &&
-      e1.Fields_Values.contains_key("doi") &&
-      e0.Fields_Values["doi"].to_lowercase() == e1.Fields_Values["doi"].to_lowercase()
-      {
-        e0.Files.append(&mut e1.Files.to_owned());
-        e0.has_file = true;
+      if e1.has_file{
+        for key in vec!["doi", "url", "issn", "abstract"]{
+          if
+          e0.Fields_Values.contains_key(key) &&
+          e1.Fields_Values.contains_key(key) &&
+          e0.Fields_Values[key].to_lowercase() == e1.Fields_Values[key].to_lowercase()
+          {
+            e0.Files.append(&mut e1.Files.to_owned());
+            e0.has_file = true;
+            break
+          }  
+        }
       }
     }
   }

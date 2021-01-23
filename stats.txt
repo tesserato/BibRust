@@ -1,4 +1,4 @@
-Found a total of 1305 entries (1264 with author, 774 with doi, 368 with files, 480 whith url):
+Found a total of 1305 entries (1264 with author, 774 with doi, 669 with files, 480 whith url):
 article 796
 book 276
 inproceedings 77
@@ -7,14 +7,14 @@ collection 26
 unpublished 23
 incollection 17
 online 8
-electronic 6
 report 6
+electronic 6
 thesis 5
-mvbook 4
 phdthesis 4
+mvbook 4
 techreport 1
-software 1
 reference 1
+software 1
 
 Fields:
 title 1305
@@ -32,8 +32,8 @@ isbn 491
 url 481
 booktitle 332
 shorttitle 215
-arxivid 174
 eprint 174
+arxivid 174
 archiveprefix 174
 pmid 138
 annote 137
