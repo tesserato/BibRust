@@ -7,5 +7,13 @@ The idea of this script is to consolidate all the bibliographic data one has in 
 
 
 # Remarks
+a article
+b book
+r reference
+
+key: `year_first author last name_[number]`
+path: `[+,!] a|b|r key [short]title`
 
 date: 2009-01-31
+filename to path:
+  : -> --

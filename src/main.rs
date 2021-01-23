@@ -10,12 +10,10 @@
 // let path_to_pdf = path::Path::new("biblatex.pdf");
 // let result = extract_text(path_to_pdf);
 
-use std::{char::ToLowercase, hint::unreachable_unchecked, io, iter::{Map, Rev}, path::{self, PathBuf}, vec};
 use std::io::BufReader;
-use std::fs::{self, DirEntry};
-use std::fs::File;
+use std::fs::{self, File};
 use std::io::prelude::*;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::str;
@@ -26,6 +24,7 @@ fn get_statistics(Entries:&Vec<Entry>) -> (Vec<String>,Vec<String>){
   let mut has_doi:usize = 0;
   let mut has_file:usize = 0;
   let mut has_url:usize = 0;
+  let mut has_author:usize = 0;
 
   for entry in Entries{
     if types.contains_key(&entry.Type){
@@ -36,6 +35,10 @@ fn get_statistics(Entries:&Vec<Entry>) -> (Vec<String>,Vec<String>){
 
     if entry.has_file{
       has_file += 1;
+    }
+
+    if entry.Authors.len() > 0{
+      has_author += 1;
     }
   
     for (field, _) in &entry.Fields_Values{
@@ -61,8 +64,8 @@ fn get_statistics(Entries:&Vec<Entry>) -> (Vec<String>,Vec<String>){
   }  
 
   println!(
-    "\nFound a total of {} entries ({} with doi, {} with files, {} whith url):", 
-    Entries.len(), has_doi, has_file, has_url);
+    "\nFound a total of {} entries ({} with author, {} with doi, {} with files, {} whith url):", 
+    Entries.len(), has_author, has_doi, has_file, has_url);
   let mut ordered_types:Vec<String> = Vec::new();
   types_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
   for (key, value) in types_vec {
@@ -134,7 +137,7 @@ fn Entry_to_String_bib(e: & Entry) -> String{
 
   //Files
   if e.Files.len() > 0 {
-    t = e.Files.iter().map(|x| x.replace(":", "\\:")).collect::<Vec<String>>().join(",");
+    t = e.Files.iter().map(|x| x.replace(":", "\\:")).collect::<Vec<String>>().join(";");
     s.push_str(&format!("file = {{{}}},\n", t));
   }
 
@@ -226,6 +229,35 @@ fn parse_tags_field(original_value:&str) -> Vec<String>{
   tags
 }
 
+fn parse_file_field(e: &mut Entry, value: & String){
+  // for e in entries{
+  let mut checked: Vec<String> = vec![];
+
+  for raw_f in value.split(";"){
+    let paths = raw_f
+      .split(":")
+      .filter(|x| !x.is_empty() && x.contains("."))
+      .map(|x| format!("C:{}", x.replace("\\\\", "/").replace("\\", "/")))
+      .collect::<Vec<String>>();
+      for p in paths{
+        if Path::new(&p).exists(){
+          // println!("{}", p);
+          e.has_file = true;
+          checked.push(Path::new(&p).as_os_str().to_str().unwrap().to_string())
+        }
+        else{
+          if e.Fields_Values.contains_key("broken-files"){
+            e.Fields_Values.get_mut("broken-files").unwrap().push_str(&format!(",{}", p).to_string());
+          }
+          else{
+            e.Fields_Values.insert("broken-files".to_string(), p);
+          }
+        }
+      }
+    }
+  e.Files = checked;
+}
+
 fn parse_generic_field(original_value:&str) -> String{
   let patterns : &[_] = &['\t',',',' '];
   original_value
@@ -277,7 +309,7 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
           let mut last_entry = Entries.last_mut().unwrap();
 
           match field {
-            "file" => last_entry.Files = vec![value.to_string()], //parse_file_field(value),
+            "file" => parse_file_field(last_entry, value), //parse_file_field(value),
             "author" => last_entry.Authors = parse_author_field(value),
             "mendeley-tags" |"groups" => last_entry.Tags = parse_tags_field( value),
             _ => {
@@ -402,6 +434,21 @@ fn get_entries_from_root_path(root_path:String) -> Vec<Entry>{
   parse_bib(&bib_vec)
 }
 
+
+fn write_to_ads(){
+  let path = Path::new("ads_test.txt:ads.bib");
+  let display = path.display();
+
+  // Open a file in write-only mode, returns `io::Result<File>`
+  let mut f = match File::create(&path) {
+      Err(why) => panic!("couldn't create {}: {}", display, why),
+      Ok(file) => file,
+  };
+
+
+  writeln!(f, "test 01\ntest 02");
+}
+
 fn main() {
 
   let mut main_entries = get_entries_from_root_path("bibs/main".to_string());
@@ -414,69 +461,105 @@ fn main() {
     &vec!["pdf".to_string(),"epub".to_string(),"djvu".to_string()]
   );
 
-  check_files(&mut main_entries, &doc_paths);
+  get_files_from_paths(&mut main_entries, &doc_paths);
 
-  // let (types, fields) = get_statistics(&main_entries);
+
+  let mut other_entries = get_entries_from_root_path("bibs/other".to_string());
+  remove_redundant_Entries(&mut other_entries);
+
+  get_files_from_entries(&mut main_entries, &other_entries);
+
+
   let (_, ordered_fields) = get_statistics(&main_entries);
 
   write_bib("Complete.bib", &main_entries);
   write_csv("Complete.csv", &main_entries, &ordered_fields);
 }
 
-fn check_files(entries: & mut Vec<Entry>, doc_paths: &Vec<PathBuf>){
+fn get_files_from_entries(entries: &mut Vec<Entry>, other_entries: &Vec<Entry>){
+  for e0 in entries{
+    for e1 in other_entries{
+      if 
+      e1.has_file &&
+      e0.Fields_Values.contains_key("doi") &&
+      e1.Fields_Values.contains_key("doi") &&
+      e0.Fields_Values["doi"].to_lowercase() == e1.Fields_Values["doi"].to_lowercase()
+      {
+        e0.Files.append(&mut e1.Files.to_owned());
+        e0.has_file = true;
+      }
+    }
+  }
+}
 
+fn get_files_from_paths(entries: &mut Vec<Entry>, doc_paths: &Vec<PathBuf>){
   let mut filename_path: HashMap<String, PathBuf> = HashMap::new();
   for p in doc_paths{
     filename_path.insert(
-      p.file_name().unwrap().to_str().unwrap().to_string(), 
+      p.file_name().unwrap().to_str().unwrap().to_string().replace(":", ""),
       p.to_path_buf()
     );
   }
 
   for e in entries{
-    let mut checked: Vec<String> = vec![];
-    if e.Files.len() > 0 {
-      for raw_f in e.Files.to_owned(){
-        let paths = raw_f
-          .split(":")
-          .filter(|x| !x.is_empty() && x.contains("."))
-          .map(|x| format!("C:{}", x.replace("\\\\", "/").replace("\\", "/")))
-          .collect::<Vec<String>>();
-          for p in paths{
-            if Path::new(&p).exists(){
-              // println!("{}", p);
-              e.has_file = true;
-              checked.push(Path::new(&p).as_os_str().to_str().unwrap().to_string())
-            }
-            else{
-              let filename = p.split("/").last().unwrap();
-              if filename_path.contains_key(filename){
-                // println!("{}", filename);
-                e.has_file = true;
-                checked.push(filename_path[filename].as_path().to_str().unwrap().to_string())
-  
-              }
-            }
-          }
+    if e.Fields_Values.contains_key("broken-files") {
+      for p in e.Fields_Values["broken-files"].split(";"){
+        let filename = p.split("/").last().unwrap();
+        if filename_path.contains_key(filename){
+          println!("{}", filename);
+          e.has_file = true;
+          e.Files.push(filename_path[filename].as_path().to_str().unwrap().to_string())
+        }
+      }
     }
-
-      // else if e.Authors.len()>0 && e.Fields_Values.contains_key("year") && e.Fields_Values.contains_key("title"){
-      //   let t = format!(
-      //     "{} {} - {}{}.pdf",
-      //     e.Fields_Values["year"],
-      //     e.Fields_Values["title"],
-      //     &e.Authors[0].last_name,
-      //     if e.Authors.len() > 1 { " et al" } else { "" }
-      //   );
-      //   // println!("{}", t);
-      //     if doc_paths.contains(&t){
-      //       e.has_file = true;
-      //       println!("{}", t);
-      //     }
-      // }
-    }
-    e.Files = checked;
   }
+
+
+
+  // for e in entries{
+  //   let mut checked: Vec<String> = vec![];
+  //   if e.Files.len() > 0 {
+  //     for raw_f in e.Files.to_owned(){
+  //       let paths = raw_f
+  //         .split(":")
+  //         .filter(|x| !x.is_empty() && x.contains("."))
+  //         .map(|x| format!("C:{}", x.replace("\\\\", "/").replace("\\", "/")))
+  //         .collect::<Vec<String>>();
+  //         for p in paths{
+  //           if Path::new(&p).exists(){
+  //             // println!("{}", p);
+  //             e.has_file = true;
+  //             checked.push(Path::new(&p).as_os_str().to_str().unwrap().to_string())
+  //           }
+  //           else{
+  //             let filename = p.split("/").last().unwrap();
+  //             if filename_path.contains_key(filename){
+  //               // println!("{}", filename);
+  //               e.has_file = true;
+  //               checked.push(filename_path[filename].as_path().to_str().unwrap().to_string())
+  
+  //             }
+  //           }
+  //         }
+  //     }
+
+  //     // else if e.Authors.len()>0 && e.Fields_Values.contains_key("year") && e.Fields_Values.contains_key("title"){
+  //     //   let t = format!(
+  //     //     "{} {} - {}{}.pdf",
+  //     //     e.Fields_Values["year"],
+  //     //     e.Fields_Values["title"],
+  //     //     &e.Authors[0].last_name,
+  //     //     if e.Authors.len() > 1 { " et al" } else { "" }
+  //     //   );
+  //     //   // println!("{}", t);
+  //     //     if doc_paths.contains(&t){
+  //     //       e.has_file = true;
+  //     //       println!("{}", t);
+  //     //     }
+  //     // }
+  //   }
+  //   e.Files = checked;
+  // }
 }
 
 fn remove_redundant_Entries(mut entries: & mut Vec<Entry>){
