@@ -10,13 +10,15 @@
 // let path_to_pdf = path::Path::new("biblatex.pdf");
 // let result = extract_text(path_to_pdf);
 
-use std::io::BufReader;
+use std::{io::BufReader, iter::Cloned, string};
 use std::fs::{self, File};
 use std::io::prelude::*;
 use std::path::{Path, PathBuf};
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::str;
+// use itertools::Itertools;
+// use alloc::collections;
 
 fn get_statistics(Entries:&Vec<Entry>) -> (Vec<String>,Vec<String>){
   let mut types: HashMap<String, u32> = HashMap::new();
@@ -90,6 +92,7 @@ fn get_statistics(Entries:&Vec<Entry>) -> (Vec<String>,Vec<String>){
   println!("");
   (ordered_types, ordered_fields)  
 }
+
 #[derive(PartialEq)]
 struct Author{
   first_name:String,
@@ -101,7 +104,7 @@ struct Entry {
   Type: String,
   Key: String,
   Authors:Vec<Author>,
-  Files: Vec<String>,
+  Files: HashSet<String>,
   has_file:bool,
   Fields_Values: HashMap<String, String>,
   Tags:Vec<String>,
@@ -159,7 +162,7 @@ fn create_Entry(Type:String, Key:String) -> Entry{
     Key: Key,
     Authors: vec![],
     Fields_Values: HashMap::new(),
-    Files: vec![],
+    Files: HashSet::new(),
     Tags: vec![],
     has_file:false
   }
@@ -231,7 +234,7 @@ fn parse_tags_field(original_value:&str) -> Vec<String>{
 
 fn parse_file_field(e: &mut Entry, value: & String){
   // for e in entries{
-  let mut checked: Vec<String> = vec![];
+  let mut checked: HashSet<String> = HashSet::new();
 
   for raw_f in value.split(";"){
     let paths = raw_f
@@ -243,7 +246,7 @@ fn parse_file_field(e: &mut Entry, value: & String){
         if Path::new(&p).exists(){
           // println!("{}", p);
           e.has_file = true;
-          checked.push(Path::new(&p).as_os_str().to_str().unwrap().to_string())
+          checked.insert(Path::new(&p).as_os_str().to_str().unwrap().to_string());
         }
         else{
           if e.Fields_Values.contains_key("broken-files"){
@@ -369,7 +372,7 @@ fn write_csv(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
         row.push(" ".to_string());
       }
     }
-    row.push(format!("\"{}\"",e.Files.join(",")));
+    row.push(format!("\"{}\"", e.Files.iter().cloned().collect::<Vec<String>>().join(",")));
     writeln!(f, "{}",row.join(",")).unwrap();
   }
 }
@@ -434,7 +437,6 @@ fn get_entries_from_root_path(root_path:String) -> Vec<Entry>{
   parse_bib(&bib_vec)
 }
 
-
 fn write_to_ads(){
   let path = Path::new("ads_test.txt:ads.bib");
   let display = path.display();
@@ -486,7 +488,7 @@ fn get_files_from_entries(entries: &mut Vec<Entry>, other_entries: &Vec<Entry>){
           e1.Fields_Values.contains_key(key) &&
           e0.Fields_Values[key].to_lowercase() == e1.Fields_Values[key].to_lowercase()
           {
-            e0.Files.append(&mut e1.Files.to_owned());
+            e0.Files.union(&mut e1.Files.to_owned());
             e0.has_file = true;
             break
           }  
@@ -512,7 +514,7 @@ fn get_files_from_paths(entries: &mut Vec<Entry>, doc_paths: &Vec<PathBuf>){
         if filename_path.contains_key(filename){
           println!("{}", filename);
           e.has_file = true;
-          e.Files.push(filename_path[filename].as_path().to_str().unwrap().to_string())
+          e.Files.insert(filename_path[filename].as_path().to_str().unwrap().to_string());
         }
       }
     }
@@ -666,16 +668,13 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
     }
   }
   if eq{
-    // println!("{}", entries[i].Fields_Values["title"]);
-    // println!("{}\n", entries[j].Fields_Values["title"]);
-    let mut files_to_add:Vec<String> = vec![];
-    for file in &entries[j].Files{
-      if !&entries[i].Files.contains(file){
-        files_to_add.push(file.to_string());
+
+    let files = entries[j].Files.iter().cloned().collect::<Vec<String>>();
+    for file in files{
+      if !entries[i].Files.contains(&file){
+        entries[i].Files.insert(file.to_string());
       }
     }
-
-    entries[i].Files.append(&mut files_to_add);
 
     for field in f2.difference(&f1){
       let value =entries[j].Fields_Values.get_mut(field).unwrap().to_string();
