@@ -482,7 +482,7 @@ fn get_files_from_entries(entries: &mut Vec<Entry>, other_entries: &Vec<Entry>){
   for e0 in entries.into_iter().filter(|x| !x.has_file){
     for e1 in other_entries.into_iter().filter(|x| x.has_file){
       // if e1.has_file{
-        for key in vec!["title", "doi", "url", "issn", "abstract"]{
+        for key in vec!["title", "doi", "url", "issn", "abstract", "eprint"]{
           if
           e0.Fields_Values.contains_key(key) &&
           e1.Fields_Values.contains_key(key) &&
