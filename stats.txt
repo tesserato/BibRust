@@ -1,4 +1,5 @@
-Found a total of 1305 entries (1264 with author, 774 with doi, 748 with files, 480 whith url):
+Found a total of 1305 entries
+(2 reviewed, 1264 with author, 774 with doi, 638 with files, 481 whith url):
 article 796
 book 276
 inproceedings 77
@@ -19,24 +20,24 @@ reference 1
 Fields:
 title 1305
 year 1137
-pages 1020
-abstract 1012
+pages 1019
+abstract 1011
 doi 775
-volume 766
-issn 731
+volume 765
+issn 730
 journal 679
-number 638
-keywords 585
+number 637
+keywords 584
 publisher 525
 isbn 491
-url 481
-booktitle 332
+url 482
+booktitle 331
 shorttitle 215
-eprint 174
-archiveprefix 174
-arxivid 174
-pmid 138
+archiveprefix 173
+arxivid 173
+eprint 173
 annote 137
+pmid 137
 edition 132
 address 124
 type 113
@@ -48,5 +49,5 @@ howpublished 15
 organization 7
 school 4
 translator 3
-broken-files 2
 qualityassured 1
+urldate 1
