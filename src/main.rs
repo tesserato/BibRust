@@ -235,12 +235,13 @@ fn parse_tags_field(e: &mut Entry, original_value:&str) -> HashSet<String>{
 }
 
 fn parse_file_field(e: &mut Entry, value:&String){
+  let patterns : &[_] = &['}',',',' '];
   let mut checked: HashSet<String> = HashSet::new();
   for raw_f in value.split(";"){
     let paths = raw_f
       .split(":")
       .filter(|x| !x.is_empty() && x.contains("."))
-      .map(|x| format!("C:{}", x.replace("\\\\", "/").replace("\\", "/")))
+      .map(|x| format!("C:{}", x.trim_matches(patterns).replace("\\\\", "/").replace("\\", "/")))
       .collect::<Vec<String>>();
       for p in paths{
         if Path::new(&p).exists(){
@@ -248,6 +249,7 @@ fn parse_file_field(e: &mut Entry, value:&String){
           checked.insert(Path::new(&p).as_os_str().to_str().unwrap().to_string());
         }
         else{
+          println!("{}", p);
           if e.Fields_Values.contains_key("broken-files"){
             e.Fields_Values.get_mut("broken-files").unwrap().push_str(&format!(",{}", p).to_string());
           }

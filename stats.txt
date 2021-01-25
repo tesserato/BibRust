@@ -8,13 +8,13 @@ collection 26
 unpublished 23
 incollection 17
 online 8
-electronic 6
 report 6
+electronic 6
 thesis 5
-mvbook 4
 phdthesis 4
-techreport 1
+mvbook 4
 software 1
+techreport 1
 reference 1
 
 Fields:
@@ -33,8 +33,8 @@ isbn 491
 url 482
 booktitle 331
 shorttitle 215
-archiveprefix 173
 arxivid 173
+archiveprefix 173
 eprint 173
 annote 137
 pmid 137
