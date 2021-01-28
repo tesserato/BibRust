@@ -230,7 +230,7 @@ fn parse_author_field(original_value:&str) -> Vec<Author>{
   authors
 }
 
-fn parse_tags_field(e: &mut Entry, original_value:&str) -> HashSet<String>{
+fn parse_tags_field(original_value:&str) -> HashSet<String>{
   // let patterns : &[_] = &['{', '}','\t',',',' ',','];
   let mut tags: HashSet<String> = 
     original_value
@@ -241,7 +241,7 @@ fn parse_tags_field(e: &mut Entry, original_value:&str) -> HashSet<String>{
   tags
 }
 
-fn parse_file_field(e: &mut Entry, value:&String){
+fn parse_file_field(e: &mut Entry, value:&String) -> HashSet<String>{
   let patterns : &[_] = &['}',',',' '];
   let mut checked: HashSet<String> = HashSet::new();
   for raw_f in value.split(";"){
@@ -266,7 +266,7 @@ fn parse_file_field(e: &mut Entry, value:&String){
         }
       }
     }
-  e.Files = checked;
+  checked
 }
 
 fn parse_generic_field(original_value:&str) -> String{
@@ -285,7 +285,7 @@ fn parse_generic_field(original_value:&str) -> String{
 fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
   let mut Entries : Vec<Entry> = vec![];
   let patterns : &[_] = &['{', '}','\t',',']; 
-  let mut counter =0;
+  let mut counter = 0;
   while counter < lines.len() {
 
     if lines[counter].starts_with("@"){ // found entry
@@ -315,12 +315,12 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
         let vec: Vec<&str> = field_value.splitn(2,"=").collect();
         if vec.len() == 2 {
           let field:&str = &vec[0].trim().trim_matches(patterns).to_lowercase();
-          let mut value = vec[1];
+          let value = vec[1];
           let mut last_entry = Entries.last_mut().unwrap();
           match field {
-            "file" => parse_file_field(last_entry, &value.to_string()), //parse_file_field(value),
+            "file" => last_entry.Files = parse_file_field(&mut last_entry, &value.to_string()), //parse_file_field(value),
             "author" => last_entry.Authors = parse_author_field(value),
-            "mendeley-tags"|"groups"|"tags" => last_entry.Tags = parse_tags_field( last_entry, value),
+            "mendeley-tags"|"groups"|"tags" => last_entry.Tags = parse_tags_field( value),
             _ => {
               if Entries.last().unwrap().Fields_Values.contains_key(field){
                 println!("Repeated entry at {}\n", field_value);
@@ -479,7 +479,7 @@ fn main() {
 
   write_bib("Complete.bib", &main_entries);
   write_csv("Complete.csv", &main_entries, &ordered_fields);
-  write_sqlite("Complete.db", &main_entries, &ordered_fields);
+  // write_sqlite("Complete.db", &main_entries, &ordered_fields);
 }
 
 fn inspect_entries(entries: &mut Vec<Entry>){
