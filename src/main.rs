@@ -24,6 +24,10 @@ use rusqlite::NO_PARAMS;
 
 static INTERNAL_TAG_MARKER: char ='#';
 static REVIEWED: &str = "#reviewed";
+static MERGED: &str = "#merged";
+
+static SEPARATOR: &str = ",";
+static INTERNAL_SEPARATOR: &str = ",";
 
 struct Statistic{
   list_of_authors: HashSet<Author>,
@@ -106,9 +110,14 @@ fn get_statistics(Entries:&Vec<Entry>) -> (Vec<String>,Vec<String>){
   println!("");
   (ordered_types, ordered_fields)  
 }
-
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone, Copy)]
+enum author_editor {
+  author,
+  editor,
+}
+#[derive(PartialEq, Clone)]
 struct Author{
+  role: author_editor,
   first_name:String,
   last_name:String
 }
@@ -202,13 +211,19 @@ fn read_bib(path:PathBuf, bib_lines:&mut Vec<String>){
   }
 }
 
-fn parse_author_field(original_value:&str) -> Vec<Author>{
+fn parse_author_editor_fields(field:&str, original_value:&str) -> Vec<Author>{
+
+  let role = match field {
+    "editor" => author_editor::editor,
+    _ => author_editor::author,
+  };
   let mut authors: Vec<Author> = vec![];
   let patterns : &[_] = &['{', '}','\t',',',' '];
   for fl in original_value.split("and").map(|x| x.trim()){
     if fl.contains(","){
       let fl_vec = fl.rsplit_once(",").unwrap();
       authors.push(Author{
+        role: role,
         first_name:fl_vec.1.trim().trim_matches(patterns).to_string(), 
         last_name:fl_vec.0.trim().trim_matches(patterns).to_string()
       })
@@ -216,14 +231,16 @@ fn parse_author_field(original_value:&str) -> Vec<Author>{
     else if fl.contains(" "){
       let fl_vec = fl.rsplit_once(" ").unwrap();
       authors.push(Author{
+        role: role,
         first_name:fl_vec.0.trim().trim_matches(patterns).to_string(), 
         last_name:fl_vec.1.trim().trim_matches(patterns).to_string()
       })
     }
     else{
       authors.push(Author{
+        role: role,
         first_name:"".to_string(), 
-      last_name:fl.trim().trim_matches(patterns).to_string()
+        last_name:fl.trim().trim_matches(patterns).to_string()
     })
     }
   }
@@ -315,18 +332,21 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
         let vec: Vec<&str> = field_value.splitn(2,"=").collect();
         if vec.len() == 2 {
           let field:&str = &vec[0].trim().trim_matches(patterns).to_lowercase();
-          let value = vec[1];
+          let mut value = vec[1].to_string();
           let mut last_entry = Entries.last_mut().unwrap();
           match field {
             "file" => last_entry.Files = parse_file_field(&mut last_entry, &value.to_string()), //parse_file_field(value),
-            "author" => last_entry.Authors = parse_author_field(value),
-            "mendeley-tags"|"groups"|"tags" => last_entry.Tags = parse_tags_field( value),
+            "author" | "editor" => last_entry.Authors = parse_author_editor_fields(&field, &value),
+            "mendeley-tags"|"groups"|"tags" => last_entry.Tags = parse_tags_field( &value),
             _ => {
+
+              if field == "isbn" {value = value.chars().filter(|x| x.is_numeric()).collect()};
+
               if Entries.last().unwrap().Fields_Values.contains_key(field){
                 println!("Repeated entry at {}\n", field_value);
               }
               else{
-                Entries.last_mut().unwrap().Fields_Values.insert(field.to_string(), parse_generic_field(value));
+                Entries.last_mut().unwrap().Fields_Values.insert(field.to_string(), parse_generic_field(&value));
               }
             }
           };
@@ -456,7 +476,6 @@ fn write_to_ads(){
 }
 
 fn main() {
-
   let mut main_entries = get_entries_from_root_path("bibs/main".to_string());
   remove_redundant_Entries(& mut main_entries);
 
@@ -606,40 +625,9 @@ fn remove_redundant_Entries(mut entries: & mut Vec<Entry>){
   for i in repeated{
     entries.remove(i);
   }
-
-  // // Remove entries were only key and/or type are different
-  // let mut repeated: Vec<usize> = vec![];
-  // for i in 0..entries.len(){
-  //   for j in i+1..entries.len(){
-  //     if 
-  //     entries[i].Fields_Values.contains_key("title") &&
-  //     entries[j].Fields_Values.contains_key("title") &&
-  //     entries[i].Fields_Values["title"] == entries[j].Fields_Values["title"]
-  //     // entries[i].Fields_Values["title"].to_ascii_lowercase() == entries[j].Fields_Values["title"].to_ascii_lowercase()
-  //     {
-  //       if entries[i].Fields_Values == entries[j].Fields_Values{
-  //         // println!("{}", entries[i].Fields_Values["title"]);
-  //         // println!("{}", entries[j].Fields_Values["title"]);
-  //         repeated.push(j);
-  //         for file in entries[j].Files.to_owned(){
-  //           if !entries[i].Files.contains(&file){
-  //             entries[i].Files.push(file.to_string());
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  // println!("Differences in key and/or type {}", &repeated.len());
-  // repeated.sort();
-  // repeated.reverse();
-  // for i in repeated{
-  //   entries.remove(i);
-  // }
   
-  // remove_by_field( entries, "doi");// Check entries with same doi
-  // remove_by_field( entries, "issn"); // Check entries with same issn
-  // remove_by_field( entries, "isbn");// Check entries with same isbn
+  remove_by_field( entries, "doi");// Check entries with same doi
+  remove_by_field( entries, "isbn");// Check entries with same isbn
   // remove_by_field( entries, "url");// Check entries with same url
   // remove_by_field( entries, "shorttitle");// Check entries with same shorttitle
   // remove_by_field( entries, "pmid");// Check entries with same pmid
@@ -667,7 +655,7 @@ fn remove_by_field(mut entries: & mut Vec<Entry>, field:&str){
     }
   }
 
-  println!("Same {}, compatible {}", field, &repeated.len());
+  println!("Same {}, compatible {}\n", field, &repeated.len());
   repeated.sort();
   repeated.reverse();
   for i in repeated{
@@ -689,14 +677,20 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
       break;
     }
   }
-  if eq{
 
-    let files = entries[j].Files.iter().cloned().collect::<Vec<String>>();
-    for file in files{
-      if !entries[i].Files.contains(&file){
-        entries[i].Files.insert(file.to_string());
+  if eq{
+    // let mut new_authors:Vec<Author> = vec![];
+    for author in entries[j].Authors.clone(){
+      if !entries[i].Authors.contains(&author){
+        entries[i].Authors.push(author);
       }
     }
+
+    entries[i].Files = entries[i].Files.union(&entries[j].Files).map(|x| x.to_owned()).collect();
+    entries[i].Tags = entries[i].Tags.union(&entries[j].Files).map(|x| x.to_owned()).collect();
+    entries[i].Tags.insert(MERGED.to_string());
+
+
 
     for field in f2.difference(&f1){
       let value =entries[j].Fields_Values.get_mut(field).unwrap().to_string();
@@ -710,7 +704,7 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
 
 fn write_sqlite(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
   let path = Path::new(path);
-  let display = path.display();
+  // let display = path.display();
 
   // Open a file in write-only mode, returns `io::Result<File>`
   let conn = Connection::open(&path).unwrap();
@@ -757,8 +751,8 @@ fn write_sqlite(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
       translator     TEXT,
       [broken-files] TEXT,
       qualityassured TEXT,
-      tags           TEXT,
-      file           TEXT
+      tags           JSON,
+      file           JSON
   )
   WITHOUT ROWID;"
      ,NO_PARAMS,
@@ -774,18 +768,23 @@ fn write_sqlite(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
     let columns = format!("type,key,author,file,tags,{}", c);
 
     let a = e.Authors.iter().map(|x| format!("{} {}", x.first_name, x.last_name).trim().to_string()).collect::<Vec<String>>().join(" and ");
-    let f = e.Files.to_owned().into_iter().collect::<Vec<String>>().join(";");
+    let f = files_to_string(&e.Files);
     let t = e.Tags.to_owned().into_iter().collect::<Vec<String>>().join(";");
     let o = e.Fields_Values.iter().map(|x| format!("\"{}\"", x.1)).collect::<Vec<String>>().join(",");
     let values = format!("\"{}\",\"{}\",\"{}\",\"{}\",\"{}\",{}",e.Type, e.Key, a, f, t, o);
 
     let instruction = format!("INSERT INTO Entries ({})\nVALUES({});", columns, values);
     let res = conn.execute(&instruction, NO_PARAMS);
-
+    // let res = conn.execute(&format!("json_array({})", f).to_string(), NO_PARAMS);
     // println!("{}\n", instruction);
     match res {
       Ok(v) => continue, //println!("row inserted: {:?}", v),
-      Err(e) => println!("{}\n{:?}\n", instruction, e),
+      // Err(e) => println!("{}\n{:?}\n", instruction, e),
+      Err(e) => println!("{:?}", e),
     }
   }
+}
+
+fn files_to_string(files: &HashSet<String>) -> String{
+  files.to_owned().into_iter().collect::<Vec<String>>().join(INTERNAL_SEPARATOR)
 }
