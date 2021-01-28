@@ -18,9 +18,9 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::str;
 
-extern crate rusqlite;
-use rusqlite::{Connection, Result};
-use rusqlite::NO_PARAMS;
+// extern crate rusqlite;
+// use rusqlite::{Connection, Result};
+// use rusqlite::NO_PARAMS;
 
 static INTERNAL_TAG_MARKER: char ='#';
 static REVIEWED: &str = "#reviewed";
@@ -138,31 +138,30 @@ impl PartialEq for Entry {
 fn Entry_to_String_bib(e: & Entry) -> String{
   // type and key
   let mut s = format!("@{}{{{},\n",e.Type, e.Key);
-  let mut t="".to_string();
 
   // authors
   if e.Creators.len() > 0 {
     for (c, v) in &e.Creators{
-      t = v.iter().map(|x| format!("{} {}", x.first_name, x.last_name).trim().to_string()).collect::<Vec<String>>().join(" and ");
+      let t = v.iter().map(|x| format!("{} {}", x.first_name, x.last_name).trim().to_string()).collect::<Vec<String>>().join(" and ");
       s.push_str(&format!("{} = {{{}}},\n", c, t));
     }
   }
 
   // Fields & Values
   if e.Fields_Values.len() > 0 {
-    t = e.Fields_Values.iter().map(|x| format!("{} = {{{}}},\n", x.0, x.1)).collect::<Vec<String>>().join("");
+    let t = e.Fields_Values.iter().map(|x| format!("{} = {{{}}},\n", x.0, x.1)).collect::<Vec<String>>().join("");
     s.push_str(&t);
   }
 
   //Files
   if e.Files.len() > 0 {
-    t = e.Files.iter().map(|x| x.replace(":", "\\:")).collect::<Vec<String>>().join(";");
+    let t = e.Files.iter().map(|x| x.replace(":", "\\:")).collect::<Vec<String>>().join(";");
     s.push_str(&format!("file = {{{}}},\n", t));
   }
 
   //Tags
   if !e.Tags.is_empty() {
-    t = e.Tags.iter().map(|x| x.to_string()).collect::<Vec<String>>().join(",");
+    let t = e.Tags.iter().map(|x| x.to_string()).collect::<Vec<String>>().join(",");
     s.push_str(&format!("mendeley-tags = {{{}}},\n", t));
   }
   s.push_str("}\n");
@@ -181,7 +180,7 @@ fn create_Entry(Type:String, Key:String) -> Entry{
 }
 
 fn read_bib(path:PathBuf, bib_lines:&mut Vec<String>){
-  let mut file = File::open(path).unwrap();
+  let file = File::open(path).unwrap();
   let file_buffer = BufReader::new(file);
 
   let mut inside_comment=false;
@@ -235,7 +234,7 @@ fn parse_creators_field(original_value:&str) -> Vec<Name>{
 
 fn parse_tags_field(original_value:&str) -> HashSet<String>{
   // let patterns : &[_] = &['{', '}','\t',',',' ',','];
-  let mut tags: HashSet<String> = 
+  let tags: HashSet<String> = 
     original_value
       .replace(";", ",")
       .split(",").map(|x| x.to_lowercase().trim_matches(|c:char| c != INTERNAL_TAG_MARKER && !c.is_alphabetic()).to_owned())
@@ -323,7 +322,7 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
           match field {
             "file" => last_entry.Files = parse_file_field(&mut last_entry, &value.to_string()), //parse_file_field(value),
             "author" | "editor" | "translator" => {
-              let r = last_entry.Creators.insert(field.to_string(), parse_creators_field(&value));
+              let _ = last_entry.Creators.insert(field.to_string(), parse_creators_field(&value));
             },
             "mendeley-tags"|"groups"|"tags" => last_entry.Tags = parse_tags_field( &value),
             _ => {
@@ -356,6 +355,10 @@ fn names_to_string(names: &Vec<Name>) -> String{
   .map(|a| a.first_name.to_owned() + " " + &a.last_name)
   .collect::<Vec<String>>()
   .join(NAMES_SEPARATOR)
+}
+
+fn hashset_to_string(files: &HashSet<String>) -> String{
+  files.to_owned().into_iter().collect::<Vec<String>>().join(INTERNAL_SEPARATOR)
 }
 
 fn write_csv(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
@@ -407,8 +410,8 @@ fn write_csv(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
         row.push(" ".to_string());
       }
     }
-    row.push(e.Tags.iter().map(|x| x.to_string()).collect::<Vec<String>>().join(";"));
-    row.push(format!("\"{}\"", e.Files.iter().cloned().collect::<Vec<String>>().join(";")));
+    row.push(format!("\"{}\"", hashset_to_string(&e.Tags)));
+    row.push(format!("\"{}\"", hashset_to_string(&e.Files)));
     writeln!(f, "{}",row.join(",")).unwrap();
   }
 }
@@ -473,19 +476,7 @@ fn get_entries_from_root_path(root_path:String) -> Vec<Entry>{
   parse_bib(&bib_vec)
 }
 
-fn write_to_ads(){
-  let path = Path::new("ads_test.txt:ads.bib");
-  let display = path.display();
 
-  // Open a file in write-only mode, returns `io::Result<File>`
-  let mut f = match File::create(&path) {
-      Err(why) => panic!("couldn't create {}: {}", display, why),
-      Ok(file) => file,
-  };
-
-
-  writeln!(f, "test 01\ntest 02");
-}
 
 fn main() {
   let mut main_entries = get_entries_from_root_path("bibs/main".to_string());
@@ -505,33 +496,13 @@ fn main() {
 
   get_files_from_entries(&mut main_entries, &other_entries);
 
-  // inspect_entries(&mut main_entries);
   let (_, ordered_fields) = get_statistics(&main_entries);
 
   write_bib("Complete.bib", &main_entries);
   write_csv("Complete.csv", &main_entries, &ordered_fields);
-  // write_sqlite("Complete.db", &main_entries, &ordered_fields);
 }
 
-// fn inspect_entries(entries: &mut Vec<Entry>){
-//   for e in entries{
-//     // check author field
-//     if e.Creators.is_empty() {
-//       e.Tags.insert("#no author".to_string());
-//     }
-//     else if !e.Creators
-//               .iter()
-//               .map(|x| format!("{} {}", x.first_name, x.last_name))
-//               .collect::<Vec<String>>()
-//               .join("")
-//               .replace(".", "")
-//               .replace(" ", "")
-//               .chars().all(char::is_alphanumeric)
-//     {
-//       e.Tags.insert("#corrupted author".to_string());
-//     }
-//   }
-// }
+
 
 fn get_files_from_entries(entries: &mut Vec<Entry>, other_entries: &Vec<Entry>){
   for e0 in entries{
@@ -621,7 +592,7 @@ fn get_files_from_paths(entries: &mut Vec<Entry>, doc_paths: &Vec<PathBuf>){
   // }
 }
 
-fn remove_redundant_Entries(mut entries: & mut Vec<Entry>){
+fn remove_redundant_Entries(entries: & mut Vec<Entry>){
   // Remove identical entries
   let mut repeated: Vec<usize> = vec![];
   for i in 0..entries.len(){
@@ -791,6 +762,36 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
 //   }
 // }
 
-fn files_to_string(files: &HashSet<String>) -> String{
-  files.to_owned().into_iter().collect::<Vec<String>>().join(INTERNAL_SEPARATOR)
-}
+// fn inspect_entries(entries: &mut Vec<Entry>){
+//   for e in entries{
+//     // check author field
+//     if e.Creators.is_empty() {
+//       e.Tags.insert("#no author".to_string());
+//     }
+//     else if !e.Creators
+//               .iter()
+//               .map(|x| format!("{} {}", x.first_name, x.last_name))
+//               .collect::<Vec<String>>()
+//               .join("")
+//               .replace(".", "")
+//               .replace(" ", "")
+//               .chars().all(char::is_alphanumeric)
+//     {
+//       e.Tags.insert("#corrupted author".to_string());
+//     }
+//   }
+// }
+
+// fn write_to_ads(){
+//   let path = Path::new("ads_test.txt:ads.bib");
+//   let display = path.display();
+
+//   // Open a file in write-only mode, returns `io::Result<File>`
+//   let mut f = match File::create(&path) {
+//       Err(why) => panic!("couldn't create {}: {}", display, why),
+//       Ok(file) => file,
+//   };
+
+
+//   writeln!(f, "test 01\ntest 02");
+// }
