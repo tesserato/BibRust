@@ -327,7 +327,13 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
             "mendeley-tags"|"groups"|"tags" => last_entry.Tags = parse_tags_field( &value),
             _ => {
 
-              if field == "isbn" {value = value.chars().filter(|x| x.is_numeric()).collect()};
+              if field == "isbn" {
+                value = value.chars().filter(|x| x.is_numeric()).collect()
+              };
+
+              if field == "arxivid" || field == "eprint" {
+                value = value.split(":").map(|x| x.to_string()).collect::<Vec<String>>().last().unwrap().to_string()
+              };
 
               if Entries.last().unwrap().Fields_Values.contains_key(field){
                 println!("Repeated entry at {}\n", field_value);
@@ -475,8 +481,6 @@ fn get_entries_from_root_path(root_path:String) -> Vec<Entry>{
 
   parse_bib(&bib_vec)
 }
-
-
 
 fn main() {
   let mut main_entries = get_entries_from_root_path("bibs/main".to_string());
