@@ -17,11 +17,17 @@ use std::path::{Path, PathBuf};
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::str;
-// use itertools::Itertools;
-// use alloc::collections;
+
+extern crate rusqlite;
+use rusqlite::{Connection, Result};
+use rusqlite::NO_PARAMS;
 
 static INTERNAL_TAG_MARKER: char ='#';
 static REVIEWED: &str = "#reviewed";
+
+struct Statistic{
+  list_of_authors: HashSet<Author>,
+}
 
 fn get_statistics(Entries:&Vec<Entry>) -> (Vec<String>,Vec<String>){
   let mut types: HashMap<String, u32> = HashMap::new();
@@ -113,8 +119,9 @@ struct Entry {
   Key: String,
   Authors:Vec<Author>,
   Files: HashSet<String>,
-  Fields_Values: HashMap<String, String>,
   Tags:HashSet<String>,
+
+  Fields_Values: HashMap<String, String>,
 }
 
 impl PartialEq for Entry {
@@ -134,7 +141,7 @@ fn Entry_to_String_bib(e: & Entry) -> String{
 
   // authors
   if e.Authors.len() > 0 {
-    t = e.Authors.iter().map(|x| format!("{} {}", x.first_name, x.last_name)).collect::<Vec<String>>().join(" and ");
+    t = e.Authors.iter().map(|x| format!("{} {}", x.first_name, x.last_name).trim().to_string()).collect::<Vec<String>>().join(" and ");
     s.push_str(&format!("author = {{{}}},\n", t));
   }
 
@@ -472,6 +479,7 @@ fn main() {
 
   write_bib("Complete.bib", &main_entries);
   write_csv("Complete.csv", &main_entries, &ordered_fields);
+  write_sqlite("Complete.db", &main_entries, &ordered_fields);
 }
 
 fn inspect_entries(entries: &mut Vec<Entry>){
@@ -700,88 +708,84 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
   eq
 }
 
+fn write_sqlite(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
+  let path = Path::new(path);
+  let display = path.display();
 
-// fn parse_file_field(original_value:&str) -> Vec<String>{
-//   let vec:Vec<String> = original_value.split(";").map(|s| s.to_owned()).collect();
-//   let mut out:Vec<String> = vec![];
-//   for v in &vec{
-//     let clean = v
-//       .trim_end_matches(":PDF")
-//       .trim_end_matches(":pdf")
-//       .trim_end_matches(":application/pdf")
-//       .trim_matches(':')
-//       .replace("\\:", ":")
-//       .replace("\\", "/");
-//       println!("{}",clean);
-//       let path =Path::new(&clean);
-//     if path.exists(){
-//       out.push(path.as_os_str().to_str().unwrap().to_string());
-//     }
-//   }
-//   out
-// }
+  // Open a file in write-only mode, returns `io::Result<File>`
+  let conn = Connection::open(&path).unwrap();
 
-// fn recursive_paths(path:&str, bib_paths:&mut Vec<PathBuf>, doc_paths:&mut Vec<PathBuf>){
-//   let exts=vec!["pdf","djvu,epub"];
-//   for entry in fs::read_dir(path).unwrap() {
-//     let entry = entry.unwrap();
-//     if entry.path().is_dir(){
-//       recursive_paths(&entry.path().to_str().unwrap().to_owned(), bib_paths, doc_paths);
-//     }
-//     else{
-//       if entry.path().extension().is_some(){
-//         let ext = entry.path().extension().unwrap().to_owned();
-//         // let ext = osext.to_str().unwrap()
-//         if ext == "bib" {
-//           bib_paths.push(entry.path());
-//         }
-//         else if exts.contains(&ext.to_str().unwrap()) {
-//           doc_paths.push(entry.path());
-//         }
-//       }
-//     }
-//   }
-// }
+  let res = conn.execute(
+    "CREATE TABLE IF NOT EXISTS Entries (
+      type           TEXT,
+      [key]          TEXT PRIMARY KEY
+                     NOT NULL
+                     UNIQUE,
+      author         TEXT,
+      title          TEXT UNIQUE
+                          NOT NULL,
+      year           INT  CHECK (length(year) == 2 OR 
+                                 length(year) == 4),
+      pages          TEXT,
+      abstract       TEXT,
+      doi            TEXT UNIQUE,
+      volume         TEXT,
+      issn           TEXT,
+      journal        TEXT,
+      number         TEXT,
+      keywords       TEXT,
+      publisher      TEXT,
+      isbn           TEXT UNIQUE,
+      url            TEXT,
+      booktitle      TEXT,
+      shorttitle     TEXT,
+      eprint         TEXT UNIQUE,
+      archiveprefix  TEXT,
+      arxivid        TEXT UNIQUE,
+      pmid           TEXT,
+      annote         TEXT,
+      edition        TEXT,
+      address        TEXT,
+      typefield      TEXT,
+      month          INT,
+      series         TEXT,
+      editor         TEXT,
+      institution    TEXT,
+      howpublished   TEXT,
+      organization   TEXT,
+      school         TEXT,
+      translator     TEXT,
+      [broken-files] TEXT,
+      qualityassured TEXT,
+      tags           TEXT,
+      file           TEXT
+  )
+  WITHOUT ROWID;"
+     ,NO_PARAMS,
+    );
 
-// fn paths_to_filenames(paths:&Vec<PathBuf>)->Vec<String>{
-//   let mut filenames:Vec<String> = vec![];
-//   for p in paths{
-//     filenames.push(p.file_name().unwrap().to_str().unwrap().to_string());
-//     // println!("{}", filenames.last().unwrap());
-//   }
-//   filenames
-// }
+    match res {
+      Ok(v) => println!("table created: {:?}", v),
+      Err(e) => println!("sqlite error: {:?}", e),
+  }
 
-// fn sort_types_fields(types:&HashMap<String, u32>, fields:&HashMap<String, u32>) -> (Vec<String>,Vec<String>){
-//   // let mut types_vec: Vec<(String, u32)>;
-//   let mut types_vec: Vec<(String, u32)> = vec![];
+  for e in entries{
+    let c = e.Fields_Values.to_owned().into_iter().map(|x| x.0).collect::<Vec<String>>().join(",");
+    let columns = format!("type,key,author,file,tags,{}", c);
 
-//   for (t,c) in types{
-//     types_vec.push((t.to_string(), *c));
-//   }  
+    let a = e.Authors.iter().map(|x| format!("{} {}", x.first_name, x.last_name).trim().to_string()).collect::<Vec<String>>().join(" and ");
+    let f = e.Files.to_owned().into_iter().collect::<Vec<String>>().join(";");
+    let t = e.Tags.to_owned().into_iter().collect::<Vec<String>>().join(";");
+    let o = e.Fields_Values.iter().map(|x| format!("\"{}\"", x.1)).collect::<Vec<String>>().join(",");
+    let values = format!("\"{}\",\"{}\",\"{}\",\"{}\",\"{}\",{}",e.Type, e.Key, a, f, t, o);
 
-//   let mut ordered_types:Vec<String> = Vec::new();
+    let instruction = format!("INSERT INTO Entries ({})\nVALUES({});", columns, values);
+    let res = conn.execute(&instruction, NO_PARAMS);
 
-//   types_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
-//   for (key, value) in types_vec {
-//     println!("{} {}", key, value);
-//     ordered_types.push(key);
-//   }
-
-//   println!("");
-
-//   let mut fields_vec: Vec<(String, u32)> = vec![];
-
-//   for (t,c) in fields{
-//     fields_vec.push((t.to_string(), *c));
-//   }  
-
-//   let mut ordered_fields:Vec<String> = Vec::new();
-
-//   fields_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
-//   for (key, value) in fields_vec {
-//     println!("{} {}", key, value);
-//     ordered_fields.push(key);
-//   }
-//   (ordered_types, ordered_fields)
-// }
+    // println!("{}\n", instruction);
+    match res {
+      Ok(v) => continue, //println!("row inserted: {:?}", v),
+      Err(e) => println!("{}\n{:?}\n", instruction, e),
+    }
+  }
+}

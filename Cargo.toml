@@ -6,6 +6,6 @@ edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[dependencies]
-# pdf-extract = "0.6.2"
-# lopdf = "0.26.0"
+[dependencies.rusqlite]
+version = "0.19.0"
+features = ["bundled"]
