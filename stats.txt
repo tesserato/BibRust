@@ -1,5 +1,5 @@
 Found a total of 1305 entries
-(2 reviewed, 1264 with author, 774 with doi, 638 with files, 481 whith url):
+(2 reviewed, 1278 with author, 774 with doi, 638 with files, 481 whith url):
 article 796
 book 276
 inproceedings 77
@@ -8,8 +8,8 @@ collection 26
 unpublished 23
 incollection 17
 online 8
-report 6
 electronic 6
+report 6
 thesis 5
 phdthesis 4
 mvbook 4
@@ -33,21 +33,20 @@ isbn 491
 url 482
 booktitle 331
 shorttitle 215
-arxivid 173
-archiveprefix 173
 eprint 173
-annote 137
+archiveprefix 173
+arxivid 173
 pmid 137
+annote 137
 edition 132
 address 124
 type 113
 month 101
 series 63
-editor 50
 institution 32
 howpublished 15
 organization 7
 school 4
-translator 3
 qualityassured 1
+date 1
 urldate 1
