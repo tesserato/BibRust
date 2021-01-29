@@ -20,6 +20,8 @@ use std::str;
 
 extern crate csv;
 
+// extern crate unicode_normalization;
+// use unicode_normalization::UnicodeNormalization;
 
 // extern crate rusqlite;
 // use rusqlite::{Connection, Result};
@@ -211,12 +213,17 @@ fn parse_creators_field(original_value:&str) -> Vec<Name>{
   let mut authors: Vec<Name> = vec![];
   // let patterns : &[_] = &['{', '}','\t',',',' '];
   // let exceptions = [' ', '-'];
-
   fn parse(name:&str) -> String{
+    let remove = [',',';','{','}','\\'];
     name
     .trim()
     .chars()
-    .filter(|x| x.is_alphabetic() || [' ', '-'].contains(x))    
+    .filter(|x|
+        !x.is_ascii_control() &&
+        !x.is_numeric() &&
+        // !x.is_whitespace() &&
+        !remove.contains(x)
+    )
     .collect::<String>()
     .trim()
     .to_string()
@@ -577,8 +584,6 @@ fn main() {
   let e1 = read_and_parse_csv("Complete.csv".to_string());
   write_bib("Complete_from_csv.bib", &e1)
 }
-
-
 
 fn get_files_from_entries(entries: &mut Vec<Entry>, other_entries: &Vec<Entry>){
   for e0 in entries{
