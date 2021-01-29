@@ -18,6 +18,9 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::str;
 
+extern crate csv;
+
+
 // extern crate rusqlite;
 // use rusqlite::{Connection, Result};
 // use rusqlite::NO_PARAMS;
@@ -119,8 +122,8 @@ struct Entry {
   Type: String,
   Key: String,
   Creators: HashMap<String, Vec<Name>>,
-  Files: HashSet<String>,
   Tags:HashSet<String>,
+  Files: HashSet<String>,
 
   Fields_Values: HashMap<String, String>,
 }
@@ -258,7 +261,7 @@ fn parse_file_field(e: &mut Entry, value:&String) -> HashSet<String>{
           checked.insert(Path::new(&p).as_os_str().to_str().unwrap().to_string());
         }
         else{
-          println!("{}", p);
+          // println!("{}", p);
           if e.Fields_Values.contains_key("broken-files"){
             e.Fields_Values.get_mut("broken-files").unwrap().push_str(&format!(",{}", p).to_string());
           }
@@ -289,7 +292,6 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
   let patterns : &[_] = &['{', '}','\t',',']; 
   let mut counter = 0;
   while counter < lines.len() {
-
     if lines[counter].starts_with("@"){ // found entry
       let vec: Vec<&str> = lines[counter].splitn(2,"{").collect();
       if vec.len() == 2 {
@@ -422,7 +424,7 @@ fn write_csv(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
   }
 }
 
-fn write_bib(path: &str, entries: & Vec<Entry>){
+fn write_bib(path: &str, entries: &Vec<Entry>){
   let path = Path::new(path);
   let display = path.display();
 
@@ -482,28 +484,82 @@ fn get_entries_from_root_path(root_path:String) -> Vec<Entry>{
   parse_bib(&bib_vec)
 }
 
+fn read_and_parse_csv(path:String) -> Vec<Entry>{
+  // let file = File::open(path).unwrap();
+  // let buf = BufReader::new(file);
+
+  let raw = fs::read_to_string(&path).unwrap();
+
+  let mut rdr = csv::ReaderBuilder::new().from_reader(raw.as_bytes());
+
+  let keys:Vec<String> = rdr.headers().unwrap().into_iter().map(|x| x.to_string()).collect();
+  let n = keys.len();
+  println!("{:?}", keys);
+  let mut Entries : Vec<Entry> = vec![];
+
+  while let Some(Ok(result)) = rdr.records().next() {
+    let v:Vec<String> = result.into_iter().map(|x| x.to_string()).collect();
+    let mut e = create_Entry(v[1].to_owned(), v[2].to_owned());
+    // println!("{:?}\n", v);
+    // creators
+    if !v[3].trim().is_empty(){
+      e.Creators.insert("author".to_string(), parse_creators_field(&v[3]));
+    }
+    if !v[4].trim().is_empty(){
+      e.Creators.insert("editor".to_string(), parse_creators_field(&v[4]));
+    }
+    if !v[5].trim().is_empty(){
+      e.Creators.insert("translator".to_string(), parse_creators_field(&v[5]));
+    }
+
+    if !v[0].trim().is_empty() || !v[n-2].is_empty(){
+      e.Tags = parse_tags_field(&v[n-2]);
+      if !v[0].is_empty(){
+        e.Tags.insert(REVIEWED.to_string());
+      }
+    }
+
+    for j in 6..n-2{
+      if !v[j].trim().is_empty(){
+        e.Fields_Values.insert(keys[j].to_owned(), v[j].to_owned());
+      }
+    }
+
+    if !v[n-1].trim().is_empty(){
+      e.Files = parse_file_field(&mut e,&v[n-1]);
+    }
+    Entries.push(e);
+  }
+  Entries
+}
+
 fn main() {
-  let mut main_entries = get_entries_from_root_path("bibs/main".to_string());
-  remove_redundant_Entries(& mut main_entries);
 
-  let mut doc_paths: Vec<PathBuf> = vec![];
-  find_paths_to_files_with_ext(
-    "C:/Users/tesse/Desktop/Files/Dropbox/BIBrep",
-    &mut doc_paths,
-    &vec!["pdf".to_string(),"epub".to_string(),"djvu".to_string()]
-  );
+  let e1 = read_and_parse_csv("Complete.csv".to_string());
 
-  get_files_from_paths(&mut main_entries, &doc_paths);
+  write_bib("Complete_from_csv.bib", &e1)
 
-  let mut other_entries = get_entries_from_root_path("bibs/other".to_string());
-  remove_redundant_Entries(&mut other_entries);
+  // let mut main_entries = get_entries_from_root_path("bibs/main".to_string());
+  // remove_redundant_Entries(& mut main_entries);
 
-  get_files_from_entries(&mut main_entries, &other_entries);
+  // let mut doc_paths: Vec<PathBuf> = vec![];
+  // find_paths_to_files_with_ext(
+  //   "C:/Users/tesse/Desktop/Files/Dropbox/BIBrep",
+  //   &mut doc_paths,
+  //   &vec!["pdf".to_string(),"epub".to_string(),"djvu".to_string()]
+  // );
 
-  let (_, ordered_fields) = get_statistics(&main_entries);
+  // get_files_from_paths(&mut main_entries, &doc_paths);
 
-  write_bib("Complete.bib", &main_entries);
-  write_csv("Complete.csv", &main_entries, &ordered_fields);
+  // let mut other_entries = get_entries_from_root_path("bibs/other".to_string());
+  // remove_redundant_Entries(&mut other_entries);
+
+  // get_files_from_entries(&mut main_entries, &other_entries);
+
+  // let (_, ordered_fields) = get_statistics(&main_entries);
+
+  // write_bib("Complete.bib", &main_entries);
+  // write_csv("Complete.csv", &main_entries, &ordered_fields);
 }
 
 
