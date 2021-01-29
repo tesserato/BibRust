@@ -581,8 +581,16 @@ fn main() {
   write_bib("Complete.bib", &main_entries);
   write_csv("Complete.csv", &main_entries, &ordered_fields);
 
-  let e1 = read_and_parse_csv("Complete.csv".to_string());
-  write_bib("Complete_from_csv.bib", &e1)
+  let mut e1 = read_and_parse_csv("Complete.csv".to_string());
+  write_bib("Complete_from_csv.bib", &e1);
+
+  let mut all: Vec<Entry> = vec![];
+  all.append(&mut main_entries);
+  all.append(&mut e1);
+
+  println!("before: {}", all.len());
+  remove_redundant_Entries(&mut all);
+  println!("after: {}", all.len());
 }
 
 fn get_files_from_entries(entries: &mut Vec<Entry>, other_entries: &Vec<Entry>){
