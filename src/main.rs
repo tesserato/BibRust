@@ -9,7 +9,7 @@
 // use std::env;
 // let path_to_pdf = path::Path::new("biblatex.pdf");
 // let result = extract_text(path_to_pdf);
-
+use std::cmp::Ordering;
 use std::io::BufReader;
 use std::fs::{self, File};
 use std::io::prelude::*;
@@ -119,7 +119,6 @@ struct Name{
   last_name:String
 }
 
-// #[derive(PartialEq)]
 struct Entry {
   Type: String,
   Key: String,
@@ -140,6 +139,20 @@ impl PartialEq for Entry {
   }
 }
 
+impl Eq for Entry {}
+
+impl PartialOrd for Entry {
+  fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+    Some(self.cmp(other))
+  }
+}
+
+impl Ord for Entry {
+  fn cmp(&self, other: &Self) -> Ordering {
+    self.Key.cmp(&other.Key)
+  }
+}
+
 fn Entry_to_String_bib(e: & Entry) -> String{
   // type and key
   let mut s = format!("@{}{{{},\n",e.Type, e.Key);
@@ -154,7 +167,10 @@ fn Entry_to_String_bib(e: & Entry) -> String{
 
   // Fields & Values
   if e.Fields_Values.len() > 0 {
-    let t = e.Fields_Values.iter().map(|x| format!("{} = {{{}}},\n", x.0, x.1)).collect::<Vec<String>>().join("");
+    let mut fields = e.Fields_Values.iter().map(|x| x.0.to_string()).collect::<Vec<String>>();
+    fields.sort();
+    let t = fields.iter().map(|x| format!("{} = {{{}}},\n", x, e.Fields_Values[x])).collect::<Vec<String>>().join("");
+    // let t = e.Fields_Values.iter().map(|x| format!("{} = {{{}}},\n", x.0, x.1)).collect::<Vec<String>>().join("");
     s.push_str(&t);
   }
 
@@ -322,7 +338,7 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
       }
       counter +=1;
       while counter < lines.len() && lines[counter].trim() != "}"{ // while inside entry
-        let mut field_value=String::new();
+        let mut field_value= String::new();
         while 
         counter < lines.len() - 1 && 
         !(lines[counter].trim().ends_with("}") && lines[counter+1].trim() == "}" ) && 
@@ -442,7 +458,7 @@ fn write_csv(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
   }
 }
 
-fn write_bib(path: &str, entries: &Vec<Entry>){
+fn write_bib(path: &str, entries: & Vec<Entry>){
   let path = Path::new(path);
   let display = path.display();
 
@@ -578,10 +594,16 @@ fn main() {
 
   let (_, ordered_fields) = get_statistics(&main_entries);
 
+
+
+  main_entries.sort();
   write_bib("Complete.bib", &main_entries);
   write_csv("Complete.csv", &main_entries, &ordered_fields);
 
   let mut e1 = read_and_parse_csv("Complete.csv".to_string());
+
+
+  e1.sort();
   write_bib("Complete_from_csv.bib", &e1);
 
   let mut all: Vec<Entry> = vec![];
