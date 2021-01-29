@@ -209,26 +209,37 @@ fn read_bib(path:PathBuf, bib_lines:&mut Vec<String>){
 
 fn parse_creators_field(original_value:&str) -> Vec<Name>{
   let mut authors: Vec<Name> = vec![];
-  let patterns : &[_] = &['{', '}','\t',',',' '];
+  // let patterns : &[_] = &['{', '}','\t',',',' '];
+  // let exceptions = [' ', '-'];
+
+  fn parse(name:&str) -> String{
+    name
+    .trim()
+    .chars()
+    .filter(|x| x.is_alphabetic() || [' ', '-'].contains(x))    
+    .collect::<String>()
+    .trim()
+    .to_string()
+  }
   for fl in original_value.split("and").map(|x| x.trim()){
     if fl.contains(","){
-      let fl_vec = fl.rsplit_once(",").unwrap();
+      let fl_vec = fl.split_once(",").unwrap();
       authors.push(Name{
-        first_name:fl_vec.1.trim().trim_matches(patterns).to_string(), 
-        last_name:fl_vec.0.trim().trim_matches(patterns).to_string()
+        first_name:parse(fl_vec.1), 
+        last_name:parse(fl_vec.0)
       })
     }
     else if fl.contains(" "){
       let fl_vec = fl.rsplit_once(" ").unwrap();
       authors.push(Name{
-        first_name:fl_vec.0.trim().trim_matches(patterns).to_string(), 
-        last_name:fl_vec.1.trim().trim_matches(patterns).to_string()
+        first_name:parse(fl_vec.0), 
+        last_name:parse(fl_vec.1)
       })
     }
     else{
       authors.push(Name{
         first_name:"".to_string(), 
-        last_name:fl.trim().trim_matches(patterns).to_string()
+        last_name:parse(fl)
     })
     }
   }
@@ -487,18 +498,25 @@ fn get_entries_from_root_path(root_path:String) -> Vec<Entry>{
 fn read_and_parse_csv(path:String) -> Vec<Entry>{
   // let file = File::open(path).unwrap();
   // let buf = BufReader::new(file);
+  // let raw = fs::read_to_string(&path).unwrap();
 
-  let raw = fs::read_to_string(&path).unwrap();
-
-  let mut rdr = csv::ReaderBuilder::new().from_reader(raw.as_bytes());
+  let mut rdr = csv::ReaderBuilder::new().from_path(path).unwrap();
 
   let keys:Vec<String> = rdr.headers().unwrap().into_iter().map(|x| x.to_string()).collect();
   let n = keys.len();
   println!("{:?}", keys);
   let mut Entries : Vec<Entry> = vec![];
 
-  while let Some(Ok(result)) = rdr.records().next() {
-    let v:Vec<String> = result.into_iter().map(|x| x.to_string()).collect();
+  while let Some(result) = rdr.records().next() {
+    match result {
+      Ok(_) => (),
+      Err(e) =>{
+        println!("{:?}\n", e);
+        continue
+      },
+    }
+
+    let v:Vec<String> = result.unwrap().into_iter().map(|x| x.to_string()).collect();
     let mut e = create_Entry(v[1].to_owned(), v[2].to_owned());
     // println!("{:?}\n", v);
     // creators
@@ -534,32 +552,30 @@ fn read_and_parse_csv(path:String) -> Vec<Entry>{
 }
 
 fn main() {
+  let mut main_entries = get_entries_from_root_path("bibs/main".to_string());
+  remove_redundant_Entries(& mut main_entries);
+
+  let mut doc_paths: Vec<PathBuf> = vec![];
+  find_paths_to_files_with_ext(
+    "C:/Users/tesse/Desktop/Files/Dropbox/BIBrep",
+    &mut doc_paths,
+    &vec!["pdf".to_string(),"epub".to_string(),"djvu".to_string()]
+  );
+
+  get_files_from_paths(&mut main_entries, &doc_paths);
+
+  let mut other_entries = get_entries_from_root_path("bibs/other".to_string());
+  remove_redundant_Entries(&mut other_entries);
+
+  get_files_from_entries(&mut main_entries, &other_entries);
+
+  let (_, ordered_fields) = get_statistics(&main_entries);
+
+  write_bib("Complete.bib", &main_entries);
+  write_csv("Complete.csv", &main_entries, &ordered_fields);
 
   let e1 = read_and_parse_csv("Complete.csv".to_string());
-
   write_bib("Complete_from_csv.bib", &e1)
-
-  // let mut main_entries = get_entries_from_root_path("bibs/main".to_string());
-  // remove_redundant_Entries(& mut main_entries);
-
-  // let mut doc_paths: Vec<PathBuf> = vec![];
-  // find_paths_to_files_with_ext(
-  //   "C:/Users/tesse/Desktop/Files/Dropbox/BIBrep",
-  //   &mut doc_paths,
-  //   &vec!["pdf".to_string(),"epub".to_string(),"djvu".to_string()]
-  // );
-
-  // get_files_from_paths(&mut main_entries, &doc_paths);
-
-  // let mut other_entries = get_entries_from_root_path("bibs/other".to_string());
-  // remove_redundant_Entries(&mut other_entries);
-
-  // get_files_from_entries(&mut main_entries, &other_entries);
-
-  // let (_, ordered_fields) = get_statistics(&main_entries);
-
-  // write_bib("Complete.bib", &main_entries);
-  // write_csv("Complete.csv", &main_entries, &ordered_fields);
 }
 
 
