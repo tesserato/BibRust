@@ -9,3 +9,7 @@ edition = "2018"
 [dependencies]
 csv = "1"
 clap = "2.33.3"
+walkdir = "2"
+
+[profile.release]
+opt-level = 3

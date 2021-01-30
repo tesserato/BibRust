@@ -1,7 +1,7 @@
 #![feature(str_split_once)]
 #![allow(non_snake_case)]
 
-use std::cmp::Ordering;
+use std::{cmp::Ordering, vec};
 use std::io::BufReader;
 use std::fs::{self, File};
 use std::io::prelude::*;
@@ -9,12 +9,15 @@ use std::path::{Path, PathBuf};
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::str;
-
+use std::env;
+use std::ffi::OsStr;
 extern crate csv;
 
 extern crate clap;
 use clap::{App, Arg, ArgMatches};
 
+extern crate walkdir;
+use walkdir::WalkDir;
 
 
 static INTERNAL_TAG_MARKER: char ='#';
@@ -393,8 +396,8 @@ fn hashset_to_string(files: &HashSet<String>) -> String{
   files.to_owned().into_iter().collect::<Vec<String>>().join(INTERNAL_SEPARATOR)
 }
 
-fn write_csv(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
-  let path = Path::new(path);
+fn write_csv(path: &PathBuf, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
+  // let path = Path::new(path);
   let display = path.display();
 
   // Open a file in write-only mode, returns `io::Result<File>`
@@ -448,8 +451,8 @@ fn write_csv(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
   }
 }
 
-fn write_bib(path: &str, entries: & Vec<Entry>){
-  let path = Path::new(path);
+fn write_bib(path: &PathBuf, entries: & Vec<Entry>){
+  // let path = Path::new(path);
   let display = path.display();
 
   // Open a file in write-only mode, returns `io::Result<File>`
@@ -478,41 +481,32 @@ fn write_raw_bib(path: &str, bib_vec : &Vec<String>){
   }
 }
 
-fn find_paths_to_files_with_ext(root_path:&str, paths:&mut Vec<PathBuf>, exts:& Vec<String>){  
-  for dir_entry in fs::read_dir(root_path).unwrap() {
-    let p = dir_entry.unwrap().path();
-    if p.is_dir(){
-      find_paths_to_files_with_ext(&p.to_str().unwrap().to_owned(), paths, &exts);
-    }
-    else if
-    p.extension().is_some() 
-    && exts.contains(&p.extension().unwrap().to_str().unwrap().to_lowercase().to_owned())
-    {
-      paths.push(p);
+fn find_paths_to_files_with_ext(root_path:&str, exts:& Vec<String> ) -> Vec<PathBuf>{
+  let mut paths: Vec<PathBuf> = vec![];
+  for direntry in WalkDir::new(root_path).into_iter().filter_map(|e| e.ok()){
+    let ext = direntry.path().extension();
+    if ext.is_some() && exts.contains(&ext.unwrap().to_str().unwrap().to_lowercase()){
+      paths.push(direntry.path().to_owned());
     }
   }
+  paths
 }
 
 fn get_entries_from_root_path(root_path:String) -> Vec<Entry>{
   let exts=vec!["bib".to_string()];
-  let mut bib_paths= vec![];
-  find_paths_to_files_with_ext(&root_path, &mut bib_paths, &exts);
+  let mut bib_paths = find_paths_to_files_with_ext(&root_path, &exts);
 
   let mut bib_vec = vec![];
   for p in bib_paths {
-    println!("{:?}", p);
+    println!("{:#?}", p);
     read_bib(p, &mut bib_vec);
   }
-  write_raw_bib("Complete_raw.bib", &mut bib_vec);
+  // write_raw_bib("Complete_raw.bib", &mut bib_vec);
 
   parse_bib(&bib_vec)
 }
 
-fn read_and_parse_csv(path:String) -> Vec<Entry>{
-  // let file = File::open(path).unwrap();
-  // let buf = BufReader::new(file);
-  // let raw = fs::read_to_string(&path).unwrap();
-
+fn read_and_parse_csv(path:PathBuf) -> Vec<Entry>{
   let mut rdr = csv::ReaderBuilder::new().from_path(path).unwrap();
 
   let keys:Vec<String> = rdr.headers().unwrap().into_iter().map(|x| x.to_string()).collect();
@@ -640,34 +634,110 @@ fn parse_cl_args() -> ArgMatches<'static> {
     .get_matches()
 }
 
+fn from_path_to_entries(input_path: String) -> Option<Vec<Entry>>{
+  let mut main_entries = vec![];
+  let p = PathBuf::from(input_path);
+  if p.is_dir(){
+    println!("Searching for .bib files in {:#?}:", p);
+    main_entries = get_entries_from_root_path("bibs/main".to_string());
+  }
+  else if p.is_file() && p.extension().is_some(){
+    match p.extension().unwrap().to_str() {
+      Some("csv")    => main_entries = read_and_parse_csv(p),
+      Some("bib")    => {
+        let mut bib_vec = vec![];
+        read_bib(p, &mut bib_vec);
+        main_entries = parse_bib(&bib_vec);
+      },
+      Some(ext) => println!("Couldn't recognize extension .{}", ext),
+      None           => println!("No extension detected in {:?}", p.as_os_str()),
+    }
+  }
+  else{
+    return None;
+    // panic!("No extension detected in {:?}; no input is available", p.as_os_str());
+    // panic!("Oh no something bad has happened!")
+  }
+  Some(main_entries)
+}
+
 fn main() {
   let args = parse_cl_args();
 
-  let input_path = match args.value_of("input") {
-    Some(i) => i,
-    None => "no input path"
+  // read input path from args
+  let mut input_path = String::new();
+  if args.value_of("input").is_some(){
+    input_path = args.value_of("input").unwrap().to_string();
+  }
+  else if args.value_of("input_pos").is_some() {
+    input_path = args.value_of("input_pos").unwrap().to_string();
+  }
+  else{
+    input_path = env::current_dir().unwrap().to_str().unwrap().to_string();
+  }
+
+  // read into main entries
+  let mut main_entries = match from_path_to_entries(input_path){
+    Some(me) => me,
+    None => panic!("No extension detected in input path; no input is available"),
   };
 
-  let input_path_pos = match args.value_of("input_pos") {
-    Some(i) => i,
-    None => "no input path pos"
-  };
+  // auxiliary entries
+  if args.value_of("auxiliary").is_some(){
+    let aux_path = args.value_of("auxiliary").unwrap().to_string();
+    let auxiliary_entries = from_path_to_entries(aux_path);
+    if auxiliary_entries.is_some(){
+      get_files_from_entries(&mut main_entries, &auxiliary_entries.unwrap());
+    }
+  }
 
-  let output_path = match args.values_of("output") {
-    Some(o) => o.map(|x| x.to_string()).collect::<Vec<String>>().join(";"),
-    None => "no output path".to_string()
-  };
+  // file paths
+  if args.value_of("files").is_some(){
+    let files_root_path = args.value_of("files").unwrap().to_string();
+    let exts = vec!["pdf".to_string(),"epub".to_string(),"djvu".to_string()];
+    let filepaths = find_paths_to_files_with_ext(&files_root_path, &exts);
+    if !filepaths.is_empty() {
+      get_files_from_paths(&mut main_entries, &filepaths);
+    }
+  }
 
-  let output_path_pos = match args.values_of("output_pos") {
-    Some(o) => o.map(|x| x.to_string()).collect::<Vec<String>>().join(";"),
-    None => "no output path pos".to_string()
-  };
+  // output
+  let (_, ordered_fields) = get_statistics(&main_entries);
 
+  let mut output_path = String::new();
+  if args.value_of("output").is_some(){
+    output_path = args.value_of("output").unwrap().to_string();
+  }
+  else if args.value_of("output_pos").is_some() {
+    output_path = args.value_of("output_pos").unwrap().to_string();
+  }
+  else{
+    output_path = env::current_dir().unwrap().to_str().unwrap().to_string();
+  }
 
-    println!("{}", input_path);
-    println!("{}", input_path_pos);
-    println!("{}", output_path);
-    println!("{}", output_path_pos);
+  let mut p = PathBuf::from(output_path);
+  if p.is_dir(){
+    p.push("Result.csv");
+    println!("Saving results at {:#?}:", p);
+    write_csv(&p, &main_entries, &ordered_fields)
+  }
+  else if p.extension().is_some(){
+    match p.extension().unwrap().to_str() {
+      Some("csv")    => write_csv(&p, &main_entries, &ordered_fields),
+      Some("bib")    => write_bib(&p, &main_entries),
+      Some(ext) => {
+        p.set_extension("csv");
+        write_csv(&p, &main_entries, &ordered_fields)
+      },
+      None           => println!("No extension detected in {:?}", p.as_os_str()),
+    }
+  }
+  else{
+    p = env::current_dir().unwrap();
+    p.push("Result.csv");
+    write_csv(&p, &main_entries, &ordered_fields);
+  }
+
   
 
 
