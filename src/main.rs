@@ -1,14 +1,6 @@
 #![feature(str_split_once)]
 #![allow(non_snake_case)]
 
-// extern crate pdf_extract;
-// extern crate lopdf;
-// use pdf_extract::*;
-// use lopdf::*;
-// use std::path;
-// use std::env;
-// let path_to_pdf = path::Path::new("biblatex.pdf");
-// let result = extract_text(path_to_pdf);
 use std::cmp::Ordering;
 use std::io::BufReader;
 use std::fs::{self, File};
@@ -20,12 +12,10 @@ use std::str;
 
 extern crate csv;
 
-// extern crate unicode_normalization;
-// use unicode_normalization::UnicodeNormalization;
+extern crate clap;
+use clap::{App, Arg, ArgMatches};
 
-// extern crate rusqlite;
-// use rusqlite::{Connection, Result};
-// use rusqlite::NO_PARAMS;
+
 
 static INTERNAL_TAG_MARKER: char ='#';
 static REVIEWED: &str = "#reviewed";
@@ -574,45 +564,151 @@ fn read_and_parse_csv(path:String) -> Vec<Entry>{
   Entries
 }
 
+fn parse_cl_args() -> ArgMatches<'static> {
+  App::new("BibRust")
+    .version("1.0")
+    .about("Tame your (bib)liographic files!")
+    .author("https://carlos-tarjano.web.app/")
+    .arg(Arg::with_name("input_pos")
+      .short("OP")
+      .long("INPUT")
+      .value_name("INPUT")
+      .help("positional: The input file to convert from (.bib or .csv), or the root folder in which to search for .bib files")
+      .takes_value(true)
+      .required(false)
+      .index(1)
+      .conflicts_with("input")
+    )
+    .arg(Arg::with_name("output_pos")
+      .short("OP")
+      .long("OUTPUT")
+      .value_name("OUTPUT")
+      .help("positional: Path[s] to output file[s] (.bib and / or .csv)")
+      .takes_value(true)
+      .required(false)
+      .index(2)
+      .conflicts_with("output")
+    )
+    .arg(Arg::with_name("input")
+      .short("i")
+      .long("input")
+      .value_name("path to file or folder")
+      .help("The input file to convert from (.bib or .csv), or the root folder in which to search for .bib files")
+      .takes_value(true)
+      .required(false)
+    )
+    .arg(Arg::with_name("output")
+      .short("o")
+      .long("output")
+      .value_name("path to file")
+      .help("Path[s] to output file[s] (.bib and / or .csv)")
+      .takes_value(true)
+      .required(false)
+    )
+    .arg(Arg::with_name("auxiliary")
+      .short("a")
+      .long("auxiliary")
+      .value_name("path to file or folder")
+      .help("The file (.bib or .csv), or the root folder in which to search for .bib files to be used to complement the info")
+      .takes_value(true)
+      .required(false)
+    )
+    .arg(Arg::with_name("files")
+      .short("f")
+      .long("files")
+      .value_name("path to folder")
+      .help("Path to a folder with files (.pdf, .epub and / or .djvu) to be linked to entries")
+      .takes_value(true)
+      .required(false)
+    )
+    .arg(Arg::with_name("keys")
+      .short("k")
+      .long("keys")
+      .value_name("update keys?")
+      .help("if set, new unique keys will be created as [year]_[first author last name]_[number]")
+      .takes_value(false)
+      .required(false)
+    )
+    .arg(Arg::with_name("merge")
+      .short("m")
+      .long("merge")
+      .value_name("merge redundant entries?")
+      .help("if set, redundant entries will be merged in a nondestructive way (except for keys and type)")
+      .takes_value(false)
+      .required(false)
+    )
+    .get_matches()
+}
+
 fn main() {
-  let mut main_entries = get_entries_from_root_path("bibs/main".to_string());
-  remove_redundant_Entries(& mut main_entries);
+  let args = parse_cl_args();
 
-  let mut doc_paths: Vec<PathBuf> = vec![];
-  find_paths_to_files_with_ext(
-    "C:/Users/tesse/Desktop/Files/Dropbox/BIBrep",
-    &mut doc_paths,
-    &vec!["pdf".to_string(),"epub".to_string(),"djvu".to_string()]
-  );
+  let input_path = match args.value_of("input") {
+    Some(i) => i,
+    None => "no input path"
+  };
 
-  get_files_from_paths(&mut main_entries, &doc_paths);
+  let input_path_pos = match args.value_of("input_pos") {
+    Some(i) => i,
+    None => "no input path pos"
+  };
 
-  let mut other_entries = get_entries_from_root_path("bibs/other".to_string());
-  remove_redundant_Entries(&mut other_entries);
+  let output_path = match args.values_of("output") {
+    Some(o) => o.map(|x| x.to_string()).collect::<Vec<String>>().join(";"),
+    None => "no output path".to_string()
+  };
 
-  get_files_from_entries(&mut main_entries, &other_entries);
-
-  let (_, ordered_fields) = get_statistics(&main_entries);
-
-
-
-  main_entries.sort();
-  write_bib("Complete.bib", &main_entries);
-  write_csv("Complete.csv", &main_entries, &ordered_fields);
-
-  let mut e1 = read_and_parse_csv("Complete.csv".to_string());
+  let output_path_pos = match args.values_of("output_pos") {
+    Some(o) => o.map(|x| x.to_string()).collect::<Vec<String>>().join(";"),
+    None => "no output path pos".to_string()
+  };
 
 
-  e1.sort();
-  write_bib("Complete_from_csv.bib", &e1);
+    println!("{}", input_path);
+    println!("{}", input_path_pos);
+    println!("{}", output_path);
+    println!("{}", output_path_pos);
+  
 
-  let mut all: Vec<Entry> = vec![];
-  all.append(&mut main_entries);
-  all.append(&mut e1);
 
-  println!("before: {}", all.len());
-  remove_redundant_Entries(&mut all);
-  println!("after: {}", all.len());
+  // let mut main_entries = get_entries_from_root_path("bibs/main".to_string());
+  // remove_redundant_Entries(& mut main_entries);
+
+  // let mut doc_paths: Vec<PathBuf> = vec![];
+  // find_paths_to_files_with_ext(
+  //   "C:/Users/tesse/Desktop/Files/Dropbox/BIBrep",
+  //   &mut doc_paths,
+  //   &vec!["pdf".to_string(),"epub".to_string(),"djvu".to_string()]
+  // );
+
+  // get_files_from_paths(&mut main_entries, &doc_paths);
+
+  // let mut other_entries = get_entries_from_root_path("bibs/other".to_string());
+  // remove_redundant_Entries(&mut other_entries);
+
+  // get_files_from_entries(&mut main_entries, &other_entries);
+
+  // let (_, ordered_fields) = get_statistics(&main_entries);
+
+
+
+  // main_entries.sort();
+  // write_bib("Complete.bib", &main_entries);
+  // write_csv("Complete.csv", &main_entries, &ordered_fields);
+
+  // let mut e1 = read_and_parse_csv("Complete.csv".to_string());
+
+
+  // e1.sort();
+  // write_bib("Complete_from_csv.bib", &e1);
+
+  // let mut all: Vec<Entry> = vec![];
+  // all.append(&mut main_entries);
+  // all.append(&mut e1);
+
+  // println!("before: {}", all.len());
+  // remove_redundant_Entries(&mut all);
+  // println!("after: {}", all.len());
 }
 
 fn get_files_from_entries(entries: &mut Vec<Entry>, other_entries: &Vec<Entry>){

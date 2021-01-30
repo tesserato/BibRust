@@ -20,3 +20,6 @@ path: `[+,!] a|b|r key [short]title`
 date: 2009-01-31
 filename to path:
   : -> --
+
+# usage:
+  bibrust or bibrust path/to/folder -> scan
