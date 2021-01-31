@@ -19,6 +19,8 @@ use clap::{App, Arg, ArgMatches};
 extern crate walkdir;
 use walkdir::WalkDir;
 
+extern crate url;
+use url::Url;
 
 static INTERNAL_TAG_MARKER: char ='#';
 static REVIEWED: &str = "#reviewed";
@@ -211,17 +213,24 @@ fn parse_file_field(e: &mut Entry, value:&String) -> HashSet<String>{
           checked.insert(Path::new(&p).as_os_str().to_str().unwrap().to_string());
         }
         else{
-          // println!("{}", p);
-          if e.Fields_Values.contains_key("broken-files"){
-            e.Fields_Values.get_mut("broken-files").unwrap().push_str(&format!(",{}", p).to_string());
-          }
-          else{
-            e.Fields_Values.insert("broken-files".to_string(), p);
-          }
+          e.BrokenFiles.insert(p);
         }
       }
     }
   checked
+}
+
+fn parse_url_field(value:&String) -> String{
+  let pattern : &[_] = &['{', '}','\t',',',' ',';'];
+  let mut checked:Vec<String> = vec![];
+  for url in value.split(pattern){
+    let curl = Url::parse(url);
+    if curl.is_ok(){
+      checked.push(curl.unwrap().to_string())
+    }
+
+  }
+  checked.join(INTERNAL_SEPARATOR)
 }
 
 fn parse_generic_field(original_value:&str) -> String{
@@ -281,11 +290,13 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
 
               if field == "isbn" {
                 value = value.chars().filter(|x| x.is_numeric()).collect()
-              };
-
-              if field == "arxivid" || field == "eprint" {
+              }
+              else if field == "arxivid" || field == "eprint" {
                 value = value.split(":").map(|x| x.to_string()).collect::<Vec<String>>().last().unwrap().to_string()
-              };
+              }
+              else if field == "url"{
+                value = parse_url_field(&value);
+              }
 
               if Entries.last().unwrap().Fields_Values.contains_key(field){
                 println!("Repeated entry at {}\n", field_value);
@@ -699,6 +710,17 @@ fn get_statistics(Entries:&mut Vec<Entry>, tidy:bool) -> Statistics{
   stats
 }
 
+fn clean(Entries:&mut Vec<Entry>){
+  for e in Entries{
+    if e.Fields_Values.contains_key("broken-files"){
+      e.Fields_Values.remove("broken-files");
+    }
+    if e.Tags.contains("#no author"){
+      e.Tags.remove("#no author");
+    }
+  }
+}
+
 fn main() {
   let args = parse_cl_args();
 
@@ -714,11 +736,13 @@ fn main() {
     input_path = env::current_dir().unwrap().to_str().unwrap().to_string();
   }
 
+
   // read into main entries
   let mut main_entries = match from_path_to_entries(input_path){
     Some(me) => me,
     None => panic!("No extension detected in input path; no input is available"),
   };
+
 
   // auxiliary entries
   if args.value_of("auxiliary").is_some(){
@@ -728,6 +752,7 @@ fn main() {
       get_files_from_entries(&mut main_entries, &auxiliary_entries.unwrap());
     }
   }
+
 
   // file paths
   if args.value_of("files").is_some(){
@@ -739,19 +764,25 @@ fn main() {
     }
   }
 
+
+  // merge
   if args.is_present("merge"){
     remove_redundant_Entries(&mut main_entries);
   }
 
+
+  // tidy
   let mut key = false;
   if args.is_present("keys"){
     key = true;
   }
-
-  // output
   main_entries.sort();
   let stats = get_statistics(&mut main_entries, key);
 
+  clean(&mut main_entries);
+
+
+// output
   let mut output_path = String::new();
   if args.value_of("output").is_some(){
     output_path = args.value_of("output").unwrap().to_string();
@@ -815,16 +846,15 @@ fn get_files_from_paths(entries: &mut Vec<Entry>, doc_paths: &Vec<PathBuf>){
   }
 
   for e in entries{
-    if e.Fields_Values.contains_key("broken-files") {
-      for p in e.Fields_Values["broken-files"].split(";"){
+    if !e.BrokenFiles.is_empty() {
+      for p in &e.BrokenFiles{
         let filename = p.split("/").last().unwrap();
         if filename_path.contains_key(filename){
-          println!("{}", filename);
+          // println!("{}", filename);
           // e.has_file = true;
           e.Files.insert(filename_path[filename].as_path().to_str().unwrap().to_string());
         }
       }
-      e.Fields_Values.remove("broken-files");
     }
   }
 }

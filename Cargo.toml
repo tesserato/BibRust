@@ -10,6 +10,7 @@ edition = "2018"
 csv = "1"
 clap = "2.33.3"
 walkdir = "2"
+url = "2.2.0"
 
 [profile.release]
 opt-level = 3
