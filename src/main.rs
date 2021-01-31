@@ -34,13 +34,14 @@ struct Name{
   last_name:String
 }
 
+#[derive(Default)]
 struct Entry {
   Type: String,
   Key: String,
   Creators: HashMap<String, Vec<Name>>,
-  Tags:HashSet<String>,
+  Tags: HashSet<String>,
   Files: HashSet<String>,
-
+  BrokenFiles: HashSet<String>,
   Fields_Values: HashMap<String, String>,
 }
 
@@ -104,16 +105,16 @@ fn Entry_to_String_bib(e: & Entry) -> String{
   s
 }
 
-fn create_Entry(Type:String, Key:String) -> Entry{
-  Entry{
-    Type:Type, 
-    Key: Key,
-    Creators: HashMap::new(),
-    Fields_Values: HashMap::new(),
-    Files: HashSet::new(),
-    Tags: HashSet::new(),
-  }
-}
+// fn create_Entry(Type:String, Key:String) -> Entry{
+//   Entry{
+//     Type:Type, 
+//     Key: Key,
+//     Creators: HashMap::new(),
+//     Fields_Values: HashMap::new(),
+//     Files: HashSet::new(),
+//     Tags: HashSet::new(),
+//   }
+// }
 
 fn read_bib(path:PathBuf, bib_lines:&mut Vec<String>){
   let file = File::open(path).unwrap();
@@ -244,9 +245,9 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
     if lines[counter].starts_with("@"){ // found entry
       let vec: Vec<&str> = lines[counter].splitn(2,"{").collect();
       if vec.len() == 2 {
-        let Type =vec[0].trim().trim_matches('@').to_lowercase();
-        let Key =vec[1].trim().trim_matches(',');
-        Entries.push(create_Entry(Type, Key.to_string())) ;
+        let etype = vec[0].trim().trim_matches('@').to_lowercase();
+        let key = vec[1].trim().trim_matches(',').to_string();
+        Entries.push(Entry{Type:etype, Key:key,..Default::default()}) ;
       }
       else{
         println!("Problem: {}\n",lines[counter]);
@@ -445,7 +446,7 @@ fn read_and_parse_csv(path:PathBuf) -> Vec<Entry>{
       },
     }
     let v:Vec<String> = result.unwrap().into_iter().map(|x| x.to_string()).collect();
-    let mut e = create_Entry(v[1].to_owned(), v[2].to_owned());
+    let mut e = Entry{Type: v[1].to_owned(), Key: v[2].to_owned(),..Default::default()};
     if !v[3].trim().is_empty(){
       e.Creators.insert("author".to_string(), parse_creators_field(&v[3]));
     }
