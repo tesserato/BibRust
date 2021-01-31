@@ -1,7 +1,7 @@
 #![feature(str_split_once)]
 #![allow(non_snake_case)]
 
-use std::{cmp::Ordering, vec};
+use std::{borrow::BorrowMut, cmp::Ordering, fmt::format, vec};
 use std::io::BufReader;
 use std::fs::{self, File};
 use std::io::prelude::*;
@@ -28,8 +28,7 @@ static SEPARATOR: &str = ",";
 static INTERNAL_SEPARATOR: &str = ",";
 static NAMES_SEPARATOR: &str = " and ";
 
-
-#[derive(PartialEq, Clone)]
+#[derive(Hash, Eq, PartialEq, Clone)]
 struct Name{
   first_name:String,
   last_name:String
@@ -598,10 +597,47 @@ struct Statistics{
   ordered_types:Vec<String>
 }
 
-fn get_statistics(Entries:&Vec<Entry>) -> Statistics{
-  let mut stats = Statistics{..Default::default()};
+fn generate_key(entry: &Entry) -> String{
+  let mut year = "year".to_string();
+  if entry.Fields_Values.contains_key("year"){
+    year = entry.Fields_Values["year"].to_owned();
+  }
+  else if entry.Fields_Values.contains_key("date"){
+    let optyear = entry.Fields_Values["date"].splitn(1, "-").map(|x| x.to_string()).next();
+    year = match optyear {
+      Some(y) => y,
+      None => "year".to_string()
+    }
+  }
 
+  let names = entry.Creators.iter().filter(|x| !x.1.is_empty()).next();
+  let creator = match names {
+    Some(n) => n.1[0].last_name.to_owned(),
+    None => "creator".to_string(),
+  };
+
+  format!("{}_{}", year, creator)
+}
+
+
+fn get_statistics(Entries:&mut Vec<Entry>, tidy:bool) -> Statistics{
+  if tidy{
+    println!("Generating keys:");
+  }
+  let mut stats = Statistics{..Default::default()};
+  let n = Entries.len();
   for entry in Entries{
+    if tidy{
+      let key = generate_key(entry);
+      entry.Key = key;
+    }
+
+    for (_, creators) in &entry.Creators{
+      for creator in creators{
+        stats.creators.insert(creator.to_owned());
+      }
+    }
+
     if entry.Tags.contains(REVIEWED){
       stats.reviewed += 1;
     }
@@ -642,7 +678,7 @@ fn get_statistics(Entries:&Vec<Entry>) -> Statistics{
 
   println!(
     "\nFound a total of {} entries\n({} reviewed, {} with author, {} with doi, {} with files, {} whith url):", 
-                        Entries.len(), stats.reviewed, stats.has_author, stats.has_doi, stats.has_file, stats.has_url);
+                        n, stats.reviewed, stats.has_author, stats.has_doi, stats.has_file, stats.has_url);
     
   types_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
   for (key, value) in types_vec {
@@ -710,13 +746,14 @@ fn main() {
     remove_redundant_Entries(&mut main_entries);
   }
 
-  if args.is_present("key"){
-
+  let mut key = false;
+  if args.is_present("keys"){
+    key = true;
   }
 
   // output
   main_entries.sort();
-  let stats = get_statistics(&main_entries);
+  let stats = get_statistics(&mut main_entries, key);
 
   let mut output_path = String::new();
   if args.value_of("output").is_some(){
