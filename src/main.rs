@@ -271,7 +271,7 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
           let mut value = vec[1].to_string();
           let mut last_entry = Entries.last_mut().unwrap();
           match field {
-            "file" => last_entry.Files = parse_file_field(&mut last_entry, &value.to_string()), //parse_file_field(value),
+            "file" => last_entry.Files = parse_file_field(&mut last_entry, &value.to_string()),
             "author" | "editor" | "translator" => {
               let _ = last_entry.Creators.insert(field.to_string(), parse_creators_field(&value));
             },
@@ -314,8 +314,8 @@ fn names_to_string(names: &Vec<Name>) -> String{
   .join(NAMES_SEPARATOR)
 }
 
-fn hashset_to_string(files: &HashSet<String>) -> String{
-  files.to_owned().into_iter().collect::<Vec<String>>().join(INTERNAL_SEPARATOR)
+fn hashset_to_string(hs: &HashSet<String>) -> String{
+  hs.to_owned().into_iter().collect::<Vec<String>>().join(INTERNAL_SEPARATOR)
 }
 
 fn write_csv(path: &PathBuf, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
@@ -369,7 +369,7 @@ fn write_csv(path: &PathBuf, entries: &Vec<Entry>, ordered_fields: &Vec<String>)
     }
     row.push(format!("\"{}\"", hashset_to_string(&e.Tags)));
     row.push(format!("\"{}\"", hashset_to_string(&e.Files)));
-    writeln!(f, "{}",row.join(",")).unwrap();
+    writeln!(f, "{}",row.join(INTERNAL_SEPARATOR)).unwrap();
   }
 }
 
@@ -444,11 +444,8 @@ fn read_and_parse_csv(path:PathBuf) -> Vec<Entry>{
         continue
       },
     }
-
     let v:Vec<String> = result.unwrap().into_iter().map(|x| x.to_string()).collect();
     let mut e = create_Entry(v[1].to_owned(), v[2].to_owned());
-    // println!("{:?}\n", v);
-    // creators
     if !v[3].trim().is_empty(){
       e.Creators.insert("author".to_string(), parse_creators_field(&v[3]));
     }
@@ -618,7 +615,6 @@ fn generate_key(entry: &Entry) -> String{
 
   format!("{}_{}", year, creator)
 }
-
 
 fn get_statistics(Entries:&mut Vec<Entry>, tidy:bool) -> Statistics{
   if tidy{
@@ -808,6 +804,7 @@ fn get_files_from_entries(entries: &mut Vec<Entry>, other_entries: &Vec<Entry>){
 }
 
 fn get_files_from_paths(entries: &mut Vec<Entry>, doc_paths: &Vec<PathBuf>){
+  println!("Fetching files in disc:");
   let mut filename_path: HashMap<String, PathBuf> = HashMap::new();
   for p in doc_paths{
     filename_path.insert(
@@ -829,53 +826,6 @@ fn get_files_from_paths(entries: &mut Vec<Entry>, doc_paths: &Vec<PathBuf>){
       e.Fields_Values.remove("broken-files");
     }
   }
-
-
-
-  // for e in entries{
-  //   let mut checked: Vec<String> = vec![];
-  //   if e.Files.len() > 0 {
-  //     for raw_f in e.Files.to_owned(){
-  //       let paths = raw_f
-  //         .split(":")
-  //         .filter(|x| !x.is_empty() && x.contains("."))
-  //         .map(|x| format!("C:{}", x.replace("\\\\", "/").replace("\\", "/")))
-  //         .collect::<Vec<String>>();
-  //         for p in paths{
-  //           if Path::new(&p).exists(){
-  //             // println!("{}", p);
-  //             e.has_file = true;
-  //             checked.push(Path::new(&p).as_os_str().to_str().unwrap().to_string())
-  //           }
-  //           else{
-  //             let filename = p.split("/").last().unwrap();
-  //             if filename_path.contains_key(filename){
-  //               // println!("{}", filename);
-  //               e.has_file = true;
-  //               checked.push(filename_path[filename].as_path().to_str().unwrap().to_string())
-  
-  //             }
-  //           }
-  //         }
-  //     }
-
-  //     // else if e.Authors.len()>0 && e.Fields_Values.contains_key("year") && e.Fields_Values.contains_key("title"){
-  //     //   let t = format!(
-  //     //     "{} {} - {}{}.pdf",
-  //     //     e.Fields_Values["year"],
-  //     //     e.Fields_Values["title"],
-  //     //     &e.Authors[0].last_name,
-  //     //     if e.Authors.len() > 1 { " et al" } else { "" }
-  //     //   );
-  //     //   // println!("{}", t);
-  //     //     if doc_paths.contains(&t){
-  //     //       e.has_file = true;
-  //     //       println!("{}", t);
-  //     //     }
-  //     // }
-  //   }
-  //   e.Files = checked;
-  // }
 }
 
 fn remove_redundant_Entries(entries: & mut Vec<Entry>){
@@ -952,7 +902,7 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
 
   if eq{
     entries[i].Files = entries[i].Files.union(&entries[j].Files).map(|x| x.to_owned()).collect();
-    entries[i].Tags = entries[i].Tags.union(&entries[j].Files).map(|x| x.to_owned()).collect();
+    entries[i].Tags = entries[i].Tags.union(&entries[j].Tags).map(|x| x.to_owned()).collect();
     entries[i].Tags.insert(MERGED.to_string());
 
 
