@@ -28,83 +28,6 @@ static SEPARATOR: &str = ",";
 static INTERNAL_SEPARATOR: &str = ",";
 static NAMES_SEPARATOR: &str = " and ";
 
-fn get_statistics(Entries:&Vec<Entry>) -> (Vec<String>,Vec<String>){
-  let mut types: HashMap<String, u32> = HashMap::new();
-  let mut fields: HashMap<String, u32> = HashMap::new();
-  let mut has_doi:usize = 0;
-  let mut has_file:usize = 0;
-  let mut has_url:usize = 0;
-  let mut has_author:usize = 0;
-  let mut reviewed:usize = 0;
-
-  for entry in Entries{
-    if entry.Tags.contains(REVIEWED){
-      reviewed += 1;
-    }
-    if types.contains_key(&entry.Type){
-      *types.get_mut(&entry.Type).unwrap() += 1;
-    }else{
-      types.insert(entry.Type.to_string(), 1);
-    }
-
-    if entry.Files.len() > 0{
-      has_file += 1;
-    }
-
-    if entry.Creators.len() > 0{
-      has_author += 1;
-    }
-  
-    for (field, _) in &entry.Fields_Values{
-      if fields.contains_key(field){
-        *fields.get_mut(field).unwrap() += 1;
-        match field.as_ref() {
-          "doi" => has_doi += 1,
-          "url" => has_url += 1,
-          _ => continue ,
-
-        }
-      }else{
-        fields.insert(field.to_string(), 1);
-      }
-    }
-  }
-  
-  // Sorting
-  let mut types_vec: Vec<(String, u32)> = vec![];
-
-  for (t,c) in types{
-    types_vec.push((t.to_string(), c));
-  }  
-
-  println!(
-    "\nFound a total of {} entries\n({} reviewed, {} with author, {} with doi, {} with files, {} whith url):", 
-                        Entries.len(), reviewed, has_author, has_doi, has_file, has_url);
-    
-  let mut ordered_types:Vec<String> = Vec::new();
-  types_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
-  for (key, value) in types_vec {
-    println!("{} {}", key, value);
-    ordered_types.push(key);
-  }
-
-  println!("\nFields:");
-  let mut fields_vec: Vec<(String, u32)> = vec![];
-
-  for (t,c) in fields{
-    fields_vec.push((t.to_string(), c));
-  }  
-
-  let mut ordered_fields:Vec<String> = Vec::new();
-
-  fields_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
-  for (key, value) in fields_vec {
-    println!("{} {}", key, value);
-    ordered_fields.push(key);
-  }
-  println!("");
-  (ordered_types, ordered_fields)  
-}
 
 #[derive(PartialEq, Clone)]
 struct Name{
@@ -481,7 +404,7 @@ fn write_raw_bib(path: &str, bib_vec : &Vec<String>){
   }
 }
 
-fn find_paths_to_files_with_ext(root_path:&str, exts:& Vec<String> ) -> Vec<PathBuf>{
+fn find_paths_to_files_with_ext(root_path:&PathBuf, exts:& Vec<String> ) -> Vec<PathBuf>{
   let mut paths: Vec<PathBuf> = vec![];
   for direntry in WalkDir::new(root_path).into_iter().filter_map(|e| e.ok()){
     let ext = direntry.path().extension();
@@ -492,9 +415,9 @@ fn find_paths_to_files_with_ext(root_path:&str, exts:& Vec<String> ) -> Vec<Path
   paths
 }
 
-fn get_entries_from_root_path(root_path:String) -> Vec<Entry>{
+fn get_entries_from_root_path(root_path:PathBuf) -> Vec<Entry>{
   let exts=vec!["bib".to_string()];
-  let mut bib_paths = find_paths_to_files_with_ext(&root_path, &exts);
+  let bib_paths = find_paths_to_files_with_ext(&root_path, &exts);
 
   let mut bib_vec = vec![];
   for p in bib_paths {
@@ -639,7 +562,7 @@ fn from_path_to_entries(input_path: String) -> Option<Vec<Entry>>{
   let p = PathBuf::from(input_path);
   if p.is_dir(){
     println!("Searching for .bib files in {:#?}:", p);
-    main_entries = get_entries_from_root_path("bibs/main".to_string());
+    main_entries = get_entries_from_root_path(p);
   }
   else if p.is_file() && p.extension().is_some(){
     match p.extension().unwrap().to_str() {
@@ -659,6 +582,88 @@ fn from_path_to_entries(input_path: String) -> Option<Vec<Entry>>{
     // panic!("Oh no something bad has happened!")
   }
   Some(main_entries)
+}
+#[derive(Default)]
+struct Statistics{
+  types: HashMap<String, u32>,
+  fields: HashMap<String, u32>,
+  keys: HashSet<String>,
+  creators: HashSet<Name>,
+  has_doi:usize,
+  has_file:usize,
+  has_url:usize,
+  has_author:usize,
+  reviewed:usize,
+  ordered_fields:Vec<String>,
+  ordered_types:Vec<String>
+}
+
+fn get_statistics(Entries:&Vec<Entry>) -> Statistics{
+  let mut stats = Statistics{..Default::default()};
+
+  for entry in Entries{
+    if entry.Tags.contains(REVIEWED){
+      stats.reviewed += 1;
+    }
+
+    if stats.types.contains_key(&entry.Type){
+      *stats.types.get_mut(&entry.Type).unwrap() += 1;
+    }else{
+      stats.types.insert(entry.Type.to_string(), 1);
+    }
+
+    if entry.Files.len() > 0{
+      stats.has_file += 1;
+    }
+
+    if entry.Creators.len() > 0{
+      stats.has_author += 1;
+    }
+  
+    for (field, _) in &entry.Fields_Values{
+      match field.as_ref() {
+        "doi" => stats.has_doi += 1,
+        "url" => stats.has_url += 1,
+        _ => (),
+      }
+      if stats.fields.contains_key(field){
+        *stats.fields.get_mut(field).unwrap() += 1;
+      }else{
+        stats.fields.insert(field.to_string(), 1);
+      }
+    }
+  }
+  
+  // Sorting
+  let mut types_vec: Vec<(String, u32)> = vec![];
+  for (t, c) in &stats.types{
+    types_vec.push((t.to_string(), *c));
+  }  
+
+  println!(
+    "\nFound a total of {} entries\n({} reviewed, {} with author, {} with doi, {} with files, {} whith url):", 
+                        Entries.len(), stats.reviewed, stats.has_author, stats.has_doi, stats.has_file, stats.has_url);
+    
+  types_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
+  for (key, value) in types_vec {
+    println!("{} {}", key, value);
+    stats.ordered_types.push(key);
+  }
+
+  println!("\nFields:");
+  let mut fields_vec: Vec<(String, u32)> = vec![];
+
+  for (t, c) in &stats.fields{
+    fields_vec.push((t.to_string(), *c));
+  }  
+
+  fields_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
+  for (key, value) in fields_vec {
+    println!("{} {}", key, value);
+    stats.ordered_fields.push(key);
+  }
+  println!("");
+  stats
 }
 
 fn main() {
@@ -693,7 +698,7 @@ fn main() {
 
   // file paths
   if args.value_of("files").is_some(){
-    let files_root_path = args.value_of("files").unwrap().to_string();
+    let files_root_path = PathBuf::from(args.value_of("files").unwrap().to_string());
     let exts = vec!["pdf".to_string(),"epub".to_string(),"djvu".to_string()];
     let filepaths = find_paths_to_files_with_ext(&files_root_path, &exts);
     if !filepaths.is_empty() {
@@ -701,8 +706,17 @@ fn main() {
     }
   }
 
+  if args.is_present("merge"){
+    remove_redundant_Entries(&mut main_entries);
+  }
+
+  if args.is_present("key"){
+
+  }
+
   // output
-  let (_, ordered_fields) = get_statistics(&main_entries);
+  main_entries.sort();
+  let stats = get_statistics(&main_entries);
 
   let mut output_path = String::new();
   if args.value_of("output").is_some(){
@@ -719,15 +733,15 @@ fn main() {
   if p.is_dir(){
     p.push("Result.csv");
     println!("Saving results at {:#?}:", p);
-    write_csv(&p, &main_entries, &ordered_fields)
+    write_csv(&p, &main_entries, &stats.ordered_fields)
   }
   else if p.extension().is_some(){
     match p.extension().unwrap().to_str() {
-      Some("csv")    => write_csv(&p, &main_entries, &ordered_fields),
+      Some("csv")    => write_csv(&p, &main_entries, &stats.ordered_fields),
       Some("bib")    => write_bib(&p, &main_entries),
       Some(ext) => {
         p.set_extension("csv");
-        write_csv(&p, &main_entries, &ordered_fields)
+        write_csv(&p, &main_entries, &stats.ordered_fields)
       },
       None           => println!("No extension detected in {:?}", p.as_os_str()),
     }
@@ -735,50 +749,8 @@ fn main() {
   else{
     p = env::current_dir().unwrap();
     p.push("Result.csv");
-    write_csv(&p, &main_entries, &ordered_fields);
+    write_csv(&p, &main_entries, &stats.ordered_fields);
   }
-
-  
-
-
-  // let mut main_entries = get_entries_from_root_path("bibs/main".to_string());
-  // remove_redundant_Entries(& mut main_entries);
-
-  // let mut doc_paths: Vec<PathBuf> = vec![];
-  // find_paths_to_files_with_ext(
-  //   "C:/Users/tesse/Desktop/Files/Dropbox/BIBrep",
-  //   &mut doc_paths,
-  //   &vec!["pdf".to_string(),"epub".to_string(),"djvu".to_string()]
-  // );
-
-  // get_files_from_paths(&mut main_entries, &doc_paths);
-
-  // let mut other_entries = get_entries_from_root_path("bibs/other".to_string());
-  // remove_redundant_Entries(&mut other_entries);
-
-  // get_files_from_entries(&mut main_entries, &other_entries);
-
-  // let (_, ordered_fields) = get_statistics(&main_entries);
-
-
-
-  // main_entries.sort();
-  // write_bib("Complete.bib", &main_entries);
-  // write_csv("Complete.csv", &main_entries, &ordered_fields);
-
-  // let mut e1 = read_and_parse_csv("Complete.csv".to_string());
-
-
-  // e1.sort();
-  // write_bib("Complete_from_csv.bib", &e1);
-
-  // let mut all: Vec<Entry> = vec![];
-  // all.append(&mut main_entries);
-  // all.append(&mut e1);
-
-  // println!("before: {}", all.len());
-  // remove_redundant_Entries(&mut all);
-  // println!("after: {}", all.len());
 }
 
 fn get_files_from_entries(entries: &mut Vec<Entry>, other_entries: &Vec<Entry>){
@@ -873,21 +845,22 @@ fn remove_redundant_Entries(entries: & mut Vec<Entry>){
   // Remove identical entries
   let mut repeated: Vec<usize> = vec![];
   for i in 0..entries.len(){
-    for j in i+1..entries.len(){
+    for j in (i+1)..entries.len(){
       if entries[i] == entries[j] {
         repeated.push(j);
       }
     }
   }  
   println!("Removed {} Identical entries\n", &repeated.len());
-  repeated.sort();
-  repeated.reverse();
+  repeated.sort_unstable_by(|a, b| b.cmp(a));
+  repeated.dedup();
+
   for i in repeated{
     entries.remove(i);
   }
-  
-  remove_by_field( entries, "doi");// Check entries with same doi
-  remove_by_field( entries, "isbn");// Check entries with same isbn
+
+  remove_by_field(entries, "doi");// Check entries with same doi
+  remove_by_field(entries, "isbn");// Check entries with same isbn
   // remove_by_field( entries, "url");// Check entries with same url
   // remove_by_field( entries, "shorttitle");// Check entries with same shorttitle
   // remove_by_field( entries, "pmid");// Check entries with same pmid
@@ -901,7 +874,7 @@ fn remove_by_field(mut entries: & mut Vec<Entry>, field:&str){
   // Check entries with same doi
   let mut repeated: Vec<usize> = vec![];
   for i in 0..entries.len(){
-    for j in i+1..entries.len(){
+    for j in (i+1)..entries.len(){
       if 
       entries[i].Fields_Values.contains_key(field) &&
       entries[j].Fields_Values.contains_key(field) &&
@@ -916,8 +889,9 @@ fn remove_by_field(mut entries: & mut Vec<Entry>, field:&str){
   }
 
   println!("Same {}, compatible {}\n", field, &repeated.len());
-  repeated.sort();
-  repeated.reverse();
+  repeated.sort_unstable_by(|a, b| b.cmp(a));
+  repeated.dedup();
+
   for i in repeated{
     entries.remove(i);
   }
@@ -956,119 +930,3 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
   eq
 }
 
-// fn write_sqlite(path: &str, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
-//   let path = Path::new(path);
-//   // let display = path.display();
-
-//   // Open a file in write-only mode, returns `io::Result<File>`
-//   let conn = Connection::open(&path).unwrap();
-
-//   let res = conn.execute(
-//     "CREATE TABLE IF NOT EXISTS Entries (
-//       type           TEXT,
-//       [key]          TEXT PRIMARY KEY
-//                      NOT NULL
-//                      UNIQUE,
-//       author         TEXT,
-//       title          TEXT UNIQUE
-//                           NOT NULL,
-//       year           INT  CHECK (length(year) == 2 OR 
-//                                  length(year) == 4),
-//       pages          TEXT,
-//       abstract       TEXT,
-//       doi            TEXT UNIQUE,
-//       volume         TEXT,
-//       issn           TEXT,
-//       journal        TEXT,
-//       number         TEXT,
-//       keywords       TEXT,
-//       publisher      TEXT,
-//       isbn           TEXT UNIQUE,
-//       url            TEXT,
-//       booktitle      TEXT,
-//       shorttitle     TEXT,
-//       eprint         TEXT UNIQUE,
-//       archiveprefix  TEXT,
-//       arxivid        TEXT UNIQUE,
-//       pmid           TEXT,
-//       annote         TEXT,
-//       edition        TEXT,
-//       address        TEXT,
-//       typefield      TEXT,
-//       month          INT,
-//       series         TEXT,
-//       editor         TEXT,
-//       institution    TEXT,
-//       howpublished   TEXT,
-//       organization   TEXT,
-//       school         TEXT,
-//       translator     TEXT,
-//       [broken-files] TEXT,
-//       qualityassured TEXT,
-//       tags           JSON,
-//       file           JSON
-//   )
-//   WITHOUT ROWID;"
-//      ,NO_PARAMS,
-//     );
-
-//     match res {
-//       Ok(v) => println!("table created: {:?}", v),
-//       Err(e) => println!("sqlite error: {:?}", e),
-//   }
-
-//   for e in entries{
-//     let c = e.Fields_Values.to_owned().into_iter().map(|x| x.0).collect::<Vec<String>>().join(",");
-//     let columns = format!("type,key,author,file,tags,{}", c);
-
-//     let a = e.Authors.iter().map(|x| format!("{} {}", x.first_name, x.last_name).trim().to_string()).collect::<Vec<String>>().join(" and ");
-//     let f = files_to_string(&e.Files);
-//     let t = e.Tags.to_owned().into_iter().collect::<Vec<String>>().join(";");
-//     let o = e.Fields_Values.iter().map(|x| format!("\"{}\"", x.1)).collect::<Vec<String>>().join(",");
-//     let values = format!("\"{}\",\"{}\",\"{}\",\"{}\",\"{}\",{}",e.Type, e.Key, a, f, t, o);
-
-//     let instruction = format!("INSERT INTO Entries ({})\nVALUES({});", columns, values);
-//     let res = conn.execute(&instruction, NO_PARAMS);
-//     // let res = conn.execute(&format!("json_array({})", f).to_string(), NO_PARAMS);
-//     // println!("{}\n", instruction);
-//     match res {
-//       Ok(v) => continue, //println!("row inserted: {:?}", v),
-//       // Err(e) => println!("{}\n{:?}\n", instruction, e),
-//       Err(e) => println!("{:?}", e),
-//     }
-//   }
-// }
-
-// fn inspect_entries(entries: &mut Vec<Entry>){
-//   for e in entries{
-//     // check author field
-//     if e.Creators.is_empty() {
-//       e.Tags.insert("#no author".to_string());
-//     }
-//     else if !e.Creators
-//               .iter()
-//               .map(|x| format!("{} {}", x.first_name, x.last_name))
-//               .collect::<Vec<String>>()
-//               .join("")
-//               .replace(".", "")
-//               .replace(" ", "")
-//               .chars().all(char::is_alphanumeric)
-//     {
-//       e.Tags.insert("#corrupted author".to_string());
-//     }
-//   }
-// }
-
-// fn write_to_ads(){
-//   let path = Path::new("ads_test.txt:ads.bib");
-//   let display = path.display();
-
-//   // Open a file in write-only mode, returns `io::Result<File>`
-//   let mut f = match File::create(&path) {
-//       Err(why) => panic!("couldn't create {}: {}", display, why),
-//       Ok(file) => file,
-//   };
-
-
-//   writeln!(f, "test 01\ntest 02");
-// }
