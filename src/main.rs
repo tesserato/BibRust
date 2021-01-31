@@ -10,7 +10,7 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::str;
 use std::env;
-use std::ffi::OsStr;
+// use std::ffi::OsStr;
 extern crate csv;
 
 extern crate clap;
@@ -107,17 +107,6 @@ fn Entry_to_String_bib(e: & Entry) -> String{
   s
 }
 
-// fn create_Entry(Type:String, Key:String) -> Entry{
-//   Entry{
-//     Type:Type, 
-//     Key: Key,
-//     Creators: HashMap::new(),
-//     Fields_Values: HashMap::new(),
-//     Files: HashSet::new(),
-//     Tags: HashSet::new(),
-//   }
-// }
-
 fn read_bib(path:PathBuf, bib_lines:&mut Vec<String>){
   let file = File::open(path).unwrap();
   let file_buffer = BufReader::new(file);
@@ -145,7 +134,7 @@ fn read_bib(path:PathBuf, bib_lines:&mut Vec<String>){
 
 fn parse_creators_field(original_value:&str) -> Vec<Name>{
   let mut authors: Vec<Name> = vec![];
-  // let patterns : &[_] = &['{', '}','\t',',',' '];
+  let pattern : &[_] = &[',',';','{','}','\\'];
   // let exceptions = [' ', '-'];
   fn parse(name:&str) -> String{
     let remove = [',',';','{','}','\\'];
@@ -162,7 +151,7 @@ fn parse_creators_field(original_value:&str) -> Vec<Name>{
     .trim()
     .to_string()
   }
-  for fl in original_value.split("and").map(|x| x.trim()){
+  for fl in original_value.trim_matches(pattern).split("and").map(|x| x.trim()){
     if fl.contains(","){
       let fl_vec = fl.split_once(",").unwrap();
       authors.push(Name{
@@ -173,7 +162,7 @@ fn parse_creators_field(original_value:&str) -> Vec<Name>{
     else if fl.contains(" "){
       let fl_vec = fl.rsplit_once(" ").unwrap();
       authors.push(Name{
-        first_name:parse(fl_vec.0), 
+        first_name:parse(fl_vec.0),
         last_name:parse(fl_vec.1)
       })
     }
@@ -612,9 +601,9 @@ fn generate_key(entry: &Entry) -> String{
     year = entry.Fields_Values["year"].to_owned();
   }
   else if entry.Fields_Values.contains_key("date"){
-    let optyear = entry.Fields_Values["date"].splitn(1, "-").map(|x| x.to_string()).next();
+    let optyear = entry.Fields_Values["date"].split( '-').next();
     year = match optyear {
-      Some(y) => y,
+      Some(y) => y.to_string(),
       None => "year".to_string()
     }
   }
@@ -625,7 +614,7 @@ fn generate_key(entry: &Entry) -> String{
     None => "creator".to_string(),
   };
 
-  format!("{}_{}", year, creator)
+  format!("{}_{}", year, creator.chars().filter(|x| x.is_alphabetic()).collect::<String>().to_lowercase())
 }
 
 fn get_statistics(Entries:&mut Vec<Entry>, tidy:bool) -> Statistics{
@@ -772,12 +761,11 @@ fn main() {
 
 
   // tidy
-  let mut key = false;
+  let mut generate_keys = false;
   if args.is_present("keys"){
-    key = true;
+    generate_keys = true;
   }
-  main_entries.sort();
-  let stats = get_statistics(&mut main_entries, key);
+  let stats = get_statistics(&mut main_entries, generate_keys);
 
   clean(&mut main_entries);
 
@@ -794,6 +782,7 @@ fn main() {
     output_path = env::current_dir().unwrap().to_str().unwrap().to_string();
   }
 
+  main_entries.sort_by(|a, b| b.Key.cmp(&a.Key));
   let mut p = PathBuf::from(output_path);
   if p.is_dir(){
     p.push("Result.csv");
@@ -919,8 +908,8 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
   if entries[i].Creators != entries[j].Creators {
     return false
   }
-  let f1:HashSet<String> = entries[i].Fields_Values.iter().map(|x| x.0.to_owned()).collect();
-  let f2:HashSet<String> = entries[j].Fields_Values.iter().map(|x| x.0.to_owned()).collect();
+  let f1:HashSet<String> = entries[i].Fields_Values.iter().filter(|x| !x.1.trim().is_empty()).map(|x| x.0.to_owned()).collect();
+  let f2:HashSet<String> = entries[j].Fields_Values.iter().filter(|x| !x.1.trim().is_empty()).map(|x| x.0.to_owned()).collect();
   let intersection = f1.intersection(&f2).to_owned();
   let common_fields:Vec<&String> = intersection.collect();
   let mut eq = true;
@@ -939,7 +928,7 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
 
 
     for field in f2.difference(&f1){
-      let value =entries[j].Fields_Values.get_mut(field).unwrap().to_string();
+      let value = entries[j].Fields_Values.get_mut(field).unwrap().to_string();
       if let Some(x) = entries[i].Fields_Values.get_mut(field) {
         *x = value;
       }
@@ -948,3 +937,17 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
   eq
 }
 
+
+
+#[test]
+fn test_parse_creators_field(){
+let input = "{Antonio Leiva},";
+let output = "Antonio Leiva";
+let vec = parse_creators_field(input);
+let result = names_to_string(&vec);
+for n in vec{
+  println!("f:{}  l:{}", n.first_name, n.last_name);
+}
+
+assert_eq!(output, result);
+}
