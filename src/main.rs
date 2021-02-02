@@ -78,7 +78,7 @@ fn Entry_to_String_bib(e: & Entry) -> String{
   // authors
   if e.Creators.len() > 0 {
     for (c, v) in &e.Creators{
-      let t = v.iter().map(|x| format!("{} {}", x.first_name, x.last_name).trim().to_string()).collect::<Vec<String>>().join(" and ");
+      let t = names_to_string(v);
       s.push_str(&format!("{} = {{{}}},\n", c, t));
     }
   }
@@ -94,13 +94,13 @@ fn Entry_to_String_bib(e: & Entry) -> String{
 
   //Files
   if e.Files.len() > 0 {
-    let t = e.Files.iter().map(|x| x.replace(":", "\\:")).collect::<Vec<String>>().join(";");
+    let t = hashset_to_string(&e.Files);
     s.push_str(&format!("file = {{{}}},\n", t));
   }
 
   //Tags
   if !e.Tags.is_empty() {
-    let t = e.Tags.iter().map(|x| x.to_string()).collect::<Vec<String>>().join(",");
+    let t = hashset_to_string(&e.Tags);
     s.push_str(&format!("mendeley-tags = {{{}}},\n", t));
   }
   s.push_str("}\n");
@@ -374,6 +374,66 @@ fn write_csv(path: &PathBuf, entries: &Vec<Entry>, ordered_fields: &Vec<String>)
   }
 }
 
+fn write_html(path: &PathBuf, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
+
+  fn remove_backticks(text: &String) -> String{
+    text.chars().filter(|x| x != &'`').collect::<String>().replace("\\", "/").replace("$", "\\$")
+  }
+  let display = path.display();
+
+
+  let mut lpath = path.to_owned();
+  lpath.set_extension("js");
+  let mut f = match File::create(&lpath) {
+      Err(why) => panic!("couldn't create {}: {}", display, why),
+      Ok(file) => file,
+  };
+
+  writeln!(f, "export const tabledata = [").unwrap();
+  for e in entries{
+      // type and key
+  let mut row: Vec<String> = vec![];
+
+  if e.Tags.contains(REVIEWED){
+    row.push(format!("reviewed: true"));
+  }
+
+  row.push(format!("key: `{}`", e.Key));
+  row.push(format!("type: `{}`", e.Type));
+
+  // authors
+  if e.Creators.len() > 0 {
+    for (c, v) in &e.Creators{
+      let t = names_to_string(v);
+      row.push(format!("{}: `{}`", c, remove_backticks(&t)));
+    }
+  }
+
+  // Fields & Values
+  if e.Fields_Values.len() > 0 {
+    let mut fields = e.Fields_Values.iter().map(|x| x.0.to_string()).collect::<Vec<String>>();
+    fields.sort();
+    let t = fields.iter().map(|x| format!("{}: `{}`", x, remove_backticks(&e.Fields_Values[x]))).collect::<Vec<String>>().join(",");
+    // let t = e.Fields_Values.iter().map(|x| format!("{} = {{{}}},\n", x.0, x.1)).collect::<Vec<String>>().join("");
+    row.push(t);
+  }
+
+  //Files
+  if e.Files.len() > 0 {
+    let t = hashset_to_string(&e.Files);
+    row.push(format!("file: `{}`", remove_backticks(&t)));
+  }
+
+  //Tags
+  if !e.Tags.is_empty() {
+    let t = hashset_to_string(&e.Tags);
+    row.push(format!("tags: `{}`", remove_backticks(&t)));
+  }
+  writeln!(f, "  {{{}}},",row.join(",")).unwrap();
+  }
+  writeln!(f, "];").unwrap();
+}
+
 fn write_bib(path: &PathBuf, entries: & Vec<Entry>){
   // let path = Path::new(path);
   let display = path.display();
@@ -608,13 +668,25 @@ fn generate_key(entry: &Entry) -> String{
     }
   }
 
-  let names = entry.Creators.iter().filter(|x| !x.1.is_empty()).next();
-  let creator = match names {
-    Some(n) => n.1[0].last_name.to_owned(),
-    None => "creator".to_string(),
+  let mut roles: Vec<String> = vec![];
+  for (c, names) in &entry.Creators{
+    if !names.is_empty(){
+      roles.push(c.to_owned());
+    }
+  }
+  roles.sort();
+  let mut etal = "";
+  let creator = match roles.first() {
+    Some(n) => {
+      if entry.Creators[n].len() > 1 {
+        etal = "_etal";
+      }
+      &entry.Creators[n][0].last_name
+    }
+    None => "creator",
   };
 
-  format!("{}_{}", year, creator.chars().filter(|x| x.is_alphabetic()).collect::<String>().to_lowercase())
+  format!("{}_{}{}", year, creator.chars().filter(|x| x.is_alphabetic()).collect::<String>().to_lowercase(), etal)
 }
 
 fn get_statistics(Entries:&mut Vec<Entry>, tidy:bool) -> Statistics{
@@ -793,6 +865,7 @@ fn main() {
     match p.extension().unwrap().to_str() {
       Some("csv")    => write_csv(&p, &main_entries, &stats.ordered_fields),
       Some("bib")    => write_bib(&p, &main_entries),
+      Some("html")    => write_html(&p, &main_entries, &stats.ordered_fields),
       Some(ext) => {
         p.set_extension("csv");
         write_csv(&p, &main_entries, &stats.ordered_fields)
