@@ -1,11 +1,33 @@
-/* Tabulator v4.9.3 (c) Oliver Folkerd */
-#tags{
-  display: flex;
-  flex-wrap: wrap;
+#container {
+  overflow: scroll;
+  height: 92vh;
 }
 
-.tag{
-  background-color: rgb(55, 144, 221);
+#tags{
+  width: 100%;
+  position: sticky;
+  left: 0;
+  display: inline-flex;
+  flex-wrap: wrap;
+  background-color: rgb(29, 26, 26);
+}
+
+#cleartagsbutn{
+  background-color: rgb(221, 28, 70);
+  color: white;
+  margin: .3em;
+  padding: .3em;
+  width: fit-content;
+}
+
+.tabulator-footer{
+  width: 100%;
+  position: sticky;
+  left: 0;
+}
+
+.deselectedtag{
+  background-color: rgb(24, 65, 102);
   color: white;
   margin: .3em;
   padding: .3em;
@@ -19,6 +41,19 @@
   padding: .3em;
   width: fit-content;
 }
+
+body{
+  background-color: rgb(66, 61, 61);
+}
+
+/* .tabulator{
+  overflow: visible;
+} */
+
+/* button{
+  background-color: rgb(0, 0, 0);
+
+} */
 
 /* unvisited link */
 a:link {
@@ -44,7 +79,7 @@ a:active {
   position: relative;
   border: 1px solid #333;
   background-color: #222;
-  overflow: hidden;
+  overflow: visible;
   font-size: 14px;
   text-align: left;
   transform: translatez(0)
@@ -73,7 +108,7 @@ a:active {
   color: #fff;
   font-weight: 700;
   white-space: nowrap;
-  overflow: hidden;
+  overflow: visible;
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
@@ -315,23 +350,23 @@ a:active {
 
 .tabulator .tabulator-tableHolder {
   position: relative;
-  width: 100%;
+  /* width: 100%; */
   white-space: nowrap;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch
+  /* overflow: scroll; */
+  /* -webkit-overflow-scrolling: touch */
 }
 
 .tabulator .tabulator-tableHolder:focus {
-  outline: none
+  outline: none;
 }
 
 .tabulator .tabulator-tableHolder .tabulator-placeholder {
-  box-sizing: border-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-align: center;
+  /* box-sizing: border-box; */
+  /* display: -ms-flexbox; */
+  /* display: flex; */
+  /* -ms-flex-align: center; */
   align-items: center;
-  width: 100%
+  width: auto
 }
 
 .tabulator .tabulator-tableHolder .tabulator-placeholder[tabulator-render-mode=virtual] {

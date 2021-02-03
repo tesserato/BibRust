@@ -116,9 +116,23 @@ function updatealltags(){
     txt = document.createTextNode(tag);
     div.appendChild(txt);
     div.classList.add("tag");
+    div.classList.add("deselectedtag");
     div.onclick = handleClick;
     parentdiv.appendChild(div);
   }
+  var btn = document.createElement("BUTTON");   // Create a <button> element
+  btn.innerHTML = "Clear tags";                   // Insert text
+  btn.id = "cleartagsbutn"
+  btn.onclick = function(event) {
+    selectedtags.clear();
+    table.clearFilter();
+    for (e of document.getElementsByClassName("tag")){
+      e.classList.remove("selectedtag");
+      e.classList.add("deselectedtag");
+    }
+  }
+
+  parentdiv.appendChild(btn);
 }
 
 
@@ -178,7 +192,7 @@ var table = new Tabulator("#table", {
   history:true,             //allow undo and redo actions on the table
 
   pagination:"local",       //paginate the data
-  paginationSize:200,         //allow 100 rows per page of data
+  paginationSize:100,         //allow 100 rows per page of data
 
   movableColumns:true,      //allow column order to be changed
   resizableRows:true,       //allow row order to be changed
@@ -196,12 +210,7 @@ var table = new Tabulator("#table", {
 updatealltags(table.getColumn("tags"));
 
 function customFilter(data, selectedtags){
-  console.log(data.tags);
-  console.log(selectedtags);
-  if (selectedtags.length == 0){
-    return true;
-  }
-  else if (!data.tags){
+  if (!data.tags){
     return false;
   }
   else {
@@ -221,19 +230,20 @@ function handleClick(event) {
   let tag = event.target.textContent;
   if (selectedtags.has(tag)){
     selectedtags.delete(tag);
-    // keywords = Array.from(selectedtags);
-    // console.log("remove ", tag);
-    // console.log(keywords);
-    event.target.classList = ["tag"];
-    table.setFilter(customFilter, selectedtags);
+    event.target.classList.remove("selectedtag");
+    event.target.classList.add("deselectedtag");
+    if (selectedtags.length == 0){
+      table.clearFilter();
+    }
+    else{
+      table.setFilter(customFilter, selectedtags);
+    }
     // table.update();
   }
   else{
     selectedtags.add(tag);
-    // keywords = Array.from(selectedtags);
-    // console.log("insert ", tag);
-    // console.log(keywords);
-    event.target.classList = ["selectedtag"];
+    event.target.classList.remove("deselectedtag");
+    event.target.classList.add("selectedtag");
     table.setFilter(customFilter, selectedtags);
     // table.update();
   }
@@ -257,4 +267,6 @@ function hadleKey(e) {
     }
   }
 }
+
+document.body.appendChild(document.getElementsByClassName("tabulator-footer")[0]);
 
