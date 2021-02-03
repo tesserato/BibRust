@@ -22,6 +22,9 @@ use walkdir::WalkDir;
 extern crate url;
 use url::Url;
 
+extern crate serde;
+use serde::{Deserialize, Serialize};
+
 static INTERNAL_TAG_MARKER: char ='#';
 static REVIEWED: &str = "#reviewed";
 static MERGED: &str = "#merged";
@@ -30,13 +33,13 @@ static SEPARATOR: &str = ",";
 static INTERNAL_SEPARATOR: &str = ",";
 static NAMES_SEPARATOR: &str = " and ";
 
-#[derive(Hash, Eq, PartialEq, Clone)]
+#[derive(Hash, Eq, PartialEq, Clone, Deserialize, Serialize)]
 struct Name{
   first_name:String,
   last_name:String
 }
 
-#[derive(Default)]
+#[derive(Default, Deserialize, Serialize)]
 struct Entry {
   Type: String,
   Key: String,
@@ -432,6 +435,16 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>, ordered_fields: &Vec<String>
   writeln!(f, "  {{{}}},",row.join(",")).unwrap();
   }
   writeln!(f, "];").unwrap();
+}
+
+fn write_json(path: &PathBuf, entries: &Vec<Entry>){
+  let mut f = match File::create(&path) {
+    Err(why) => panic!("couldn't create {}: {}", path.display(), why),
+    Ok(file) => file,
+  };
+
+  writeln!(f, "{}", serde_json::to_string(entries).unwrap()).unwrap();
+
 }
 
 fn write_bib(path: &PathBuf, entries: & Vec<Entry>){
@@ -866,6 +879,7 @@ fn main() {
       Some("csv")    => write_csv(&p, &main_entries, &stats.ordered_fields),
       Some("bib")    => write_bib(&p, &main_entries),
       Some("html")    => write_html(&p, &main_entries, &stats.ordered_fields),
+      Some("json")    => write_json(&p, &main_entries),
       Some(ext) => {
         p.set_extension("csv");
         write_csv(&p, &main_entries, &stats.ordered_fields)

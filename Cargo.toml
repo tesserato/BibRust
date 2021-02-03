@@ -11,6 +11,8 @@ csv = "1"
 clap = "2.33.3"
 walkdir = "2"
 url = "2.2.0"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
 
 [profile.release]
 opt-level = 3
