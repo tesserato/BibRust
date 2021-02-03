@@ -36,7 +36,10 @@ var hcm = [
   {
     label:"Delete this column",
     action:function(e, column){
-      column.delete();
+      conf = confirm("Really? This can't be undone!");
+      if (conf) {
+        column.delete();
+      }
     }
   },
   {
@@ -49,7 +52,7 @@ var hcm = [
   },
 ];
 
-ww = 400;
+ww = 200;
 
 
 var coldef = [                 //define the table columns
@@ -96,6 +99,16 @@ for (field of sortedfields){
   }
 }
 
+function fullscreen() {
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+}
+
 function updatealltags(){
   alltags = new Set([]);
   for (const e of tabledata){
@@ -131,7 +144,21 @@ function updatealltags(){
       e.classList.add("deselectedtag");
     }
   }
+  parentdiv.appendChild(btn);
 
+  var btn = document.createElement("BUTTON");   // Create a <button> element
+  btn.innerHTML = "Fullscreen";                   // Insert text
+  btn.id = "fullscreenbutn"
+  btn.onclick = function(event) {
+    var elem = document.documentElement;
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) { /* Safari */
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE11 */
+      elem.msRequestFullscreen();
+    }
+  }
   parentdiv.appendChild(btn);
 }
 
@@ -182,7 +209,7 @@ var table = new Tabulator("#table", {
       }
     },
   ],
-
+  // selectable:true,
   data:tabledata,           //load row data from array
   downloadRowRange:"all",
   layout:"fitDataFill",      //fit columns to width of table

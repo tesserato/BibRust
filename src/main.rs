@@ -17,6 +17,7 @@ extern crate clap;
 use clap::{App, Arg, ArgMatches};
 
 extern crate walkdir;
+use fs::rename;
 use walkdir::WalkDir;
 
 extern crate url;
@@ -392,7 +393,7 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>, ordered_fields: &Vec<String>
       Ok(file) => file,
   };
 
-  writeln!(f, "export const tabledata = [").unwrap();
+  writeln!(f, "tabledata = [").unwrap();
   for e in entries{
       // type and key
   let mut row: Vec<String> = vec![];
@@ -710,7 +711,14 @@ fn get_statistics(Entries:&mut Vec<Entry>, tidy:bool) -> Statistics{
   let n = Entries.len();
   for entry in Entries{
     if tidy{
-      let key = generate_key(entry);
+      let base_key = generate_key(entry);
+      let mut ctr = 0;
+      let mut key = base_key.clone();
+      while stats.keys.contains(&key) {
+        ctr +=1;
+        key = format!{"{}{}", base_key, ctr};
+      }
+      stats.keys.insert(key.clone());
       entry.Key = key;
     }
 
@@ -784,13 +792,31 @@ fn get_statistics(Entries:&mut Vec<Entry>, tidy:bool) -> Statistics{
   stats
 }
 
-fn clean(Entries:&mut Vec<Entry>){
+fn temp_clean(Entries:&mut Vec<Entry>){
   for e in Entries{
     if e.Fields_Values.contains_key("broken-files"){
       e.Fields_Values.remove("broken-files");
     }
     if e.Tags.contains("#no author"){
       e.Tags.remove("#no author");
+    }
+  }
+}
+
+fn rename_files(Entries:&mut Vec<Entry>){
+  for e in Entries{
+    if !e.Files.is_empty() && e.Tags.contains(REVIEWED){
+      let key = generate_key(e);
+      let typ = match e.Type.as_ref() {
+        "article" | "inproceedings" | "incollection" => "a",
+        "book" | "collection" | "thesis" | "mvbook" | "phdthesis" => "b",
+        _ => "r"
+      };
+      let tit = match e.Fields_Values["title"].split(":").next(){
+        Some(t) => t,
+        None => "NO_TITLE"
+      };
+      println!("!{} {} {}",typ, key, tit);
     }
   }
 }
@@ -852,8 +878,9 @@ fn main() {
   }
   let stats = get_statistics(&mut main_entries, generate_keys);
 
-  clean(&mut main_entries);
+  temp_clean(&mut main_entries);
 
+  rename_files(&mut main_entries);
 
 // output
   let mut output_path = String::new();

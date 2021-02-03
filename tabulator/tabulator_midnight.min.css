@@ -20,6 +20,14 @@
   width: fit-content;
 }
 
+#fullscreenbutn{
+  background-color: rgb(14, 83, 35);
+  color: white;
+  margin: .3em;
+  padding: .3em;
+  width: fit-content;
+}
+
 .tabulator-footer{
   width: 100%;
   position: sticky;

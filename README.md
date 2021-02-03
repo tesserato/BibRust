@@ -4,7 +4,7 @@ The way most bibliographic software process .bib files is very annoying; they me
 
 The idea of this script is to consolidate all the bibliographic data one has in .bib files spread around a folder, consolidate it in a unique file ready to be imported and treated in some of the available programs such as mendeley and zotero.
 
-
+no assumptions, non destructive behaviour
 
 # Remarks
 a article
