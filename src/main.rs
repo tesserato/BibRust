@@ -33,14 +33,15 @@ static SEPARATOR: &str = ",";
 static INTERNAL_SEPARATOR: &str = ",";
 static NAMES_SEPARATOR: &str = " and ";
 
-#[derive(Hash, Eq, PartialEq, Clone, Deserialize, Serialize)]
+#[derive(Debug, Hash, Eq, PartialEq, Clone, Deserialize, Serialize)]
 struct Name{
   first_name:String,
   last_name:String
 }
 
-#[derive(Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize)]
 struct Entry {
+  Reviewed:bool,
   Type: String,
   Key: String,
   Creators: HashMap<String, Vec<Name>>,
@@ -102,8 +103,12 @@ fn Entry_to_String_bib(e: & Entry) -> String{
   }
 
   //Tags
-  if !e.Tags.is_empty() {
-    let t = hashset_to_string(&e.Tags);
+  if !e.Tags.is_empty() || e.Reviewed {
+    let mut tags =e.Tags.clone();
+    if e.Reviewed{
+      tags.insert(REVIEWED.to_string());
+    }
+    let t = hashset_to_string(&tags);
     s.push_str(&format!("mendeley-tags = {{{}}},\n", t));
   }
   s.push_str("}\n");
@@ -179,15 +184,19 @@ fn parse_creators_field(original_value:&str) -> Vec<Name>{
   authors
 }
 
-fn parse_tags_field(original_value:&str) -> HashSet<String>{
+fn parse_tags_field(e: &mut Entry, original_value:&str) {
   // let patterns : &[_] = &['{', '}','\t',',',' ',','];
-  let tags: HashSet<String> = 
+  let mut tags: HashSet<String> = 
     original_value
       .replace(";", ",")
       .split(",").map(|x| x.to_lowercase().trim_matches(|c:char| c != INTERNAL_TAG_MARKER && !c.is_alphabetic()).to_owned())
       .filter(|s| !s.is_empty())
       .collect();
-  tags
+  if tags.contains(REVIEWED) {
+    e.Reviewed =true;
+    tags.remove(REVIEWED);
+  }
+  e.Tags = tags;
 }
 
 fn parse_file_field(e: &mut Entry, value:&String) -> HashSet<String>{
@@ -277,7 +286,7 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
             "author" | "editor" | "translator" => {
               let _ = last_entry.Creators.insert(field.to_string(), parse_creators_field(&value));
             },
-            "mendeley-tags"|"groups"|"tags" => last_entry.Tags = parse_tags_field( &value),
+            "mendeley-tags"|"groups"|"tags" => parse_tags_field( &mut last_entry,&value),
             _ => {
 
               if field == "isbn" {
@@ -339,7 +348,7 @@ fn write_csv(path: &PathBuf, entries: &Vec<Entry>, ordered_fields: &Vec<String>)
   writeln!(f, "{}", top_row).unwrap();
 
   for e in entries{
-    let c0:String = match e.Tags.contains(REVIEWED){
+    let c0:String = match e.Reviewed{
       true => "x".to_string(),
       false => "".to_string(),
     };
@@ -397,7 +406,7 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
       // type and key
   let mut row: Vec<String> = vec![];
 
-  if e.Tags.contains(REVIEWED){
+  if e.Reviewed{
     row.push(format!("reviewed: true"));
   }
 
@@ -531,9 +540,9 @@ fn read_and_parse_csv(path:PathBuf) -> Vec<Entry>{
     }
 
     if !v[0].trim().is_empty() || !v[n-2].is_empty(){
-      e.Tags = parse_tags_field(&v[n-2]);
+      parse_tags_field(&mut e,&v[n-2]);
       if !v[0].is_empty(){
-        e.Tags.insert(REVIEWED.to_string());
+        e.Reviewed=true;
       }
     }
 
@@ -549,6 +558,11 @@ fn read_and_parse_csv(path:PathBuf) -> Vec<Entry>{
     Entries.push(e);
   }
   Entries
+}
+
+fn read_and_parse_json(path: &Path) -> Vec<Entry>{
+  let file = File::open(path).expect("file not found");
+  serde_json::from_reader(file).expect("error while reading")
 }
 
 fn parse_cl_args() -> ArgMatches<'static> {
@@ -735,7 +749,7 @@ fn get_statistics(Entries:&mut Vec<Entry>, tidy:bool) -> Statistics{
       }
     }
 
-    if entry.Tags.contains(REVIEWED){
+    if entry.Reviewed{
       stats.reviewed += 1;
     }
 
@@ -812,7 +826,7 @@ fn temp_clean(Entries:&mut Vec<Entry>){
 
 fn rename_files(Entries:&mut Vec<Entry>){
   for e in Entries{
-    if !e.Files.is_empty() && e.Tags.contains(REVIEWED){
+    if !e.Files.is_empty() && e.Reviewed{
       let key = generate_key(e);
       let typ = match e.Type.as_ref() {
         "article" | "inproceedings" | "incollection" => "a",
@@ -823,24 +837,28 @@ fn rename_files(Entries:&mut Vec<Entry>){
         Some(t) => t,
         None => "NO_TITLE"
       };
-      println!("!{} {} {}",typ, key, tit);
+      println!("!{} {{{}}} {}", typ, key, tit);
     }
   }
 }
 
 fn main() -> Result<()> {
+  println!("Running from {}", env::current_dir().unwrap().to_str().unwrap().to_string());
   let args = parse_cl_args();
 
   // read input path from args
   let mut input_path = String::new();
   if args.value_of("input").is_some(){
     input_path = args.value_of("input").unwrap().to_string();
+    println!("Input: {} (from named arg)", input_path);
   }
   else if args.value_of("input_pos").is_some() {
     input_path = args.value_of("input_pos").unwrap().to_string();
+    println!("Input: {} (from positional arg)", input_path);
   }
   else{
     input_path = env::current_dir().unwrap().to_str().unwrap().to_string();
+    // println!("Defaulting to searching for .bib files in {:?}", input_path);
   }
 
 
@@ -1078,4 +1096,30 @@ for n in vec{
 }
 
 assert_eq!(output, result);
+}
+
+#[test]
+fn test_json(){
+  let path = Path::new("tests/res.json");
+  let entries = read_and_parse_json(path);
+  let path2 = Path::new("tests/res2.json").to_owned();
+  write_json(&path2, &entries);
+  let entries2 = read_and_parse_json(&path2);
+  assert_eq!(entries, entries2);
+}
+
+#[test]
+fn test_bib(){
+  let path = Path::new("tests/res.json");
+  let mut entries = read_and_parse_json(path);
+  let path2 = Path::new("tests/res.bib").to_owned();
+  write_bib(&path2, &entries);
+  let mut lines: Vec<String> =vec![];
+  read_bib(path2, &mut lines);
+  let mut entries2 = parse_bib(&lines);
+  // entries.sort();
+  // entries2.sort();
+  let path3 = Path::new("tests/res_from_bib.json").to_owned();
+  write_json(&path3, &entries2);
+  assert_eq!(entries, entries2, "Problem!");
 }

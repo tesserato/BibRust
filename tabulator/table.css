@@ -47,7 +47,7 @@ html{
   padding-bottom: .3em;
 }
 
-#cleartagsbutn, #fullscreenbutn{
+#cleartagsbutn, #fullscreenbutn, #csvbutn{
   background-color: rgb(221, 28, 70);
   color: white;
   margin: .3em;
@@ -55,7 +55,7 @@ html{
   width: fit-content;
 }
 
-#cleartagsbutn:hover, #fullscreenbutn:hover{
+#cleartagsbutn:hover, #fullscreenbutn:hover, #csvbutn:hover{
   background-color:rgb(145, 19, 46);
   color: white;
   margin: .3em;

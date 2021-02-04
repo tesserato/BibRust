@@ -1,0 +1,3145 @@
+[
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "year_lowther_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "John",
+          "last_name": "Lowther"
+        },
+        {
+          "first_name": "Ching-Kuang",
+          "last_name": "Shene"
+        }
+      ]
+    },
+    "Tags": [
+      "computer graphics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Computer Graphics/Teaching B Splines Is Not Difficult!_LowtherTeaching.pdf"
+    ],
+    "Fields_Values": {
+      "title": "Teaching B-splines Is Not Difficult!",
+      "abstract": "This paper describes the authors’ approach of introducing important concepts and algorithms of B-splines to junior computer science students with the help of a pedagogical tool DesignMentor. This approach is non-mathematical and intuitive, and has been used and reﬁned in the past six years.",
+      "pages": "5",
+      "langid": "english"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "year_hendry",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Simon",
+          "last_name": "Hendry"
+        }
+      ]
+    },
+    "Tags": [
+      "piano"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Piano/Inharmonicity of Piano Strings_HendryInharmonicity.pdf"
+    ],
+    "Fields_Values": {
+      "abstract": "Piano partials deviate from integer harmonics due to the stiffness and linear density of the strings. Values for the inharmonicity coefficient of six strings were determined experimentally and compared with calculated values. An investigation into stretched tuning was also performed with detailed readings taken from a well tuned Steinway Model D grand piano. These results are compared with Railsback‟s predictions of 1938.",
+      "langid": "english",
+      "pages": "32",
+      "title": "Inharmonicity of Piano Strings"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "misc",
+    "Key": "year_creator",
+    "Creators": {},
+    "Tags": [
+      "programming"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Programming/Kotlin Language Documentation_Kotlin.pdf"
+    ],
+    "Fields_Values": {
+      "title": "Kotlin Language Documentation"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2018_martínmartín_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Alberto",
+          "last_name": "Martín-Martín"
+        },
+        {
+          "first_name": "Enrique",
+          "last_name": "Orduna-Malea"
+        },
+        {
+          "first_name": "Mike",
+          "last_name": "Thelwall"
+        },
+        {
+          "first_name": "Emilio",
+          "last_name": "Delgado López-Cózar"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2018 Google Scholar, Web of Science, and Scopus_ a Systematic Comparison of Citations in 252 Subject Categories_2018MartinMartinGoogle.pdf"
+    ],
+    "Fields_Values": {
+      "issn": "1751-1577",
+      "date": "2018-11",
+      "number": "4",
+      "langid": "english",
+      "shorttitle": "Google Scholar, Web of Science, and Scopus",
+      "doi": "10.1016/j.joi.2018.09.002",
+      "urldate": "2019-04-07",
+      "journaltitle": "Journal of Informetrics",
+      "title": "Google Scholar, Web of Science, and Scopus: A systematic comparison of citations in 252 subject categories",
+      "url": "https://linkinghub.elsevier.com/retrieve/pii/S1751157718303249",
+      "abstract": "Despite citation counts from Google Scholar (GS), Web of Science (WoS), and Scopus being widely consulted by researchers and sometimes used in research evaluations, there is no recent or systematic evidence about the differences between them. In response, this paper investigates 2,448,055 citations to 2299 English-language highly-cited documents from 252 GS subject categories published in 2006, comparing GS, the WoS Core Collection, and Scopus. GS consistently found the largest percentage of citations across all areas (93/////// %–96/////// %), far ahead of Scopus (35/////// %–77/////// %) and WoS (27/////// %–73/////// %). GS found nearly all the WoS (95/////// %) and Scopus (92/////// %) citations. Most citations found only by GS were from non-journal sources (48/////// %–65/////// %), including theses, books, conference papers, and unpublished materials. Many were non-English (19/////// %–38/////// %), and they tended to be much less cited than citing sources that were also in Scopus or WoS. Despite the many unique GS citing sources, Spearman correlations between citation counts in GS and WoS or Scopus are high (0.78-0.99). They are lower in the Humanities, and lower between GS and WoS than between GS and Scopus. The results suggest that in all areas GS citation data is essentially a superset of WoS and Scopus, with substantial extra coverage.",
+      "pages": "1160--1177",
+      "volume": "12"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "collection",
+    "Key": "2018_erdt_etal",
+    "Creators": {
+      "editor": [
+        {
+          "first_name": "Mojisola",
+          "last_name": "Erdt"
+        },
+        {
+          "first_name": "Aravind",
+          "last_name": "Sesagiri Raamkumar"
+        },
+        {
+          "first_name": "Edie",
+          "last_name": "Rasmussen"
+        },
+        {
+          "first_name": "Yin-Leng",
+          "last_name": "Theng"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2018 Altmetrics for Research Outputs Measurement and Scholarly Information Management_2018ErdtAltmetrics.pdf"
+    ],
+    "Fields_Values": {
+      "publisher": "Springer Singapore",
+      "doi": "10.1007/978-981-13-1053-9",
+      "series": "Communications in Computer and Information Science",
+      "volume": "856",
+      "title": "Altmetrics for Research Outputs Measurement and Scholarly Information Management",
+      "isbn": "9789811310522",
+      "langid": "english",
+      "date": "2018",
+      "location": "Singapore",
+      "urldate": "2019-04-07"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "unpublished",
+    "Key": "2018_elsevier",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "",
+          "last_name": "Elsevier"
+        }
+      ]
+    },
+    "Tags": [
+      "writing"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Writing/2018 4 Step Guide to Writing a Literature Review_2018Elsevier4.pdf"
+    ],
+    "Fields_Values": {
+      "title": "4 step guide to writing a literature review",
+      "date": "2018",
+      "url": "http://www.emeraldgrouppublishing.com/authors/guides/write/literature.htm",
+      "publisher": "Emerald Publishing"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2017_zatorski_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Hubert",
+          "last_name": "Zatorski"
+        },
+        {
+          "first_name": "Jakub",
+          "last_name": "Fichna"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2017 Young GI Angle_ the Role of Bibliometrics in Scientist’s Career Development_2017ZatorskiYoung.pdf"
+    ],
+    "Fields_Values": {
+      "issn": "2050-6406",
+      "pages": "1151--1152",
+      "urldate": "2019-04-07",
+      "date": "2017-12",
+      "title": "Young GI angle: The role of bibliometrics in scientist’s career development",
+      "volume": "5",
+      "doi": "10.1177/2050640617744497",
+      "journaltitle": "United European Gastroenterology Journal",
+      "shorttitle": "Young GI angle",
+      "langid": "english",
+      "number": "8"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "misc",
+    "Key": "2017_oliehoek_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Frans A.",
+          "last_name": "Oliehoek"
+        },
+        {
+          "first_name": "Rahul",
+          "last_name": "Savani"
+        },
+        {
+          "first_name": "Jose",
+          "last_name": "Gallego-Posada"
+        },
+        {
+          "first_name": "Elise",
+          "last_name": "van der Pol"
+        },
+        {
+          "first_name": "Edwin D.",
+          "last_name": "de Jong"
+        },
+        {
+          "first_name": "Roderich",
+          "last_name": "Gross"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2017 GANGs_ Generative Adversarial Network Games_2017OliehoekGANGs.pdf"
+    ],
+    "Fields_Values": {
+      "title": "GANGs: Generative Adversarial Network Games",
+      "abstract": "Generative Adversarial Networks (GAN) have become one of the most successful frameworks for unsupervised generative modeling. As GANs are difficult to train much research has focused on this. However, very little of this research has directly exploited gametheoretic techniques. We introduce Generative Adversarial Network Games (GANGs), which explicitly model a finite zero-sum game between a generator (G) and classifier (C) that use mixed strategies. The size of these games precludes exact solution methods, therefore we define resource-bounded best responses (RBBRs), and a resourcebounded Nash Equilibrium (RB-NE) as a pair of mixed strategies such that neither G or C can find a better RBBR. The RB-NE solution concept is richer than the notion of ‘local Nash equilibria’ in that it captures not only failures of escaping local optima of gradient descent, but applies to any approximate best response computations, including methods with random restarts. To validate our approach, we solve GANGs with the Parallel Nash Memory algorithm, which provably monotonically converges to an RB-NE. We compare our results to standard GAN setups, and demonstrate that our method deals well with typical GAN problems such as mode collapse, partial mode coverage and forgetting.",
+      "shorttitle": "GANGs",
+      "eprint": "1712.00679",
+      "journaltitle": "arXiv",
+      "eprinttype": "arXiv",
+      "langid": "english",
+      "date": "2017-12-02"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "misc",
+    "Key": "2017_ebrahim",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Nader Ale",
+          "last_name": "Ebrahim"
+        }
+      ]
+    },
+    "Tags": [
+      "writing"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Writing/2017 How to Write a Bibliometric Paper_2017EbrahimHow.pdf"
+    ],
+    "Fields_Values": {
+      "abstract": "Bibliometrics can be defined as the statistical analysis of publications. Bibliometrics has focused on the quantitative analysis of citations and citation counts which is complex. It is so complex and specialized that personal knowledge and experience are insufficient for understanding trends and then making decisions. We need tools for analysis of bibliometrics information to recognize the research trends and evaluate scientific/institution/country’s research productivity. This presentation will provide procedure to write a Bibliometrics paper.",
+      "doi": "10.6084/m9.figshare.5374615.v1",
+      "urldate": "2019-04-07",
+      "title": "How to Write a Bibliometric Paper",
+      "langid": "english",
+      "url": "https://figshare.com/articles/How/////////_to/////////_Write/////////_a/////////_Bibliometric/////////_Paper/5374615/1",
+      "date": "2017",
+      "publisher": "Figshare"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "unpublished",
+    "Key": "2017_deserio",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Robert",
+          "last_name": "DeSerio"
+        }
+      ]
+    },
+    "Tags": [
+      "harmonic analysis"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Harmonic Analysis/2017 Addendum _ the Fourier Transform of Decaying Oscillations_2017DeSerioAddendum.pdf"
+    ],
+    "Fields_Values": {
+      "pages": "12",
+      "langid": "english",
+      "date": "2017",
+      "number": "6",
+      "title": "Addendum : The Fourier transform of decaying oscillations"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "misc",
+    "Key": "2017_batty",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "C.",
+          "last_name": "Batty"
+        }
+      ]
+    },
+    "Tags": [
+      "harmonic analysis"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Harmonic Analysis/2017 Discrete Fourier Transform Derivation_2017BattyDiscrete.pdf"
+    ],
+    "Fields_Values": {
+      "title": "Discrete Fourier Transform Derivation",
+      "date": "2017"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "incollection",
+    "Key": "2017_an_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Bo",
+          "last_name": "An"
+        },
+        {
+          "first_name": "Milind",
+          "last_name": "Tambe"
+        }
+      ],
+      "editor": [
+        {
+          "first_name": "Ali E.",
+          "last_name": "Abbas"
+        },
+        {
+          "first_name": "Milind",
+          "last_name": "Tambe"
+        },
+        {
+          "first_name": "Detlof",
+          "last_name": "von Winterfeldt"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2017 Stackelberg Security Games (SSG) Basics and Application Overview_2017AnStackelberg.pdf"
+    ],
+    "Fields_Values": {
+      "pages": "485--507",
+      "abstract": "Security is a critical concern around the world, whether it is the challenge of protecting ports, airports and other critical infrastructure, interdicting the illegal ﬂow of drugs, weapons and money, protecting endangered species, forests and ﬁsheries, suppressing urban crime or security in cyberspace. Unfortunately, limited security resources prevent full security coverage at all times; instead, we must optimize the use of limited security resources. To that end, we founded the \"security games\" framework to build decision-aids for security agencies. Security games is a novel area of research that is based on computational and behavioral game theory, while also incorporating elements of AI planning under uncertainty and machine learning. We have deployed securitygames based decision aids for infrastructure security such as at the ports and ferry trafﬁc with the US coast guard (in the ports of New York, Boston, Los Angeles/Long Beach, Houston and others), for security of airports and air trafﬁc with the US Federal Air Marshals and the Los Angeles World Airport (LAX) police, and tested this framework for security of metro trains with the Los Angeles Sheriff’s Department. Moreover, recent work on \"green security games\" has led to testing our decision aids for protection of ﬁsheries with the US Coast Guard and protection of wildlife at sites in multiple countries, and opportunistic crime security games have focused on suppressing urban crime. This chapter will discuss applications of security games, and outline research challenges in security games including algorithms for scaling up security games as well as for handling signiﬁcant adversarial uncertainty and learning models of human adversary behaviors.",
+      "date": "2017-11-02",
+      "doi": "10.1017/9781316676714.021",
+      "title": "Stackelberg Security Games (SSG) Basics and Application Overview",
+      "edition": "1",
+      "url": "https://www.cambridge.org/core/product/identifier/9781316676714/////////%23CN-bp-21/type/book/////////_part",
+      "booktitle": "Improving Homeland Security Decisions",
+      "urldate": "2019-03-28",
+      "isbn": "9781316676714",
+      "langid": "english",
+      "publisher": "Cambridge University Press"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "collection",
+    "Key": "2016_rothe",
+    "Creators": {
+      "editor": [
+        {
+          "first_name": "Jörg",
+          "last_name": "Rothe"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2016 Economics and Computation_ an Introduction to Algorithmic Game Theory, Computational Social Choice, and Fair Division_2016RotheEconomics.pdf"
+    ],
+    "Fields_Values": {
+      "title": "Economics and computation: an introduction to algorithmic game theory, computational social choice, and fair division",
+      "isbn": "9783662479032",
+      "publisher": "Springer",
+      "pagetotal": "612",
+      "date": "2016",
+      "series": "Springer texts in business and economics",
+      "shorttitle": "Economics and computation",
+      "location": "Berlin",
+      "note": "OCLC: 923541416",
+      "langid": "english"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2016_pérolat_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Julien",
+          "last_name": "Pérolat"
+        },
+        {
+          "first_name": "Florian",
+          "last_name": "Strub"
+        },
+        {
+          "first_name": "Bilal",
+          "last_name": "Piot"
+        },
+        {
+          "first_name": "Olivier",
+          "last_name": "Pietquin"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2016 Learning Nash Equilibrium for General Sum Markov Games from Batch Data_2016PerolatLearning.pdf"
+    ],
+    "Fields_Values": {
+      "title": "Learning Nash Equilibrium for General-Sum Markov Games from Batch Data",
+      "date": "2016-06-28",
+      "eprintclass": "cs",
+      "langid": "english",
+      "eprinttype": "arxiv",
+      "abstract": "This paper addresses the problem of learning a Nash equilibrium in γ-discounted multiplayer general-sum Markov Games (MGs) in a batch setting. As the number of players increases in MG, the agents may either collaborate or team apart to increase their ﬁnal rewards. One solution to address this problem is to look for a Nash equilibrium. Although, several techniques were found for the subcase of two-player zero-sum MGs, those techniques fail to ﬁnd a Nash equilibrium in general-sum Markov Games. In this paper, we introduce a new deﬁnition of ǫ-Nash equilibrium in MGs which grasps the strategy’s quality for multiplayer games. We prove that minimizing the norm of two Bellmanlike residuals implies to learn such an ǫ-Nash equilibrium. Then, we show that minimizing an empirical estimate of the Lp norm of these Bellman-like residuals allows learning for general-sum games within the batch setting. Finally, we introduce a neural network architecture that successfully learns a Nash equilibrium in generic multiplayer generalsum turn-based MGs.",
+      "eprint": "1606.08718"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2016_perianesrodriguez_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Antonio",
+          "last_name": "Perianes-Rodriguez"
+        },
+        {
+          "first_name": "Ludo",
+          "last_name": "Waltman"
+        },
+        {
+          "first_name": "Nees Jan",
+          "last_name": "van Eck"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2016 Constructing Bibliometric Networks_ a Comparison between Full and Fractional Counting_2016PerianesRodriguezConstructing.pdf"
+    ],
+    "Fields_Values": {
+      "journaltitle": "Journal of Informetrics",
+      "date": "2016-11",
+      "issn": "1751-1577",
+      "url": "https://linkinghub.elsevier.com/retrieve/pii/S1751157716302036",
+      "volume": "10",
+      "number": "4",
+      "langid": "english",
+      "urldate": "2019-04-07",
+      "doi": "10.1016/j.joi.2016.10.006",
+      "title": "Constructing bibliometric networks: A comparison between full and fractional counting",
+      "shorttitle": "Constructing bibliometric networks",
+      "pages": "1178--1195"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2016_mongeon_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Philippe",
+          "last_name": "Mongeon"
+        },
+        {
+          "first_name": "Adèle",
+          "last_name": "Paul-Hus"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2016 The Journal Coverage of Web of Science and Scopus_ a Comparative Analysis_2016Mongeonjournal.pdf"
+    ],
+    "Fields_Values": {
+      "journaltitle": "Scientometrics",
+      "doi": "10.1007/s11192-015-1765-5",
+      "pages": "213--228",
+      "volume": "106",
+      "issn": "0138-9130",
+      "urldate": "2019-04-07",
+      "number": "1",
+      "abstract": "Bibliometric methods are used in multiple ﬁelds for a variety of purposes, namely for research evaluation. Most bibliometric analyses have in common their data sources: Thomson Reuters’ Web of Science (WoS) and Elsevier’s Scopus. The objective of this research is to describe the journal coverage of those two databases and to assess whether some ﬁeld, publishing country and language are over or underrepresented. To do this we compared the coverage of active scholarly journals in WoS (13,605 journals) and Scopus (20,346 journals) with Ulrich’s extensive periodical directory (63,013 journals). Results indicate that the use of either WoS or Scopus for research evaluation may introduce biases that favor Natural Sciences and Engineering as well as Biomedical Research to the detriment of Social Sciences and Arts and Humanities. Similarly, English-language journals are overrepresented to the detriment of other languages. While both databases share these biases, their coverage differs substantially. As a consequence, the results of bibliometric analyses may vary depending on the database used. These results imply that in the context of comparative research evaluation, WoS and Scopus should be used with caution, especially when comparing different ﬁelds, institutions, countries or languages. The bibliometric community should continue its efforts to develop methods and indicators that include scientiﬁc output that are not covered in WoS or Scopus, such as ﬁeld-speciﬁc and national citation indexes.",
+      "langid": "english",
+      "title": "The journal coverage of Web of Science and Scopus: a comparative analysis",
+      "shorttitle": "The journal coverage of Web of Science and Scopus",
+      "date": "2016-01"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "incollection",
+    "Key": "2016_krawczyk_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Jacek B.",
+          "last_name": "Krawczyk"
+        },
+        {
+          "first_name": "Vladimir",
+          "last_name": "Petkov"
+        }
+      ],
+      "editor": [
+        {
+          "first_name": "Tamer",
+          "last_name": "Basar"
+        },
+        {
+          "first_name": "Georges",
+          "last_name": "Zaccour"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2016 Multistage Games_2016KrawczykMultistage.pdf"
+    ],
+    "Fields_Values": {
+      "abstract": "In this chapter, we build on the concept of a repeated game discussed in Chap. Repeated Games and introduce the notion of a multistage game. In both types of games, several antagonistic agents interact with each other over time. The difference is that, in a multistage game, there is a dynamic system whose state keeps changing: the controls chosen by the agents in the current period affect the system’s future. In contrast with repeated games, the agents’ payoffs in multistage games depend directly on the state of this system. Examples of such settings range from a microeconomic dynamic model of a ﬁsh biomass exploited by several agents to a macroeconomic interaction between the government and the business sector. In some multistage games, physically different decisionmakers engage in simultaneous-move competition. In others, agents execute their actions sequentially rather than simultaneously. We also study hierarchical games, where a leader moves ahead of a follower. This chapter concludes with an example of memory-based strategies that can support Pareto-efﬁcient outcomes.",
+      "langid": "english",
+      "booktitle": "Handbook of Dynamic Game Theory",
+      "date": "2016",
+      "title": "Multistage Games",
+      "doi": "10.1007/978-3-319-27335-8///////\\\\_3-1",
+      "isbn": "9783319273358",
+      "pages": "1--57",
+      "publisher": "Springer International Publishing",
+      "location": "Cham",
+      "urldate": "2019-03-28"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2016_harzing_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Anne-Wil",
+          "last_name": "Harzing"
+        },
+        {
+          "first_name": "Satu",
+          "last_name": "Alakangas"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2016 Google Scholar, Scopus and the Web of Science_ a Longitudinal and Cross Disciplinary Comparison_2016HarzingGoogle.pdf"
+    ],
+    "Fields_Values": {
+      "date": "2016-02",
+      "number": "2",
+      "urldate": "2019-04-07",
+      "volume": "106",
+      "langid": "english",
+      "journaltitle": "Scientometrics",
+      "shorttitle": "Google Scholar, Scopus and the Web of Science",
+      "abstract": "This article aims to provide a systematic and comprehensive comparison of the coverage of the three major bibliometric databases: Google Scholar, Scopus and the Web of Science. Based on a sample of 146 senior academics in ﬁve broad disciplinary areas, we therefore provide both a longitudinal and a cross-disciplinary comparison of the three databases. Our longitudinal comparison of eight data points between 2013 and 2015 shows a consistent and reasonably stable quarterly growth for both publications and citations across the three databases. This suggests that all three databases provide sufﬁcient stability of coverage to be used for more detailed cross-disciplinary comparisons. Our cross-disciplinary comparison of the three databases includes four key research metrics (publications, citations, h-index, and hI, annual, an annualised individual h-index) and ﬁve major disciplines (Humanities, Social Sciences, Engineering, Sciences and Life Sciences). We show that both the data source and the speciﬁc metrics used change the conclusions that can be drawn from cross-disciplinary comparisons.",
+      "doi": "10.1007/s11192-015-1798-9",
+      "issn": "0138-9130",
+      "pages": "787--804",
+      "title": "Google Scholar, Scopus and the Web of Science: a longitudinal and cross-disciplinary comparison"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2016_gracia_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "X.",
+          "last_name": "Gracia"
+        },
+        {
+          "first_name": "T.",
+          "last_name": "Sanz-perela"
+        }
+      ]
+    },
+    "Tags": [
+      "piano"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Piano/2016 The Wave Equation for Stiff Strings and Piano Tuning._2016Graciawave.pdf"
+    ],
+    "Fields_Values": {
+      "url": "http://revistes.iec.cat/index.php/reports/article/view/142136/141068",
+      "number": "1",
+      "title": "The wave equation for stiff strings and piano tuning.",
+      "eprint": "1603.05516",
+      "journaltitle": "Reports@SCM",
+      "pages": "1--16",
+      "annotation": "preprint",
+      "arxivid": "1603.05516",
+      "keywords": "inharmonic spectrum,musical,stiffness,vibrating string,wave equation",
+      "eprinttype": "arXiv",
+      "date": "2016",
+      "volume": "3"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2016_chabassier_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Juliette",
+          "last_name": "Chabassier"
+        },
+        {
+          "first_name": "Marc",
+          "last_name": "Duruflé"
+        },
+        {
+          "first_name": "Patrick",
+          "last_name": "Joly"
+        }
+      ]
+    },
+    "Tags": [
+      "piano"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Piano/2016 Time Domain Simulation of a Piano. Part 2_ Numerical Aspects_2016ChabassierTime.pdf"
+    ],
+    "Fields_Values": {
+      "abstract": "This article is the second of a series of two papers devoted to the numerical simulation of the piano. It concerns the numerical aspects of the work, the implementation of a piano code and the presentation of corresponding simulations. The main diﬃculty is time discretisation and stability is achieved via energy methods. Numerical illustrations are provided for a realistic piano and compared to experimental recordings.",
+      "langid": "english",
+      "shorttitle": "Time domain simulation of a piano. Part 2",
+      "volume": "50",
+      "journaltitle": "ESAIM: Mathematical Modelling and Numerical Analysis",
+      "urldate": "2019-03-26",
+      "number": "1",
+      "issn": "0764-583X",
+      "title": "Time domain simulation of a piano. Part 2: numerical aspects",
+      "date": "2016-01",
+      "pages": "93--133",
+      "doi": "10.1051/m2an/2015007"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "inproceedings",
+    "Key": "2015_liu_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Xingfeng",
+          "last_name": "Liu"
+        },
+        {
+          "first_name": "Tiansong",
+          "last_name": "Zhou"
+        },
+        {
+          "first_name": "Zhongxia",
+          "last_name": "Zheng"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2015 Complex Information Game Problem Based on Artificial Neural Network_2015LiuComplex.pdf"
+    ],
+    "Fields_Values": {
+      "location": "Shenyang, China",
+      "booktitle": "Proceedings of the International Conference on Logistics, Engineering, Management and Computer Science",
+      "doi": "10.2991/lemcs-15.2015.34",
+      "eventtitle": "International Conference on Logistics Engineering, Management and Computer Science (LEMCS 2015)",
+      "langid": "english",
+      "publisher": "Atlantis Press",
+      "url": "http://www.atlantis-press.com/php/paper-details.php?id=25838084",
+      "isbn": "9789462521025",
+      "title": "Complex Information Game Problem Based on Artificial Neural Network",
+      "date": "2015",
+      "urldate": "2019-03-28",
+      "abstract": "The assumption of game theory is that the players in game must be rational. In the game of incomplete information, participants are not completely clear about the game. Therefore, usually there is a probability distribution of strategy selection in game. It is very complicated to know the real game information of the social and economic problems. In fact, the actual situation for many problems is that game players are irrational, or the probability distribution of game players’ strategies cannot be gotten, even the strategy sets are not complete (infinite strategy sets).There are many limitations in application of the traditional game theory. In this paper, the concept of complex information game and its Nash equilibrium are presented. It is proved that the complex information game problem can be solved by artificial neural network. An example on how to solve the complex information game problem with artificial neural network is given as well. Researchers hope that more and more scholars can use artificial intelligence theory to analyze the game theory problem. Therefore, the complex information game problems can be dealt more efficiently."
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "inproceedings",
+    "Key": "2015_liao",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Jan-Ray",
+          "last_name": "Liao"
+        }
+      ]
+    },
+    "Tags": [
+      "harmonic analysis"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Harmonic Analysis/2015 Analytical Solution of DFT Interpolated Frequency Estimator for Hanning Windowed Signal_2015LiaoAnalytical.pdf"
+    ],
+    "Fields_Values": {
+      "langid": "english",
+      "abstract": "Frequency estimation from discrete Fourier transform (DFT) coefﬁcients of a rectangular windowed signal under the inﬂuence of additive white noise is a well studied problem in signal processing. In its simplest form, the process involves ﬁnding the spectral peaks. When higher frequency resolution is required, a frequency offset can be found from the interpolation of DFT coefﬁcients. However, most of the past researches focus on monotonic cisoid signals. In practical situations where multiple harmonics are present, the sidelobes from other harmonics interfere with the estimation of the harmonic being considered. In this case, windows with smaller sidelobes such as Hanning window are preferred over rectangular window. Given the increased mathematical complexity of Hanning window, analytical solution has not yet been available for DFT interpolation. In this paper, we derive an exact analytical solution of the estimated frequency from DFT interpolation of Hanning windowed signal. In experiments, we show that the new analytical solution is accurate for monotonic cisoid signal and can considerably reduce the effect of interharmonic interference as compared to previous rectangular windowed methods.",
+      "doi": "10.1109/ISCIT.2015.7458336",
+      "booktitle": "2015 15th International Symposium on Communications and Information Technologies (ISCIT)",
+      "urldate": "2019-03-26",
+      "date": "2015-10",
+      "publisher": "IEEE",
+      "eventtitle": "2015 15th International Symposium on Communications and Information Technologies (ISCIT)",
+      "pages": "177--180",
+      "title": "Analytical solution of DFT interpolated frequency estimator for Hanning windowed signal",
+      "location": "Nara, Japan",
+      "url": "http://ieeexplore.ieee.org/document/7458336/",
+      "isbn": "9781467368209"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2015_giordano",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "N.",
+          "last_name": "Giordano"
+        }
+      ]
+    },
+    "Tags": [
+      "piano"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Piano/2015 Explaining the Railsback Stretch in Terms of the Inharmonicity of Piano Tones and Sensory Dissonance_2015GiordanoExplaining.pdf"
+    ],
+    "Fields_Values": {
+      "date": "2015-10",
+      "volume": "138",
+      "title": "Explaining the Railsback stretch in terms of the inharmonicity of piano tones and sensory dissonance",
+      "doi": "10.1121/1.4931439",
+      "langid": "english",
+      "pages": "2359--2366",
+      "issn": "0001-4966",
+      "number": "4",
+      "urldate": "2019-03-26",
+      "journaltitle": "The Journal of the Acoustical Society of America"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2015_courtney_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Elya",
+          "last_name": "Courtney"
+        },
+        {
+          "first_name": "Michael",
+          "last_name": "Courtney"
+        }
+      ]
+    },
+    "Tags": [
+      "harmonic analysis"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Harmonic Analysis/2015 A More Accurate Fourier Transform_2015CourtneyMore.pdf"
+    ],
+    "Fields_Values": {
+      "abstract": "Fourier transform methods are used to analyze functions and data sets to provide frequencies, amplitudes, and phases of underlying oscillatory components. Fast Fourier transform (FFT) methods oﬀer speed advantages over evaluation of explicit integrals (EI) that deﬁne Fourier transforms. This paper compares frequency, amplitude, and phase accuracy of the two methods for well resolved peaks over a wide array of data sets including cosine series with and without random noise and a variety of physical data sets, including atmospheric CO2 concentrations, tides, temperatures, sound waveforms, and atomic spectra. The FFT uses MIT’s FFTW3 library. The EI method uses the rectangle method to compute the areas under the curve via complex math. Results support the hypothesis that EI methods are more accurate than FFT methods. Errors range from 5 to 10 times higher when determining peak frequency by FFT, 1.4 to 60 times higher for peak amplitude, and 6 to 10 times higher for phase under a peak. The ability to compute more accurate Fourier transforms has promise for improved data analysis in many ﬁelds, including more sensitive assessment of hypotheses in the environmental sciences related to CO2 concentrations and temperature. Other methods are available to address diﬀerent weaknesses in FFTs; however, the EI method always produces the most accurate output possible for a given data set. On the 2011 Lenovo ThinkPad used in this study, an EI transform on a 10,000 point data set took 31 seconds to complete. Source code (C) and Windows executable for the EI method are available at https://sourceforge.net/projects/amoreaccuratefouriertransform/.",
+      "eprintclass": "physics",
+      "title": "A More Accurate Fourier Transform",
+      "date": "2015-07-06",
+      "eprinttype": "arxiv",
+      "eprint": "1507.01832",
+      "langid": "english"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "inproceedings",
+    "Key": "2015_cheng_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Tian",
+          "last_name": "Cheng"
+        },
+        {
+          "first_name": "Simon",
+          "last_name": "Dixon"
+        },
+        {
+          "first_name": "Matthias",
+          "last_name": "Mauch"
+        }
+      ]
+    },
+    "Tags": [
+      "piano"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Piano/2015 Modelling the Decay of Piano Sounds_2015ChengModelling.pdf"
+    ],
+    "Fields_Values": {
+      "url": "http://ieeexplore.ieee.org/document/7178038/",
+      "abstract": "We investigate piano acoustics and compare the theoretical temporal decay of individual partials to recordings of real-world piano notes from the RWC Music Database. We ﬁrst describe the theory behind double decay and beats, known phenomena caused by the interaction between strings and soundboard. Then we ﬁt the decay of the ﬁrst 30 partials to a standard linear model and two physically-motivated non-linear models that take into account the coupling of strings and soundboard. We show that the use of non-linear models provides a better ﬁt to the data. We use these estimated decay rates to parameterise the characteristic decay response (decay rates along frequencies) of the piano under investigation. The results also show that dynamics have no signiﬁcant effect on the decay rate.",
+      "langid": "english",
+      "title": "Modelling the decay of piano sounds",
+      "urldate": "2019-03-28",
+      "date": "2015-04",
+      "booktitle": "2015 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)",
+      "isbn": "9781467369978",
+      "doi": "10.1109/ICASSP.2015.7178038",
+      "location": "South Brisbane, Queensland, Australia",
+      "pages": "594--598",
+      "eventtitle": "ICASSP 2015 - 2015 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)",
+      "publisher": "IEEE"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2014_zahedi_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Zohreh",
+          "last_name": "Zahedi"
+        },
+        {
+          "first_name": "Rodrigo",
+          "last_name": "Costas"
+        },
+        {
+          "first_name": "Paul",
+          "last_name": "Wouters"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2014 How Well Developed Are Altmetrics_ a Cross Disciplinary Analysis of the Presence of ‘alternative Metrics’ in Scientific Publications_2014ZahediHow.pdf"
+    ],
+    "Fields_Values": {
+      "date": "2014-11",
+      "issn": "0138-9130",
+      "doi": "10.1007/s11192-014-1264-0",
+      "abstract": "In this paper an analysis of the presence and possibilities of altmetrics for bibliometric and performance analysis is carried out. Using the web based tool Impact Story, we collected metrics for 20,000 random publications from the Web of Science. We studied both the presence and distribution of altmetrics in the set of publications, across ﬁelds, document types and over publication years, as well as the extent to which altmetrics correlate with citation indicators. The main result of the study is that the altmetrics source that provides the most metrics is Mendeley, with metrics on readerships for 62.6 /////// % of all the publications studied, other sources only provide marginal information. In terms of relation with citations, a moderate spearman correlation (r = 0.49) has been found between Mendeley readership counts and citation indicators. Other possibilities and limitations of these indicators are discussed and future research lines are outlined.",
+      "title": "How well developed are altmetrics? A cross-disciplinary analysis of the presence of ‘alternative metrics’ in scientific publications",
+      "number": "2",
+      "shorttitle": "How well developed are altmetrics?",
+      "pages": "1491--1513",
+      "urldate": "2019-04-07",
+      "langid": "english",
+      "volume": "101",
+      "journaltitle": "Scientometrics"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2014_serra",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Xavier",
+          "last_name": "Serra"
+        }
+      ]
+    },
+    "Tags": [
+      "harmonic analysis"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Harmonic Analysis/2014 Spectral Modeling Synthesis_ Past and Present_2014SerraSpectral.pdf"
+    ],
+    "Fields_Values": {
+      "date": "2014",
+      "langid": "english",
+      "title": "Spectral Modeling Synthesis: Past and Present",
+      "number": "November",
+      "pages": "26"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2014_haustein_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Stefanie",
+          "last_name": "Haustein"
+        },
+        {
+          "first_name": "Isabella",
+          "last_name": "Peters"
+        },
+        {
+          "first_name": "Judit",
+          "last_name": "Bar-Ilan"
+        },
+        {
+          "first_name": "Jason",
+          "last_name": "Priem"
+        },
+        {
+          "first_name": "Hadas",
+          "last_name": "Shema"
+        },
+        {
+          "first_name": "Jens",
+          "last_name": "Terliesner"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2014 Coverage and Adoption of Altmetrics Sources in the Bibliometric Community_2014HausteinCoverage.pdf"
+    ],
+    "Fields_Values": {
+      "doi": "10.1007/s11192-013-1221-3",
+      "pages": "1145--1163",
+      "issn": "0138-9130",
+      "number": "2",
+      "urldate": "2019-04-07",
+      "date": "2014-11",
+      "volume": "101",
+      "journaltitle": "Scientometrics",
+      "langid": "english",
+      "title": "Coverage and adoption of altmetrics sources in the bibliometric community"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "misc",
+    "Key": "2014_harinarayana",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "N.",
+          "last_name": "Harinarayana"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2014 Data Sources and Software Tools for Bibliometric Studies_2014HarinarayanaData.pdf"
+    ],
+    "Fields_Values": {
+      "url": "https://epgp.inflibnet.ac.in/epgpdata/uploads/epgp/////////_content/library/////////_and/////////_information/////////_science/informetrics/////////_/////////&/////////_scientometrics/data/////////_sources/////////_and/////////_software/////////_tools/////////_for/////////_bibliometric/////////_studies/et/333/////////_et/////////_m2.pdf",
+      "date": "2014",
+      "title": "Data sources and software tools for bibliometric studies"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "inproceedings",
+    "Key": "2014_goodfellow_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Ian",
+          "last_name": "Goodfellow"
+        },
+        {
+          "first_name": "Jean",
+          "last_name": "Pouget-Abadie"
+        },
+        {
+          "first_name": "Mehdi",
+          "last_name": "Mirza"
+        },
+        {
+          "first_name": "Bing",
+          "last_name": "Xu"
+        },
+        {
+          "first_name": "David",
+          "last_name": "Warde-Farley"
+        },
+        {
+          "first_name": "Sherjil",
+          "last_name": "Ozair"
+        },
+        {
+          "first_name": "Aaron",
+          "last_name": "Courville"
+        },
+        {
+          "first_name": "Yoshua",
+          "last_name": "Bengio"
+        }
+      ]
+    },
+    "Tags": [
+      "seminal"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:done/2014GoodfellowGenerative Generative Adversarial Nets.pdf"
+    ],
+    "Fields_Values": {
+      "title": "Generative Adversarial Nets",
+      "eprint": "1406.2661v1",
+      "arxivid": "1406.2661v1",
+      "journaltitle": "Advances in Neural Information Processing Systems",
+      "eprinttype": "arXiv",
+      "booktitle": "Procedings",
+      "date": "2014",
+      "abstract": "We propose a new framework for estimating generative models via an adversar- ial process; in which we simultaneously train two models: a generative model G that captures the data distribution; and a discriminative model D that estimates the probability that a sample came from the training data rather thanG. The train- ing procedure for G is to maximize the probability of D making a mistake. This framework corresponds to a minimax two-player game. In the space of arbitrary functions G and D; a unique solution exists; with G recovering the training data distribution andD equal to 1 2 everywhere. In the case where G andD are defined by multilayer perceptrons; the entire system can be trained with backpropagation. There is no need for any Markov chains or unrolled approximate inference net- works during either training or generation of samples. Experiments demonstrate the potential of the framework through qualitative and quantitative evaluation of the generated samples. 1",
+      "keywords": "seminal",
+      "url": "http://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf",
+      "langid": "english",
+      "issn": "1049-5258",
+      "pages": "9",
+      "doi": "10.1001/jamainternmed.2016.8245"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2014_dewinter_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Joost C. F.",
+          "last_name": "de Winter"
+        },
+        {
+          "first_name": "Amir A.",
+          "last_name": "Zadpoor"
+        },
+        {
+          "first_name": "Dimitra",
+          "last_name": "Dodou"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2014 The Expansion of Google Scholar Versus Web of Science_ a Longitudinal Study_2014Winterexpansion.pdf"
+    ],
+    "Fields_Values": {
+      "langid": "english",
+      "journaltitle": "Scientometrics",
+      "number": "2",
+      "doi": "10.1007/s11192-013-1089-2",
+      "title": "The expansion of Google Scholar versus Web of Science: a longitudinal study",
+      "shorttitle": "The expansion of Google Scholar versus Web of Science",
+      "date": "2014-02",
+      "volume": "98",
+      "issn": "0138-9130",
+      "urldate": "2019-04-07",
+      "pages": "1547--1565",
+      "abstract": "Web of Science (WoS) and Google Scholar (GS) are prominent citation services with distinct indexing mechanisms. Comprehensive knowledge about the growth patterns of these two citation services is lacking. We analyzed the development of citation counts in WoS and GS for two classic articles and 56 articles from diverse research ﬁelds, making a distinction between retroactive growth (i.e., the relative difference between citation counts up to mid-2005 measured in mid-2005 and citation counts up to mid-2005 measured in April 2013) and actual growth (i.e., the relative difference between citation counts up to mid-2005 measured in April 2013 and citation counts up to April 2013 measured in April 2013). One of the classic articles was used for a citation-by-citation analysis. Results showed that GS has substantially grown in a retroactive manner (median of 170 /////// % across articles), especially for articles that initially had low citations counts in GS as compared to WoS. Retroactive growth of WoS was small, with a median of 2 /////// % across articles. Actual growth percentages were moderately higher for GS than for WoS (medians of 54 vs. 41 /////// %). The citation-by-citation analysis showed that the percentage of citations being unique in WoS was lower for more recent citations (6.8 /////// % for citations from 1995 and later vs. 41 /////// % for citations from before 1995), whereas the opposite was noted for GS (57 vs. 33 /////// %). It is concluded that, since its inception, GS has shown substantial expansion, and that the majority of recent works indexed in WoS are now also retrievable via GS. A discussion is provided on quantity versus quality of citations, threats for WoS, weaknesses of GS, and implications for literature research and research evaluation."
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2014_chabassier_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "J.",
+          "last_name": "Chabassier"
+        },
+        {
+          "first_name": "A.",
+          "last_name": "Chaigne"
+        },
+        {
+          "first_name": "P.",
+          "last_name": "Joly"
+        }
+      ]
+    },
+    "Tags": [
+      "piano"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Piano/2014 Time Domain Simulation of a Piano. Part 1_ Model Description_2014ChabassierTime.pdf"
+    ],
+    "Fields_Values": {
+      "shorttitle": "Time domain simulation of a piano. Part 1",
+      "title": "Time domain simulation of a piano. Part 1: model description",
+      "issn": "0764-583X",
+      "doi": "10.1051/m2an/2013136",
+      "number": "5",
+      "abstract": "The purpose of this study is the time domain modeling of a piano. We aim at explaining the vibratory and acoustical behavior of the piano, by taking into account the main elements that contribute to sound production. The soundboard is modeled as a bidimensional thick, orthotropic, heterogeneous, frequency dependant damped plate, using Reissner Mindlin equations. The vibroacoustics equations allow the soundboard to radiate into the surrounding air, in which we wish to compute the complete acoustical ﬁeld around the perfectly rigid rim. The soundboard is also coupled to the strings at the bridge, where they form a slight angle from the horizontal plane. Each string is modeled by a one dimensional damped system of equations, taking into account not only the transversal waves excited by the hammer, but also the stiﬀness thanks to shear waves, as well as the longitudinal waves arising from geometric nonlinearities. The hammer is given an initial velocity that projects it towards a choir of strings, before being repelled. The interacting force is a nonlinear function of the hammer compression. The ﬁnal piano model is a coupled system of partial diﬀerential equations, each of them exhibiting speciﬁc diﬃculties (nonlinear nature of the string system of equations, frequency dependant damping of the soundboard, great number of unknowns required for the acoustic propagation), in addition to couplings’ inherent diﬃculties.",
+      "langid": "english",
+      "date": "2014-09",
+      "journaltitle": "ESAIM: Mathematical Modelling and Numerical Analysis",
+      "volume": "48",
+      "pages": "1241--1278",
+      "urldate": "2019-03-26"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2014_bornmann1",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Lutz",
+          "last_name": "Bornmann"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2014 Do Altmetrics Point to the Broader Impact of Research_ an Overview of Benefits and Disadvantages of Altmetrics_2014BornmannDo.pdf"
+    ],
+    "Fields_Values": {
+      "volume": "8",
+      "title": "Do altmetrics point to the broader impact of research? An overview of benefits and disadvantages of altmetrics",
+      "journaltitle": "Journal of Informetrics",
+      "url": "https://linkinghub.elsevier.com/retrieve/pii/S1751157714000868",
+      "urldate": "2019-04-07",
+      "issn": "1751-1577",
+      "date": "2014-10",
+      "doi": "10.1016/j.joi.2014.09.005",
+      "number": "4",
+      "langid": "english",
+      "shorttitle": "Do altmetrics point to the broader impact of research?",
+      "pages": "895--903"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2014_bornmann",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Lutz",
+          "last_name": "Bornmann"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2014 Validity of Altmetrics Data for Measuring Societal Impact_ a Study Using Data from Altmetric and F1000Prime_2014BornmannValidity.pdf"
+    ],
+    "Fields_Values": {
+      "title": "Validity of altmetrics data for measuring societal impact: A study using data from Altmetric and F1000Prime",
+      "abstract": "Can altmetric data be validly used for the measurement of societal impact? The current study seeks to answer this question with a comprehensive dataset (about 100,000 records) from very disparate sources (F1000, Altmetric, and an in-house database based on Web of Science). In the F1000 peer review system, experts attach particular tags to scientiﬁc papers which indicate whether a paper could be of interest for science or rather for other segments of society. The results show that papers with the tag \"good for teaching\" do achieve higher altmetric counts than papers without this tag – if the quality of the papers is controlled. At the same time, a higher citation count is shown especially by papers with a tag that is speciﬁcally scientiﬁcally oriented (\"new ﬁnding\"). The ﬁndings indicate that papers tailored for a readership outside the area of research should lead to societal impact.",
+      "issn": "1751-1577",
+      "pages": "935--950",
+      "date": "2014-10",
+      "urldate": "2019-04-07",
+      "url": "https://linkinghub.elsevier.com/retrieve/pii/S1751157714000881",
+      "doi": "10.1016/j.joi.2014.09.007",
+      "number": "4",
+      "langid": "english",
+      "volume": "8",
+      "journaltitle": "Journal of Informetrics",
+      "shorttitle": "Validity of altmetrics data for measuring societal impact"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "inproceedings",
+    "Key": "2014_bhatia_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Sudeep",
+          "last_name": "Bhatia"
+        },
+        {
+          "first_name": "Russell",
+          "last_name": "Golman"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2014 A Recurrent Neural Network for Game Theoretic Decision Making_2014BhatiaRecurrent.pdf"
+    ],
+    "Fields_Values": {
+      "abstract": "We describe the properties of a connectionist network that is able to make decisions in strategic games. We use the structure of Bidirectional Associative Memory (BAM), a minimal two-layer recurrent neural network with binary activation functions and binary connection weights. We apply BAM to finite-strategy two-player games, and show that network activation in the long run is restricted to the set of rationalizable strategies. The network is not guaranteed to reach a stable activation state, but any pure strategy profile that constitutes a stable state in the network must be a pure strategy Nash equilibrium.",
+      "langid": "english",
+      "booktitle": "Proceedings of the Annual Meeting of the Cognitive Science Society",
+      "title": "A Recurrent Neural Network for Game Theoretic Decision Making",
+      "date": "2014",
+      "pages": "6",
+      "volume": "36"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2013_thelwall_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Mike",
+          "last_name": "Thelwall"
+        },
+        {
+          "first_name": "Stefanie",
+          "last_name": "Haustein"
+        },
+        {
+          "first_name": "Vincent",
+          "last_name": "Larivière"
+        },
+        {
+          "first_name": "Cassidy R.",
+          "last_name": "Sugimoto"
+        }
+      ],
+      "editor": [
+        {
+          "first_name": "Lutz",
+          "last_name": "Bornmann"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2013 Do Altmetrics Work_ Twitter and Ten Other Social Web Services_2013ThelwallDo.pdf"
+    ],
+    "Fields_Values": {
+      "title": "Do Altmetrics Work? Twitter and Ten Other Social Web Services",
+      "doi": "10.1371/journal.pone.0064841",
+      "issn": "1932-6203",
+      "number": "5",
+      "pages": "e64841",
+      "urldate": "2019-04-07",
+      "volume": "8",
+      "langid": "english",
+      "date": "2013-05-28",
+      "shorttitle": "Do Altmetrics Work?",
+      "abstract": "Altmetric measurements derived from the social web are increasingly advocated and used as early indicators of article impact and usefulness. Nevertheless, there is a lack of systematic scientific evidence that altmetrics are valid proxies of either impact or utility although a few case studies have reported medium correlations between specific altmetrics and citation rates for individual journals or fields. To fill this gap, this study compares 11 altmetrics with Web of Science citations for 76 to 208,739 PubMed articles with at least one altmetric mention in each case and up to 1,891 journals per metric. It also introduces a simple sign test to overcome biases caused by different citation and usage windows. Statistically significant associations were found between higher metric scores and higher citations for articles with positive altmetric scores in all cases with sufficient evidence (Twitter, Facebook wall posts, research highlights, blogs, mainstream media and forums) except perhaps for Google+ posts. Evidence was insufficient for LinkedIn, Pinterest, question and answer sites, and Reddit, and no conclusions should be drawn about articles with zero altmetric scores or the strength of any correlation between altmetrics and citations. Nevertheless, comparisons between citations and metric values for articles published at different times, even within the same year, can remove or reverse this association and so publishers and scientometricians should consider the effect of time when using altmetrics to rank articles. Finally, the coverage of all the altmetrics except for Twitter seems to be low and so it is not clear if they are prevalent enough to be useful in practice.",
+      "journaltitle": "PLoS ONE"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2013_sadriaanse_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Leslie",
+          "last_name": "S. Adriaanse"
+        },
+        {
+          "first_name": "Chris",
+          "last_name": "Rensleigh"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2013 Web of Science, Scopus and Google Scholar_ a Content Comprehensiveness Comparison_2013S.AdriaanseWeb.pdf"
+    ],
+    "Fields_Values": {
+      "number": "6",
+      "urldate": "2019-04-07",
+      "title": "Web of Science, Scopus and Google Scholar: A content comprehensiveness comparison",
+      "doi": "10.1108/EL-12-2011-0174",
+      "volume": "31",
+      "issn": "0264-0473",
+      "langid": "english",
+      "shorttitle": "Web of Science, Scopus and Google Scholar",
+      "journaltitle": "The Electronic Library",
+      "abstract": "Purpose – The research aim for this study was to compare three citation resources with one another to identify the citation resource with the most representative South African scholarly environmental sciences citation coverage. This paper focuses on the results of the content veriﬁcation process which measured amongst others the citation counts, multiple copies and inconsistencies encountered across the three citation resources ISI Web of Science, Scopus and Google Scholar.",
+      "date": "2013-11-18",
+      "pages": "727--744"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "inproceedings",
+    "Key": "2013_kartofelev_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Dmitri",
+          "last_name": "Kartofelev"
+        },
+        {
+          "first_name": "Anatoli",
+          "last_name": "Stulov"
+        },
+        {
+          "first_name": "Heidi-Maria",
+          "last_name": "Lehtonen"
+        },
+        {
+          "first_name": "Vesa",
+          "last_name": "Va"
+        }
+      ]
+    },
+    "Tags": [
+      "acoustics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Acoustics/2013 Modeling a Vibrating String Terminated against a Bridge with Arbitrary Geometry_2013KartofelevModeling.pdf"
+    ],
+    "Fields_Values": {
+      "title": "Modeling a vibrating string terminated against a bridge with arbitrary geometry",
+      "url": "http://homes.ioc.ee/stulov/smac13.pdf",
+      "booktitle": "4th Stockholm Music Acoustics Conference",
+      "langid": "english",
+      "date": "2013",
+      "pages": "7"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2013_galligan_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Finbar",
+          "last_name": "Galligan"
+        },
+        {
+          "first_name": "Sharon",
+          "last_name": "Dyas-Correia"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2013 Altmetrics_ Rethinking the Way We Measure_2013GalliganAltmetrics.pdf"
+    ],
+    "Fields_Values": {
+      "date": "2013-03",
+      "number": "1",
+      "url": "http://linkinghub.elsevier.com/retrieve/pii/S009879131300004X",
+      "title": "Altmetrics: Rethinking the Way We Measure",
+      "issn": "0098-7913",
+      "shorttitle": "Altmetrics",
+      "volume": "39",
+      "doi": "10.1016/j.serrev.2013.01.003",
+      "journaltitle": "Serials Review",
+      "abstract": "Altmetrics is the focus for this edition of \"Balance Point.\" The column editor invited Finbar Galligan who has gained considerable knowledge of altmetrics to co-author the column. Altmetrics, their relationship to traditional metrics, their importance, uses, potential impacts, and possible future directions are examined. The authors conclude that altmetrics have an important future role to play and that they offer the potential to revolutionize the analysis of the value and impact of scholarly work.",
+      "urldate": "2019-04-07",
+      "pages": "56--61",
+      "langid": "english"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2012_vanclay",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Jerome K.",
+          "last_name": "Vanclay"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2012 Impact Factor_ Outdated Artefact or Stepping Stone to Journal Certification__2012VanclayImpact.pdf"
+    ],
+    "Fields_Values": {
+      "abstract": "A review of Garﬁeld’s journal impact factor and its speciﬁc implementation as the Thomson Reuters impact factor reveals several weaknesses in this commonly-used indicator of journal standing. Key limitations include the mismatch between citing and cited documents, the deceptive display of three decimals that belies the real precision, and the absence of conﬁdence intervals. These are minor issues that are easily amended and should be corrected, but more substantive improvements are needed. There are indications that the scientiﬁc community seeks and needs better certiﬁcation of journal procedures to improve the quality of published science. Comprehensive certiﬁcation of editorial and review procedures could help ensure adequate procedures to detect duplicate and fraudulent submissions.",
+      "title": "Impact factor: outdated artefact or stepping-stone to journal certification?",
+      "pages": "211--238",
+      "langid": "english",
+      "doi": "10.1007/s11192-011-0561-0",
+      "shorttitle": "Impact factor",
+      "journaltitle": "Scientometrics",
+      "issn": "0138-9130",
+      "volume": "92",
+      "number": "2",
+      "date": "2012-08",
+      "urldate": "2019-04-07"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "incollection",
+    "Key": "2012_nowé_etal",
+    "Creators": {
+      "editor": [
+        {
+          "first_name": "Marco",
+          "last_name": "Wiering"
+        },
+        {
+          "first_name": "Martijn",
+          "last_name": "van Otterlo"
+        }
+      ],
+      "author": [
+        {
+          "first_name": "Ann",
+          "last_name": "Nowé"
+        },
+        {
+          "first_name": "Peter",
+          "last_name": "Vrancx"
+        },
+        {
+          "first_name": "Yann-Michaël",
+          "last_name": "De Hauwere"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2012 Game Theory and Multi Agent Reinforcement Learning_2012NoweGame.pdf"
+    ],
+    "Fields_Values": {
+      "title": "Game Theory and Multi-agent Reinforcement Learning",
+      "urldate": "2019-04-16",
+      "doi": "10.1007/978-3-642-27645-3///////\\\\_14",
+      "pages": "441--470",
+      "volume": "12",
+      "date": "2012",
+      "publisher": "Springer Berlin Heidelberg",
+      "location": "Berlin, Heidelberg",
+      "booktitle": "Reinforcement Learning",
+      "isbn": "9783642276446"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "unpublished",
+    "Key": "2012_morse",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Bryan",
+          "last_name": "Morse"
+        }
+      ]
+    },
+    "Tags": [
+      "harmonic analysis"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Harmonic Analysis/2012 The Fourier Transform_ Examples, Properties, Common Pairs_2012MorseFourier.pdf"
+    ],
+    "Fields_Values": {
+      "title": "The Fourier Transform: Examples, Properties, Common Pairs",
+      "pages": "4",
+      "langid": "english",
+      "date": "2012"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2012_hoogenboom_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Barbara J.",
+          "last_name": "Hoogenboom"
+        },
+        {
+          "first_name": "Robert C.",
+          "last_name": "Manske"
+        }
+      ]
+    },
+    "Tags": [
+      "writing"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Writing/2012 How to Write a Scientific Article_2012HoogenboomHow.pdf"
+    ],
+    "Fields_Values": {
+      "date": "2012",
+      "langid": "english",
+      "abstract": "Successful production of a written product for submission to a peer-reviewed scientific journal requires substantial effort. Such an effort can be maximized by following a few simple suggestions when composing/ creating the product for submission. By following some suggested guidelines and avoiding common errors, the process can be streamlined and success realized for even beginning/novice authors as they negotiate the publication process. The purpose of this invited commentary is to offer practical suggestions for achieving success when writing and submitting manuscripts to The International Journal of Sports Physical Therapy and other professional journals.",
+      "journaltitle": "The International Journal of Sports Physical Therapy",
+      "title": "How To Write A Scientific Article",
+      "pages": "6"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2012_friedrich_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Johannes",
+          "last_name": "Friedrich"
+        },
+        {
+          "first_name": "Walter",
+          "last_name": "Senn"
+        }
+      ],
+      "editor": [
+        {
+          "first_name": "Olaf",
+          "last_name": "Sporns"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2012 Spike Based Decision Learning of Nash Equilibria in Two Player Games_2012FriedrichSpike.pdf"
+    ],
+    "Fields_Values": {
+      "volume": "8",
+      "abstract": "Humans and animals face decision tasks in an uncertain multi-agent environment where an agent’s strategy may change in time due to the co-adaptation of others strategies. The neuronal substrate and the computational algorithms underlying such adaptive decision making, however, is largely unknown. We propose a population coding model of spiking neurons with a policy gradient procedure that successfully acquires optimal strategies for classical game-theoretical tasks. The suggested population reinforcement learning reproduces data from human behavioral experiments for the blackjack and the inspector game. It performs optimally according to a pure (deterministic) and mixed (stochastic) Nash equilibrium, respectively. In contrast, temporal-difference(TD)-learning, covariance-learning, and basic reinforcement learning fail to perform optimally for the stochastic strategy. Spike-based population reinforcement learning, shown to follow the stochastic reward gradient, is therefore a viable candidate to explain automated decision learning of a Nash equilibrium in two-player games.",
+      "title": "Spike-based Decision Learning of Nash Equilibria in Two-Player Games",
+      "langid": "english",
+      "doi": "10.1371/journal.pcbi.1002691",
+      "number": "9",
+      "urldate": "2019-03-28",
+      "journaltitle": "PLoS Computational Biology",
+      "issn": "1553-7358",
+      "date": "2012-09-27",
+      "pages": "e1002691"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "thesis",
+    "Key": "2011_eröcal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Burçin",
+          "last_name": "Eröcal"
+        }
+      ]
+    },
+    "Tags": [
+      "mathematics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Mathematics/2011 Algebraic Extensions for Symbolic Summation_2011EroecalAlgebraic.pdf"
+    ],
+    "Fields_Values": {
+      "date": "2011",
+      "title": "Algebraic Extensions for Symbolic Summation",
+      "institution": "Johannes Kepler University Linz",
+      "abstract": "The main result of this thesis is an eﬀective method to extend Karr’s symbolic summation framework to algebraic extensions. These arise, for example, when working with expressions involving (−1)n. An implementation of this method, including a modernised version of Karr’s algorithm is also presented. Karr’s algorithm is the summation analogue of the Risch algorithm for indeﬁnite integration. In the summation case, towers of specialized diﬀerence ﬁelds called ΠΣ-ﬁelds are used to model nested sums and products. This is similar to the way elementary functions involving nested logarithms and exponentials are represented in diﬀerential ﬁelds in the integration case. In contrast to the integration framework, only transcendental extensions are allowed in Karr’s construction. Algebraic extensions of ΠΣ-ﬁelds can even be rings with zero divisors. Karr’s methods rely heavily on the ability to solve ﬁrst-order linear diﬀerence equations and they are no longer applicable over these rings. Based on Bronstein’s formulation of a method used by Singer for the solution of diﬀerential equations over algebraic extensions, we transform a ﬁrst-order linear equation over an algebraic extension to a system of ﬁrst-order equations over a purely transcendental extension ﬁeld. However, this domain is not necessarily a ΠΣ-ﬁeld. Using a structure theorem by Singer and van der Put, we reduce this system to a single ﬁrst-order equation over a ΠΣ-ﬁeld, which can be solved by Karr’s algorithm. We also describe how to construct towers of diﬀerence ring extensions on an algebraic extension, where the same reduction methods can be used. A common bottleneck for symbolic summation algorithms is the computation of nullspaces of matrices over rational function ﬁelds. We present a fast algorithm for matrices over Q(x) which uses fast arithmetic at the hardware level with calls to BLAS subroutines after modular reduction. This part is joint work with Arne Storjohann.",
+      "type": "phdthesis",
+      "langid": "english"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "collection",
+    "Key": "2010_szőkefalvinagy",
+    "Creators": {
+      "editor": [
+        {
+          "first_name": "Béla",
+          "last_name": "Szőkefalvi-Nagy"
+        }
+      ]
+    },
+    "Tags": [
+      "harmonic analysis"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Harmonic Analysis/2010 Harmonic Analysis of Operators on Hilbert Space_2010SzoekefalviNagyHarmonic.pdf"
+    ],
+    "Fields_Values": {
+      "pagetotal": "474",
+      "series": "Universitext",
+      "edition": "2",
+      "note": "OCLC: 845818617",
+      "title": "Harmonic analysis of operators on Hilbert space",
+      "date": "2010",
+      "isbn": "9781441960931",
+      "publisher": "Springer",
+      "location": "New York, NY",
+      "langid": "english"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2010_schuster_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Alfons",
+          "last_name": "Schuster"
+        },
+        {
+          "first_name": "Yoko",
+          "last_name": "Yamaguchi"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2010 Application of Game Theory to Neuronal Networks_2010SchusterApplication.pdf"
+    ],
+    "Fields_Values": {
+      "doi": "10.1155/2010/521606",
+      "pages": "1--12",
+      "title": "Application of Game Theory to Neuronal Networks",
+      "langid": "english",
+      "volume": "2010",
+      "issn": "1687-7470",
+      "journaltitle": "Advances in Artificial Intelligence",
+      "urldate": "2019-03-28",
+      "date": "2010"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2010_elkind_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Edith",
+          "last_name": "Elkind"
+        },
+        {
+          "first_name": "Kevin",
+          "last_name": "Leyton-Brown"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2010 Algorithmic Game Theory and Artificial Intelligence_2010ElkindAlgorithmic.pdf"
+    ],
+    "Fields_Values": {
+      "issn": "0738-4602",
+      "abstract": "We brieﬂy survey the rise of game theory as a topic of study in artiﬁcial intelligence, and explain the term algorithmic game theory. We then describe three broad areas of current inquiry by AI researchers in algorithmic game theory: game playing, social choice, and mechanism design. Finally, we give short summaries of each of the six articles appearing in this issue.",
+      "journaltitle": "AI Magazine",
+      "langid": "english",
+      "title": "Algorithmic Game Theory and Artificial Intelligence",
+      "number": "4",
+      "date": "2010-09-20",
+      "pages": "9",
+      "url": "https://aaai.org/ojs/index.php/aimagazine/article/view/2310",
+      "urldate": "2019-03-26",
+      "doi": "10.1609/aimag.v31i4.2310",
+      "volume": "31"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2009_torres_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Jesús Alej",
+          "last_name": "Torres"
+        },
+        {
+          "first_name": "",
+          "last_name": "ro"
+        },
+        {
+          "first_name": "Ricardo R.",
+          "last_name": "Boullosa"
+        }
+      ]
+    },
+    "Tags": [
+      "acoustics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Acoustics/2009 Influence of the Bridge on the Vibrations of the Top Plate of a Classical Guitar_2009TorresInfluence.pdf"
+    ],
+    "Fields_Values": {
+      "urldate": "2019-04-05",
+      "abstract": "In this work the effect of two different bridge conﬁgurations on the vibrations of the top plate of a classical guitar is presented. Experimental harmonic analysis and visualization techniques, in addition to detailed damped simulations using the ﬁnite element method, were used to obtain mobility functions and operating deﬂection shapes of a top plate. The mobility functions were obtained in the following sequence. First the mobility functions were obtained on the top plate without a bridge attached. Then a bridge was glued to the top plate and new measurements were made. Finally the already attached bridge was cross-cut in situ without detaching it from the top plate, and the measurements were repeated. Those speciﬁc designs were chosen on the grounds of simplicity of construction both experimentally and in FEM simulations (no particular preference for those designs is implied). The assembly and the speciﬁc design of the bridge have shown to have considerable inﬂuence on the response of the top plate regarding the mode shapes above 300 Hz. Depending on the geometry of the bridge, its deﬂections can either be comparable to the maximum deﬂections of the top plate or can have amplitudes so small that the bridge effectively creates a nodal zone on the plate vibrations. This suggests that the shape, the stiffness, and the mass properties of the bridge may play a role in the sound quality of the instrument. Ó 2009 Elsevier Ltd. All rights reserved.",
+      "doi": "10.1016/j.apacoust.2009.07.002",
+      "pages": "1371--1377",
+      "issn": "0003-682X",
+      "journaltitle": "Applied Acoustics",
+      "number": "11",
+      "title": "Influence of the bridge on the vibrations of the top plate of a classical guitar",
+      "date": "2009-12",
+      "url": "https://linkinghub.elsevier.com/retrieve/pii/S0003682X09001613",
+      "volume": "70",
+      "langid": "english"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "unpublished",
+    "Key": "2009_tao",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Terence",
+          "last_name": "Tao"
+        }
+      ]
+    },
+    "Tags": [
+      "harmonic analysis"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Harmonic Analysis/2009 Fourier Transform_2009TaoFourier.pdf"
+    ],
+    "Fields_Values": {
+      "date": "2009",
+      "url": "https://www.math.ucla.edu//textasciitilde",
+      "title": "Fourier Transform"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2009_sgroi_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Daniel",
+          "last_name": "Sgroi"
+        },
+        {
+          "first_name": "Daniel John",
+          "last_name": "Zizzo"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2009 Learning to Play Games_ Neural Networks As Bounded Rational Players_2009SgroiLearning.pdf"
+    ],
+    "Fields_Values": {
+      "pages": "27--38",
+      "date": "2009-01",
+      "urldate": "2019-03-28",
+      "title": "Learning to play games: Neural networks as bounded-rational players",
+      "issn": "0167-2681",
+      "doi": "10.1016/j.jebo.2008.09.008",
+      "url": "https://linkinghub.elsevier.com/retrieve/pii/S0167268108001959",
+      "volume": "69",
+      "number": "1",
+      "abstract": "We present a neural network methodology for learning game-playing rules in general. Existing research suggests learning to …nd a Nash equilibrium in a new game is too di¢ cult a task for a neural network, but says little about what it will do instead. We observe that a neural network trained to …nd Nash equilibria in a known subset of games, will use self-taught rules developed endogenously when facing new games. These rules are close to payo¤ dominance and its best response. Our …ndings are consistent with existing experimental results, both in terms of subject’s methodology and success rates.",
+      "langid": "english",
+      "journaltitle": "Journal of Economic Behavior & Organization",
+      "shorttitle": "Learning to play games"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "unpublished",
+    "Key": "2009_morin",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "David",
+          "last_name": "Morin"
+        }
+      ]
+    },
+    "Tags": [
+      "harmonic analysis"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Harmonic Analysis/2009 Fourier Analysis.pdf_2009MorinFourier.pdf"
+    ],
+    "Fields_Values": {
+      "year": "2009",
+      "title": "Fourier analysis.pdf",
+      "date": "2009",
+      "note": "Chapter 3",
+      "url": "http://www.people.fas.harvard.edu//textasciitilde"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "phdthesis",
+    "Key": "2009_levien",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Raph",
+          "last_name": "Levien"
+        }
+      ]
+    },
+    "Tags": [
+      "computer graphics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Computer Graphics/From Spiral to Spline_ Optimal Techniques in Interactive Curve Design_LevienSpirala.pdf"
+    ],
+    "Fields_Values": {
+      "date": "2009",
+      "keywords": "splines, elastica, euler spirals, curves",
+      "institution": "Berkeley",
+      "title": "From Spiral to Spline: Optimal Techniques in Interactive Curve Design"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2009_bryner",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "John C.",
+          "last_name": "Bryner"
+        }
+      ]
+    },
+    "Tags": [
+      "piano"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Piano/2009 Stiff String Theory_ Richard Feynman on Piano Tuning_2009BrynerStiff.pdf"
+    ],
+    "Fields_Values": {
+      "urldate": "2019-03-26",
+      "langid": "english",
+      "doi": "10.1063/1.3273016",
+      "shorttitle": "Stiff-string theory",
+      "title": "Stiff-string theory: Richard Feynman on piano tuning",
+      "issn": "0031-9228",
+      "journaltitle": "Physics Today",
+      "date": "2009-12",
+      "pages": "46--49",
+      "number": "12",
+      "volume": "62"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "collection",
+    "Key": "2009_bruneau_etal",
+    "Creators": {
+      "editor": [
+        {
+          "first_name": "Michel",
+          "last_name": "Bruneau"
+        },
+        {
+          "first_name": "Catherine",
+          "last_name": "Potel"
+        }
+      ]
+    },
+    "Tags": [
+      "acoustics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Acoustics/2009 Materials and Acoustics Handbook_2009BruneauMaterials.pdf"
+    ],
+    "Fields_Values": {
+      "pagetotal": "919",
+      "langid": "english",
+      "isbn": "9781848210745",
+      "title": "Materials and acoustics handbook",
+      "location": "London, UK",
+      "date": "2009",
+      "publisher": "ISTE ; Hoboken, NJ : J. Wiley",
+      "keywords": "Handbooks, manuals, etc, Acoustical engineering, Acoustical materials, Materials, Testing"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "unpublished",
+    "Key": "2008_lyche_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Tom",
+          "last_name": "Lyche"
+        },
+        {
+          "first_name": "Knut",
+          "last_name": "Mørken"
+        }
+      ]
+    },
+    "Tags": [
+      "computer graphics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Computer Graphics/2008 Spline Methods.pdf_2008LycheSpline.pdf"
+    ],
+    "Fields_Values": {
+      "title": "Spline Methods.pdf",
+      "year": "2008",
+      "date": "2008",
+      "note": "draft",
+      "doi": "10/undervisningsmateriale"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "collection",
+    "Key": "2007_nisan",
+    "Creators": {
+      "editor": [
+        {
+          "first_name": "Noam",
+          "last_name": "Nisan"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2007 Algorithmic Game Theory_2007NisanAlgorithmic.pdf"
+    ],
+    "Fields_Values": {
+      "pagetotal": "754",
+      "isbn": "9780521872829",
+      "date": "2007",
+      "note": "OCLC: ocn122526907",
+      "title": "Algorithmic game theory",
+      "publisher": "Cambridge University Press",
+      "location": "Cambridge ; New York",
+      "keywords": "Algorithms, Game theory",
+      "langid": "english"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "collection",
+    "Key": "2007_beauchamp",
+    "Creators": {
+      "editor": [
+        {
+          "first_name": "James W.",
+          "last_name": "Beauchamp"
+        }
+      ]
+    },
+    "Tags": [
+      "acoustics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Acoustics/2007 Analysis, Synthesis, and Perception of Musical Sounds_ the Sound of Music_2007BeauchampAnalysis.pdf"
+    ],
+    "Fields_Values": {
+      "date": "2007",
+      "isbn": "9780387324968",
+      "location": "New York, NY",
+      "pagetotal": "325",
+      "title": "Analysis, synthesis, and perception of musical sounds: the sound of music",
+      "note": "OCLC: 237018036",
+      "shorttitle": "Analysis, synthesis, and perception of musical sounds",
+      "langid": "english",
+      "publisher": "Springer",
+      "series": "Modern acoustics and signal processing"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "unpublished",
+    "Key": "2007_an_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "",
+          "last_name": "An"
+        },
+        {
+          "first_name": "Aashirwad Viswanathan",
+          "last_name": ""
+        }
+      ]
+    },
+    "Tags": [
+      "harmonic analysis"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Harmonic Analysis/2007 A Brief Study of Discrete and Fast Fourier Transforms_2007AnandBrief.pdf"
+    ],
+    "Fields_Values": {
+      "langid": "english",
+      "pages": "11",
+      "date": "2007",
+      "title": "A Brief Study Of Discrete And Fast Fourier Transforms",
+      "abstract": "This paper studies the mathematical machinery underlying the Discrete and Fast Fourier Transforms, algorithmic processes widely used in quantum mechanics, signal analysis, options pricing, and other diverse ﬁelds. Beginning with the basic properties of Fourier Transform, we proceed to study the derivation of the Discrete Fourier Transform, as well as computational considerations that necessitate the development of a faster way to calculate the DFT. With these considerations in mind, we study the construction of the Fast Fourier Transform, as proposed by Cooley and Tukey [7].",
+      "year": "2007"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2006_wagner_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Claus",
+          "last_name": "Wagner"
+        },
+        {
+          "first_name": "Thomas",
+          "last_name": "Huttl"
+        },
+        {
+          "first_name": "Pierre",
+          "last_name": "Sagaut"
+        }
+      ]
+    },
+    "Tags": [
+      "acoustics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Acoustics/2006 Large Eddy Simulation for Acoustics_2006WagnerLarge.pdf"
+    ],
+    "Fields_Values": {
+      "title": "Large-Eddy Simulation for Acoustics",
+      "date": "2006",
+      "pages": "471",
+      "langid": "english"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "misc",
+    "Key": "2006_blum_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "A.",
+          "last_name": "Blum"
+        },
+        {
+          "first_name": "M.",
+          "last_name": "Blum"
+        },
+        {
+          "first_name": "M.",
+          "last_name": "Kearns"
+        },
+        {
+          "first_name": "",
+          "last_name": "S"
+        },
+        {
+          "first_name": "T.",
+          "last_name": "holm"
+        },
+        {
+          "first_name": "M. T.",
+          "last_name": "Hajiaghayi"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2006 Machine Learning, Game Theory, and Mechanism Design for a Networked World_2006BlumMachine.pdf"
+    ],
+    "Fields_Values": {
+      "date": "2006",
+      "title": "Machine Learning, Game Theory, and Mechanism Design for a Networked World",
+      "pages": "18",
+      "langid": "english"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2006_bakkalbasi_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Nisa",
+          "last_name": "Bakkalbasi"
+        },
+        {
+          "first_name": "Kathleen",
+          "last_name": "Bauer"
+        },
+        {
+          "first_name": "Janis",
+          "last_name": "Glover"
+        },
+        {
+          "first_name": "Lei",
+          "last_name": "Wang"
+        }
+      ]
+    },
+    "Tags": [
+      "bibliometry"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Bibliometry/2006 Three Options for Citation Tracking_ Google Scholar, Scopus and Web of Science_2006BakkalbasiThree.pdf"
+    ],
+    "Fields_Values": {
+      "date": "2006-12",
+      "volume": "3",
+      "journaltitle": "Biomedical Digital Libraries",
+      "doi": "10.1186/1742-5581-3-7",
+      "issn": "1742-5581",
+      "langid": "english",
+      "shorttitle": "Three options for citation tracking",
+      "title": "Three options for citation tracking: Google Scholar, Scopus and Web of Science",
+      "urldate": "2019-04-07",
+      "number": "1",
+      "abstract": "Background: Researchers turn to citation tracking to find the most influential articles for a particular topic and to see how often their own published papers are cited. For years researchers looking for this type of information had only one resource to consult: the Web of Science from Thomson Scientific. In 2004 two competitors emerged – Scopus from Elsevier and Google Scholar from Google. The research reported here uses citation analysis in an observational study examining these three databases; comparing citation counts for articles from two disciplines (oncology and condensed matter physics) and two years (1993 and 2003) to test the hypothesis that the different scholarly publication coverage provided by the three search tools will lead to different citation counts from each. Methods: Eleven journal titles with varying impact factors were selected from each discipline (oncology and condensed matter physics) using the Journal Citation Reports (JCR). All articles published in the selected titles were retrieved for the years 1993 and 2003, and a stratified random sample of articles was chosen, resulting in four sets of articles. During the week of November 7–12, 2005, the citation counts for each research article were extracted from the three sources. The actual citing references for a subset of the articles published in 2003 were also gathered from each of the three sources. Results: For oncology 1993 Web of Science returned the highest average number of citations, 45.3. Scopus returned the highest average number of citations (8.9) for oncology 2003. Web of Science returned the highest number of citations for condensed matter physics 1993 and 2003 (22.5 and 3.9 respectively). The data showed a significant difference in the mean citation rates between all pairs of resources except between Google Scholar and Scopus for condensed matter physics 2003. For articles published in 2003 Google Scholar returned the largest amount of unique citing material for oncology and Web of Science returned the most for condensed matter physics. Conclusion: This study did not identify any one of these three resources as the answer to all citation tracking needs. Scopus showed strength in providing citing literature for current (2003) oncology articles, while Web of Science produced more citing material for 2003 and 1993 condensed matter physics, and 1993 oncology articles. All three tools returned some unique material. Our data indicate that the question of which tool provides the most complete set of citing literature may depend on the subject and publication year of a given article."
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2005_darmon_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Eric",
+          "last_name": "Darmon"
+        },
+        {
+          "first_name": "Roger",
+          "last_name": "Waldeck"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2005 Convergence of Reinforcement Learning to Nash Equilibrium_ a Search Market Experiment_2005DarmonConvergence.pdf"
+    ],
+    "Fields_Values": {
+      "pages": "119--130",
+      "title": "Convergence of reinforcement learning to Nash equilibrium: A search-market experiment",
+      "url": "https://linkinghub.elsevier.com/retrieve/pii/S0378437105002839",
+      "date": "2005-09",
+      "doi": "10.1016/j.physa.2005.02.074",
+      "number": "1",
+      "urldate": "2019-03-28",
+      "journaltitle": "Physica A: Statistical Mechanics and its Applications",
+      "issn": "0378-4371",
+      "volume": "355",
+      "abstract": "Since the introduction of Reinforcement Learning (RL) in Game Theory, a growing literature is concerned with the theoretical convergence of RL-driven outcomes towards Nash equilibrium. In this paper, we apply this issue to a search-theoretic framework (posted-price market) where sellers are confronted with a population of imperfectly informed buyers and take one decision per period (posted prices) with no direct interactions between sellers. We focus on three different scenarios with varying buyers’ characteristics. For each of these scenarios, we quantitatively and qualitatively test whether the learned variable (price strategy) converges to the Nash equilibrium. We also study the impact of the temperature parameter (deﬁning the exploitation/exploration trade off) on these results.",
+      "langid": "english",
+      "shorttitle": "Convergence of reinforcement learning to Nash equilibrium"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "unpublished",
+    "Key": "2005_agrawal_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Anurag",
+          "last_name": "Agrawal"
+        },
+        {
+          "first_name": "Deepak",
+          "last_name": "Jaiswal"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2005 When Machine Learning Meets AI and Game Theory_2005AgrawalWhen.pdf"
+    ],
+    "Fields_Values": {
+      "pages": "5",
+      "title": "When Machine Learning Meets AI and Game Theory",
+      "date": "2005",
+      "abstract": "We study the problem of development of intelligent machine learning applications to exploit the problems of adaptation that arise in multi-agent systems, for expected-long-termproﬁt maximization. We present two results. First, we propose a learning algorithm for the Iterated Prisoners Dilemma (IPD) problem. Using numerical analysis we show that it performs strictly better than the tit-for-tat algorithm and many other adaptive and non-adaptive strategies. Second, we study the same problem from the aspect of zero-sum games. We discuss how AI and Machine Learning techniques work closely to give our agent a ’mind-reading’ capability.",
+      "langid": "english"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "misc",
+    "Key": "2004_fessler",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Jeffrey",
+          "last_name": "Fessler"
+        }
+      ]
+    },
+    "Tags": [
+      "harmonic analysis"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Harmonic Analysis/2004 The Discrete Fourier Transform_2004FesslerDiscrete.pdf"
+    ],
+    "Fields_Values": {
+      "url": "https://web.eecs.umich.edu//textasciitilde",
+      "date": "2004",
+      "title": "The Discrete Fourier Transform",
+      "note": "chapter 5"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "report",
+    "Key": "2004_burred",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Juan Jose",
+          "last_name": "Burred"
+        }
+      ]
+    },
+    "Tags": [
+      "piano"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Piano/2004 The Acoustics of the Piano_2004BurredAcoustics.pdf"
+    ],
+    "Fields_Values": {
+      "pages": "43",
+      "langid": "english",
+      "institution": "Professional Conservatory of Music Arturo Soria",
+      "year": "2004",
+      "date": "2004",
+      "type": "resreport",
+      "title": "The Acoustics of the Piano"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "inproceedings",
+    "Key": "2003_wang_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Xiaofeng",
+          "last_name": "Wang"
+        },
+        {
+          "first_name": "",
+          "last_name": "S"
+        },
+        {
+          "first_name": "Tuomas",
+          "last_name": "holm"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2003 Reinforcement Learning to Play an Optimal Nash Equilibrium in Team Markov Games_2003WangReinforcement.pdf"
+    ],
+    "Fields_Values": {
+      "abstract": "Multiagent learning is a key problem in AI. In the presence of multiple Nash equilibria, even agents with non-conﬂicting interests may not be able to learn an optimal coordination policy. The problem is exaccerbated if the agents do not know the game and independently receive noisy payoffs. So, multiagent reinforfcement learning involves two interrelated problems: identifying the game and learning to play. In this paper, we present optimal adaptive learning, the ﬁrst algorithm that converges to an optimal Nash equilibrium with probability 1 in any team Markov game. We provide a convergence proof, and show that the algorithm’s parameters are easy to set to meet the convergence conditions.",
+      "title": "Reinforcement learning to play an optimal Nash equilibrium in team Markov games",
+      "booktitle": "Advances in neural information processing systems",
+      "date": "2003",
+      "pages": "1603--1610"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "unpublished",
+    "Key": "2003_korner",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "T. W.",
+          "last_name": "Korner"
+        }
+      ]
+    },
+    "Tags": [
+      "harmonic analysis"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Harmonic Analysis/2003 A First Look at Fourier Analysis_2003KornerFirst.pdf"
+    ],
+    "Fields_Values": {
+      "title": "A First Look at Fourier Analysis",
+      "date": "2003",
+      "langid": "english",
+      "pages": "60"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "inproceedings",
+    "Key": "2003_karjalainen_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "M.",
+          "last_name": "Karjalainen"
+        },
+        {
+          "first_name": "C.",
+          "last_name": "Erkut"
+        },
+        {
+          "first_name": "L.",
+          "last_name": "Savioja"
+        }
+      ]
+    },
+    "Tags": [
+      "acoustics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Acoustics/2003 Compilation of Unified Physical Models for Efficient Sound Synthesis_2003KarjalainenCompilation.pdf"
+    ],
+    "Fields_Values": {
+      "pages": "V–433–6",
+      "urldate": "2019-03-31",
+      "langid": "english",
+      "doi": "10.1109/ICASSP.2003.1199999",
+      "eventtitle": "International Conference on Acoustics, Speech and Signal Processing (ICASSP'03)",
+      "url": "http://ieeexplore.ieee.org/document/1199999/",
+      "publisher": "IEEE",
+      "abstract": "This paper describes a systematic approach to specification and compilation of different physical modeling schemes particularly for sound synthesis studies. First we formulate theoretically a unified way of constructing physical interaction models which include elements that use both wave variables and Kirchhoff variables. These elements can be applied to build 1-D and multidimensional structures as well as lumped element models. In addition, typical signal processing algorithms are supported. A software environment (Block Compiler) has been developed, allowing for high-level object-based specification of physical models and their compilation to efficient code for execution.",
+      "title": "Compilation of unified physical models for efficient sound synthesis",
+      "date": "2003",
+      "booktitle": "2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings. (ICASSP '03).",
+      "location": "Hong Kong, China",
+      "isbn": "9780780376632",
+      "volume": "5"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "incollection",
+    "Key": "2002_tennenholtz",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Moshe",
+          "last_name": "Tennenholtz"
+        }
+      ],
+      "editor": [
+        {
+          "first_name": "Mark",
+          "last_name": "d’Inverno"
+        },
+        {
+          "first_name": "Michael",
+          "last_name": "Luck"
+        },
+        {
+          "first_name": "Michael",
+          "last_name": "Fisher"
+        },
+        {
+          "first_name": "Chris",
+          "last_name": "Preist"
+        }
+      ]
+    },
+    "Tags": [
+      "game theory"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Game Theory/2002 Game Theory and Artificial Intelligence_2002TennenholtzGame.pdf"
+    ],
+    "Fields_Values": {
+      "title": "Game Theory and Artificial Intelligence",
+      "publisher": "Springer Berlin Heidelberg",
+      "volume": "2403",
+      "booktitle": "Foundations and Applications of Multi-Agent Systems",
+      "urldate": "2019-03-26",
+      "editorbtype": "redactor",
+      "date": "2002",
+      "langid": "english",
+      "editorb": "Goos, G. and Hartmanis, J. and van Leeuwen, J.",
+      "abstract": "Game Theory and Artiﬁcial Intelligence are two mature areas of research, originating from similar roots, which have taken diﬀerent research directions in the last 50 years. Recent research however shows that the connections between these areas are deep, and that the time had come for bridging the gap between these research disciplines. In this paper we concentrate on basic issues in representation, reasoning, and learning, and discuss work that lies in the intersection of Artiﬁcial Intelligence and Game Theory, for each of these subjects.",
+      "isbn": "9783540439622",
+      "doi": "10.1007/3-540-45634-1///////\\\\_4",
+      "pages": "49--58",
+      "location": "Berlin, Heidelberg"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2002_boullosa",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Ricardo R.",
+          "last_name": "Boullosa"
+        }
+      ]
+    },
+    "Tags": [
+      "acoustics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Acoustics/2002 Vibration Measurements in the Classical Guitar_2002BoullosaVibration.pdf"
+    ],
+    "Fields_Values": {
+      "date": "2002-03",
+      "url": "http://linkinghub.elsevier.com/retrieve/pii/S0003682X01000378",
+      "langid": "english",
+      "number": "3",
+      "urldate": "2019-04-05",
+      "volume": "63",
+      "issn": "0003-682X",
+      "journaltitle": "Applied Acoustics",
+      "doi": "10.1016/S0003-682X(01)00037-8",
+      "abstract": "Some measurements are described that pertain to the high frequency behaviour of the vibrations of the string and soundboard of the guitar.Three isolated soundboards of diﬀerent woods were compared with respect to their early decay times (by means of measurements of their vibrational impulse responses), in order to assess its possible use as an objective measure of the reverberation time of the plates. The results of all these measurements show that high frequency vibrations and radiation occurs signiﬁcantly from 1 to 14 kHz, but that the sound radiation has harmonics at frequencies up to 20 kHz. This report does not produce any experimental evidence as to the importance of the high frequency region from the subjective point of view, or to the correlation of the subjective impression of reverberation of the plates with measured data of early decay times, as these aspects were not addressed at this point.",
+      "pages": "311--322",
+      "title": "Vibration measurements in the classical guitar"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "2001_järveläinen_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Hanna",
+          "last_name": "Järveläinen"
+        },
+        {
+          "first_name": "Vesa",
+          "last_name": "Välimäki"
+        },
+        {
+          "first_name": "Matti",
+          "last_name": "Karjalainen"
+        }
+      ]
+    },
+    "Tags": [
+      "acoustics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Acoustics/2001 Audibility of the Timbral Effects of Inharmonicity in Stringed Instrument Tones_2001JaervelaeinenAudibility.pdf"
+    ],
+    "Fields_Values": {
+      "doi": "10.1121/1.1374756",
+      "volume": "2",
+      "number": "3",
+      "langid": "english",
+      "issn": "1529-7853",
+      "journaltitle": "Acoustics Research Letters Online",
+      "pages": "79--84",
+      "date": "2001-07",
+      "title": "Audibility of the timbral effects of inharmonicity in stringed instrument tones",
+      "urldate": "2019-03-28"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "1999_yao",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Xin",
+          "last_name": "Yao"
+        }
+      ]
+    },
+    "Tags": [
+      "seminal"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Seminal/1999 Evolving Artiﬁcial Neural Networks_1999YaoEvolving.pdf"
+    ],
+    "Fields_Values": {
+      "journal": "Proceedings of the IEEE",
+      "number": "9",
+      "doi": "10.1109/5.784219",
+      "langid": "english",
+      "pages": "25",
+      "title": "Evolving Artiﬁcial Neural Networks",
+      "date": "1999",
+      "journaltitle": "PROCEEDINGS OF THE IEEE",
+      "volume": "87",
+      "publisher": "Institute of Electrical and Electronics Engineers (IEEE)",
+      "year": "1999"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "incollection",
+    "Key": "1999_pollock",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "D. S. G.",
+          "last_name": "Pollock"
+        }
+      ]
+    },
+    "Tags": [
+      "computer graphics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Computer Graphics/1999 Smoothing with Cubic Splines_1999PollockSmoothing.pdf"
+    ],
+    "Fields_Values": {
+      "doi": "10.1016/B978-012560990-6/50013-0",
+      "pages": "293--322",
+      "date": "1999",
+      "langid": "english",
+      "booktitle": "Handbook of Time Series Analysis, Signal Processing, and Dynamics",
+      "title": "Smoothing with Cubic Splines",
+      "isbn": "9780125609906",
+      "url": "https://linkinghub.elsevier.com/retrieve/pii/B9780125609906500130",
+      "urldate": "2019-03-28",
+      "publisher": "Elsevier"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "1996_loe",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "K. F.",
+          "last_name": "Loe"
+        }
+      ]
+    },
+    "Tags": [
+      "computer graphics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Computer Graphics/1996 A Sinusoidal Polynomial Spline and Its Bezier Blended Interpolant_1996Loesinusoidal.pdf"
+    ],
+    "Fields_Values": {
+      "langid": "english",
+      "journaltitle": "Journal of Computational and Applied Mathematics",
+      "number": "2",
+      "title": "A sinusoidal polynomial spline and its Bezier blended interpolant",
+      "doi": "10.1016/0377-0427(95)00241-3",
+      "url": "http://linkinghub.elsevier.com/retrieve/pii/0377042795002413",
+      "volume": "71",
+      "abstract": "Functional polynomials composed of sinusoidal functions are introduced as basis functions to construct an interpolatory spline. An interpolant constructed in this way does not require solving a system of linear equations as many approaches do. However there are vanishing tangent vectors at the interpolating points. By blending with a Bezier curve using the data points as the control points, the blended curve is a proper smooth interpolant. The blending factor has the effect similar to the \"tension\" control of tension splines. Piecewise interpolants can be constructed in an analogous way as a connection of Bezier curve segments to achieve C 1 continuity at the connecting points. Smooth interpolating surface patches can also be defined by blending sinusoidal polynomial tensor surfaces and Bezier tensor surfaces. The interpolant can very efficiently be evaluated by tabulating the sinusoidal function.",
+      "urldate": "2019-03-28",
+      "date": "1996-07",
+      "pages": "383--393",
+      "issn": "0377-0427"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "1995_caldersmith",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Graham",
+          "last_name": "Caldersmith"
+        }
+      ]
+    },
+    "Tags": [
+      "acoustics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Acoustics/1995 Designing a Guitar Family_1995CaldersmithDesigning.pdf"
+    ],
+    "Fields_Values": {
+      "pages": "3--17",
+      "volume": "46",
+      "langid": "english",
+      "doi": "10.1016/0003-682X(95)93949-I",
+      "number": "1",
+      "title": "Designing a guitar family",
+      "urldate": "2019-04-05",
+      "abstract": "When the standard classical guitar is scaled up a musical fourth to a treble guitar, down a musical fifth to a baritone guitar, and down an octave to a bass guitar, design compromises are necessary to maintain playability and favourable tone qulality. The resulting instruments exhibit interesting natural vibration mode and sound radiation physics. The tone qualities of the new instruments suggest relations between the guitar response envelope and human sound perception. Translating the principle natural modes of the guitar up or down with string frequencies does not necessarily produce pleasing tone qualities nor optimal playing dynamics. However, designing bracing configurations for both classical and folk baritone and bass guitars to maximise low frequency radiation eficiency does seem to produce new instruments of musical appeal, Frequency response records of standard and guitar family variants illustrate the physical behaviour of the difierent designs. Experience of musicians with the guitar family instruments indicates that creative new guitar territory is available.",
+      "date": "1995",
+      "issn": "0003-682X",
+      "journaltitle": "Applied Acoustics",
+      "url": "http://linkinghub.elsevier.com/retrieve/pii/0003682X9593949I"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "report",
+    "Key": "1992_chaigne_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "A.",
+          "last_name": "Chaigne"
+        },
+        {
+          "first_name": "A.",
+          "last_name": "Askenfelt"
+        }
+      ]
+    },
+    "Tags": [
+      "piano"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Piano/1992 Numerical Simulations of Piano Strings_1992ChaigneNumerical.pdf"
+    ],
+    "Fields_Values": {
+      "title": "Numerical simulations of piano strings",
+      "pages": "24",
+      "date": "1992",
+      "abstract": "Thefirst attempt to generate musical sounds by solving the equations of vibrating strings by means of Finite Difference Methods (FDM)was made by Hiller /& Ruiz (].AudioEng.Soc. 19, pp. 462-472, 19711. It is shown here how their numerical approach and the underlying physical model can be improved in order to simulate the motion of the piano string with a high d e g e e of realism. Starting from the fundamental equations of a damped, stlff string interacting with a nonlinear hammer, a numericalfinite difference scheme is derived,from which the time and spatial dependence of string displacement, velocity, and interactingforce between hammer and string, as well as theforce acting on the bridge, are computed in the time-domain. The strength of the model is illustrated by comparisons between measured and simulated piano tones. After this verification of the accuracy of the method, the model is used as a tool for systematically exploring the influence of string stiffness, relative strikin, position, and hammer-string mass ratio on string waveforms and spectra.",
+      "langid": "english",
+      "year": "1992",
+      "type": "resreport",
+      "institution": "KTH"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "1987_sorensen_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "H.",
+          "last_name": "Sorensen"
+        },
+        {
+          "first_name": "D.",
+          "last_name": "Jones"
+        },
+        {
+          "first_name": "M.",
+          "last_name": "Heideman"
+        },
+        {
+          "first_name": "C.",
+          "last_name": "Burrus"
+        }
+      ]
+    },
+    "Tags": [
+      "harmonic analysis"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Harmonic Analysis/1987 Real Valued Fast Fourier Transform Algorithms_1987SorensenReal.pdf"
+    ],
+    "Fields_Values": {
+      "doi": "10.1109/TASSP.1987.1165220",
+      "issn": "0096-3518",
+      "number": "6",
+      "title": "Real-valued fast Fourier transform algorithms",
+      "pages": "849--863",
+      "journaltitle": "IEEE Transactions on Acoustics, Speech, and Signal Processing",
+      "volume": "35",
+      "keywords": "Signal processing algorithms, Algorithm design and analysis, Application software, Convolutional codes, Digital images, Discrete Fourier transforms, Discrete transforms, Fast Fourier transforms, NASA",
+      "date": "1987-06"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "1986_hobby",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "John D.",
+          "last_name": "Hobby"
+        }
+      ]
+    },
+    "Tags": [
+      "computer graphics"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Computer Graphics/1986 Smooth, Easy to Compute Interpolating Splines_1986HobbySmooth.pdf"
+    ],
+    "Fields_Values": {
+      "number": "2",
+      "year": "1986",
+      "title": "Smooth, easy to compute interpolating splines",
+      "issn": "0179-5376",
+      "abstract": "We present a system of interpolating splines with first and approximate second order geometric continuity. The curves are easily computed in linear time by solving a system of linear equations without the need to resort to any kind of successive approximation scheme. Emphasis is placed on the need to find aesthetically pleasing curves in a wide range of circumstances; favorable results are obtained even when the knots are very unequally spaced or widely separated. The curves are invariant under scaling, rotation, and reflection, and the effects of a local change fall off exponentially as one moves away from the disturbed knot.",
+      "journal": "Discrete & Computational Geometry",
+      "doi": "10.1007/BF02187690",
+      "journaltitle": "Discrete & Computational Geometry",
+      "month": "6",
+      "publisher": "Springer Nature",
+      "pages": "123--140",
+      "urldate": "2019-03-31",
+      "date": "1986",
+      "langid": "english",
+      "volume": "1"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "collection",
+    "Key": "1979_carmona_etal",
+    "Creators": {
+      "editor": [
+        {
+          "first_name": "Jacques",
+          "last_name": "Carmona"
+        },
+        {
+          "first_name": "Michèle",
+          "last_name": "Vergne"
+        }
+      ]
+    },
+    "Tags": [
+      "harmonic analysis"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Harmonic Analysis/1979 Non Commutative Harmonic Analysis_ Proceedings, Marseille Luminy, France, June 26 to 30, 1978_ Actes Du Colloque D'analyse Harmonique Non Commutative_1979CarmonaNon.pdf"
+    ],
+    "Fields_Values": {
+      "pagetotal": "244",
+      "publisher": "Springer-Verlag",
+      "series": "Lecture notes in mathematics ; 728",
+      "isbn": "9780387095165",
+      "location": "Berlin ; New York",
+      "title": "Non-commutative harmonic analysis: proceedings, Marseille-Luminy, France, June 26 to 30, 1978: actes du Colloque d'analyse harmonique non commutative",
+      "keywords": "Congresses, Harmonic analysis, Lie algebras, Lie groups",
+      "date": "1979",
+      "shorttitle": "Non-commutative harmonic analysis"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "report",
+    "Key": "1974_smith",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "R. E.",
+          "last_name": "Smith"
+        }
+      ]
+    },
+    "Tags": [
+      "computer graphics",
+      "tesse"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Computer Graphics/1974 A Smoothing Algorithm Using Cubic Spline Functions_1974Smithsmoothing.pdf"
+    ],
+    "Fields_Values": {
+      "month": "feb",
+      "date": "1974-02-01",
+      "url": "https://ntrs.nasa.gov/search.jsp?R=19740008165",
+      "title": "A smoothing algorithm using cubic spline functions",
+      "urldate": "2019-03-31",
+      "abstract": "Two algorithms are presented for smoothing arbitrary sets of data. They are the explicit variable algorithm and the parametric variable algorithm. The former would be used where large gradients are not encountered because of the smaller amount of calculation required. The latter would be used if the data being smoothed were double valued or experienced large gradients. Both algorithms use a least-squares technique to obtain a cubic spline fit to the data. The advantage of the spline fit is that the first and second derivatives are continuous. This method is best used in an interactive graphics environment so that the junction values for the spline curve can be manipulated to improve the fit.",
+      "year": "1974"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "1964_fletcher",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Harvey",
+          "last_name": "Fletcher"
+        }
+      ]
+    },
+    "Tags": [
+      "piano"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Piano/1964 Normal Vibration Frequencies of a Stiff Piano String_1964FletcherNormal.pdf"
+    ],
+    "Fields_Values": {
+      "doi": "10.1121/1.1918933",
+      "issn": "0001-4966",
+      "volume": "36",
+      "title": "Normal Vibration Frequencies of a Stiff Piano String",
+      "urldate": "2019-03-28",
+      "number": "1",
+      "month": "jan",
+      "journaltitle": "The Journal of the Acoustical Society of America",
+      "publisher": "Acoustical Society of America (ASA)",
+      "year": "1964",
+      "pages": "203--209",
+      "journal": "The Journal Of The Acoustical Society Of America",
+      "langid": "english",
+      "date": "1964-01"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "1962_parzen",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Emanuel",
+          "last_name": "Parzen"
+        }
+      ]
+    },
+    "Tags": [
+      "seminal"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Seminal/1962 On Estimation of a Probability Density Function and Mode_1962ParzenEstimation.pdf"
+    ],
+    "Fields_Values": {
+      "journaltitle": "The Annals of Mathematical Statistics",
+      "number": "3",
+      "date": "1962",
+      "urldate": "2019-03-28",
+      "pages": "1065--1076",
+      "issn": "0003-4851",
+      "volume": "33",
+      "url": "https://www.jstor.org/stable/2237880",
+      "title": "On Estimation of a Probability Density Function and Mode"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "1961_martin_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Daniel W.",
+          "last_name": "Martin"
+        },
+        {
+          "first_name": "W. D.",
+          "last_name": "Ward"
+        }
+      ]
+    },
+    "Tags": [
+      "piano"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Piano/1961 Subjective Evaluation of Musical Scale Temperament in Pianos_1961MartinSubjective.pdf"
+    ],
+    "Fields_Values": {
+      "publisher": "ASA",
+      "title": "Subjective evaluation of musical scale temperament in pianos",
+      "date": "1961",
+      "pages": "582--585",
+      "volume": "33",
+      "number": "5",
+      "journaltitle": "The Journal of the Acoustical Society of America"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "techreport",
+    "Key": "1957_rosenblatt",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Frank",
+          "last_name": "Rosenblatt"
+        }
+      ]
+    },
+    "Tags": [
+      "seminal"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Seminal/1957 The Perceptron_ a Perceiving and Recognizing Automaton_1957RosenblattPerceptron.pdf"
+    ],
+    "Fields_Values": {
+      "url": "https://blogs.umass.edu/brain-wars/files/2016/03/rosenblatt-1957.pdf",
+      "abstract": "First publication about the perceptron",
+      "booktitle": "Report 85, Cornell Aeronautical Laboratory",
+      "publisher": "Cornell Aeronautical Laboratory",
+      "keywords": "seminal",
+      "volume": "1957",
+      "id": "1",
+      "type": "techreport",
+      "date": "1957",
+      "number": "85-460-1",
+      "title": "The Perceptron: A Perceiving and Recognizing Automaton",
+      "institution": "Cornell Aeronautical Laboratory",
+      "note": "(Project PARA)",
+      "pages": "460--1"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "1956_rosenblatt",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Murray",
+          "last_name": "Rosenblatt"
+        }
+      ]
+    },
+    "Tags": [
+      "seminal"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Seminal/1956 Remarks on Some Nonparametric Estimates of a Density Function_1956RosenblattRemarks.pdf"
+    ],
+    "Fields_Values": {
+      "issn": "0003-4851",
+      "title": "Remarks on Some Nonparametric Estimates of a Density Function",
+      "volume": "27",
+      "publisher": "Institute of Mathematical Statistics",
+      "date": "1956",
+      "number": "3",
+      "url": "http://www.jstor.org/stable/2237390",
+      "journaltitle": "The Annals of Mathematical Statistics",
+      "abstract": "This note discusses some aspects of the estimation of the density function of a univariate probability distribution. All estimates of the density function satisfying relatively mild conditions are shown to be biased. The asymptotic mean square error of a particular class of estimates is evaluated.",
+      "pages": "832--837"
+    }
+  },
+  {
+    "Reviewed": false,
+    "Type": "article",
+    "Key": "1943_mcculloch_etal",
+    "Creators": {
+      "author": [
+        {
+          "first_name": "Warren S.",
+          "last_name": "McCulloch"
+        },
+        {
+          "first_name": "Walter",
+          "last_name": "Pitts"
+        }
+      ]
+    },
+    "Tags": [
+      "seminal"
+    ],
+    "Files": [],
+    "BrokenFiles": [
+      "C:bibliography/ Seminal/1943 A Logical Calculus of the Ideas Immanent in Nervous Activity_1943McCullochlogical.pdf"
+    ],
+    "Fields_Values": {
+      "number": "4",
+      "journaltitle": "The Bulletin of Mathematical Biophysics",
+      "title": "A logical calculus of the ideas immanent in nervous activity",
+      "date": "1943-12",
+      "volume": "5",
+      "doi": "10.1007/bf02478259",
+      "pages": "115--133"
+    }
+  }
+]

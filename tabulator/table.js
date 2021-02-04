@@ -160,6 +160,15 @@ function updatealltags(){
     }
   }
   parentdiv.appendChild(btn);
+
+  var btn = document.createElement("BUTTON");   // Create a <button> element
+  btn.innerHTML = "Download as .csv";                   // Insert text
+  btn.id = "csvbutn"
+  btn.onclick = function(event) {
+    var elem = document.documentElement;
+    table.download("csv", "bibliography.csv", {bom:true});
+  }
+  parentdiv.appendChild(btn);
 }
 
 
@@ -205,7 +214,7 @@ var table = new Tabulator("#table", {
     {
       label:"Download data as .csv",
       action:function(e, row){
-          table.download("csv", "data.csv", {bom:true});
+          table.download("csv", "bibliography.csv", {bom:true});
       }
     },
   ],
