@@ -235,7 +235,7 @@ fn parse_url_field(value:&String) -> String{
 }
 
 fn parse_generic_field(original_value:&str) -> String{
-  let patterns : &[_] = &['\t',',',' '];
+  let patterns : &[_] = &['\t',',',' ','"','\''];
   original_value
   .trim()
   .trim_matches(patterns)
@@ -252,7 +252,7 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
   let patterns : &[_] = &['{', '}','\t',',']; 
   let mut counter = 0;
   while counter < lines.len() {
-    if lines[counter].starts_with("@"){ // found entry
+    if lines[counter].trim_start().starts_with("@"){ // found entry
       let vec: Vec<&str> = lines[counter].splitn(2,"{").collect();
       if vec.len() == 2 {
         let etype = vec[0].trim().trim_matches('@').to_lowercase();
@@ -263,7 +263,7 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
         println!("Problem: {}\n",lines[counter]);
       }
       counter +=1;
-      while counter < lines.len() && lines[counter].trim() != "}"{ // while inside entry
+      while counter < lines.len() && lines[counter].trim() != "}" && !lines[counter].trim_start().starts_with("@"){ // while inside entry
         let mut field_value= String::new();
         while 
         counter < lines.len() - 1 && 
@@ -395,6 +395,8 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
 
 
   let mut lpath = path.to_owned();
+  lpath.pop();
+  lpath.push(".deps/result");
   lpath.set_extension("js");
   let mut f = match File::create(&lpath) {
       Err(why) => panic!("couldn't create {}: {}", display, why),
