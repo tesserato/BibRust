@@ -124,23 +124,36 @@ fn read_bib(path:PathBuf, bib_lines:&mut Vec<String>){
 
   let mut inside_comment= false;
   for line in file_buffer.lines(){
-    let l =match line {
+    let l = match line {
       Ok(l) => l.trim().to_string(),
       Err(e) => {
         println!("error reading line: {:?}", e);
         "".to_string()
       }
     };
-  
-    if std::str::from_utf8(l.as_bytes()).is_err(){
-      println!("utf8 error in {}", l);
+
+    if l.is_empty(){
+      continue;
     }
 
-    let l = l.trim();
-    if l.to_lowercase().starts_with("@comment"){
+      if l.to_lowercase().starts_with("@comment"){
       inside_comment = true;
     }
-    if !l.is_empty() && !inside_comment && !l.starts_with('%'){
+
+    if l.starts_with("@") && !l.ends_with(",") && !inside_comment{
+      println!("{}", l);
+
+      let mut sls = l.split("}, ");
+      let (sl0, sl1) = sls.next().unwrap().split_once(",").unwrap();
+      bib_lines.push(format!("{},", sl0.trim()));
+      bib_lines.push(format!("{}}},", sl1.trim()));
+      while let Some(sl) = sls.next(){        
+        bib_lines.push(format!("{}}},", sl.trim_end().trim_end_matches("}}")));
+      }
+        bib_lines.push(format!("}}"));
+    }
+
+    if !inside_comment && !l.starts_with('%'){
       bib_lines.push(l.to_string().replace("“", "\"").replace("”", "\""));
     }
     if inside_comment && l.ends_with('}'){

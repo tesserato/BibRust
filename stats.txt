@@ -1,9 +1,9 @@
-Found a total of 5109 entries
-(2 reviewed, 4877 with author, 2344 with doi, 2074 with files, 1560 whith url):
-article 3128
-book 1135
+Found a total of 5114 entries
+(2 reviewed, 4877 with author, 2344 with doi, 2074 with files, 1568 whith url):
+article 3126
+book 1134
 inproceedings 336
-misc 176
+misc 184
 unpublished 60
 collection 58
 incollection 50
@@ -14,26 +14,26 @@ thesis 22
 phdthesis 17
 mvbook 13
 inreference 6
-techreport 5
 manual 5
+techreport 5
 reference 3
 software 3
-inbook 1
 mastersthesis 1
+inbook 1
 
 Fields:
-title 5106
+title 5111
 year 3516
 pages 3503
 abstract 3080
 volume 2465
 doi 2344
+journal 2076
 issn 2075
-journal 2069
 number 2046
 isbn 1693
-url 1560
-publisher 1544
+url 1568
+publisher 1542
 keywords 1506
 date 1074
 booktitle 997
@@ -48,7 +48,7 @@ pmid 376
 edition 361
 location 300
 annote 214
-month 210
+month 213
 pagetotal 202
 address 178
 type 176
@@ -62,8 +62,8 @@ eventtitle 57
 howpublished 52
 timestamp 19
 biburl 19
-bibsource 18
 ean 18
+bibsource 18
 titleaddon 15
 school 13
 day 7
@@ -71,27 +71,27 @@ rights 6
 eprintclass 5
 volumes 5
 shortjournal 4
-editorbtype 4
 editorb 4
+editorbtype 4
 primaryclass 3
 unidentified 3
-editoratype 2
 qualityassured 2
-numpages 2
-acmid 2
 editora 2
-place 1
-comment 1
-adsnote 1
-interhash 1
-id 1
-intrahash 1
-ee 1
-adsurl 1
+acmid 2
+numpages 2
+editoratype 2
 mendeley-groups 1
-subtitle 1
-issue 1
+ee 1
+adsnote 1
+place 1
+adsurl 1
+comment 1
 annotation 1
-collection 1
+subtitle 1
+interhash 1
+intrahash 1
 n 1
 language 1
+id 1
+issue 1
+collection 1
