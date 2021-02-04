@@ -1,9 +1,9 @@
 #![feature(str_split_once)]
 #![allow(non_snake_case)]
 
-use std::{borrow::BorrowMut, cmp::Ordering, fmt::format, vec};
+use std::{cmp::Ordering, vec};
 use std::io::BufReader;
-use std::fs::{self, File};
+use std::fs::File;
 use std::io::prelude::*;
 use std::path::{Path, PathBuf};
 use std::collections::HashMap;
@@ -14,10 +14,9 @@ use std::env;
 extern crate csv;
 
 extern crate clap;
-use clap::{App, Arg, ArgMatches};
+use clap::{App, Arg, ArgMatches, Result};
 
 extern crate walkdir;
-use fs::rename;
 use walkdir::WalkDir;
 
 extern crate url;
@@ -378,7 +377,7 @@ fn write_csv(path: &PathBuf, entries: &Vec<Entry>, ordered_fields: &Vec<String>)
   }
 }
 
-fn write_html(path: &PathBuf, entries: &Vec<Entry>, ordered_fields: &Vec<String>){
+fn write_html(path: &PathBuf, entries: &Vec<Entry>){
 
   fn remove_backticks(text: &String) -> String{
     text.chars().filter(|x| x != &'`').collect::<String>().replace("\\", "/").replace("$", "\\$")
@@ -625,6 +624,14 @@ fn parse_cl_args() -> ArgMatches<'static> {
       .takes_value(false)
       .required(false)
     )
+    .arg(Arg::with_name("rename")
+      .short("r")
+      .long("rename")
+      .value_name("rename files?")
+      .help("if set, files pointed in the entries will be renamed")
+      .takes_value(false)
+      .required(false)
+    )
     .get_matches()
 }
 
@@ -821,7 +828,7 @@ fn rename_files(Entries:&mut Vec<Entry>){
   }
 }
 
-fn main() {
+fn main() -> Result<()> {
   let args = parse_cl_args();
 
   // read input path from args
@@ -857,7 +864,7 @@ fn main() {
   // file paths
   if args.value_of("files").is_some(){
     let files_root_path = PathBuf::from(args.value_of("files").unwrap().to_string());
-    let exts = vec!["pdf".to_string(),"epub".to_string(),"djvu".to_string()];
+    let exts = vec!["pdf".to_string(), "epub".to_string(), "djvu".to_string()];
     let filepaths = find_paths_to_files_with_ext(&files_root_path, &exts);
     if !filepaths.is_empty() {
       get_files_from_paths(&mut main_entries, &filepaths);
@@ -880,9 +887,12 @@ fn main() {
 
   temp_clean(&mut main_entries);
 
-  rename_files(&mut main_entries);
+  // rename associated files
+  if args.is_present("rename"){
+    rename_files(&mut main_entries);
+  }
 
-// output
+  // output
   let mut output_path = String::new();
   if args.value_of("output").is_some(){
     output_path = args.value_of("output").unwrap().to_string();
@@ -891,34 +901,38 @@ fn main() {
     output_path = args.value_of("output_pos").unwrap().to_string();
   }
   else{
-    output_path = env::current_dir().unwrap().to_str().unwrap().to_string();
+    return Ok(())
   }
 
   main_entries.sort_by(|a, b| b.Key.cmp(&a.Key));
   let mut p = PathBuf::from(output_path);
+
   if p.is_dir(){
-    p.push("Result.csv");
+    p.push("Result.html");
     println!("Saving results at {:#?}:", p);
-    write_csv(&p, &main_entries, &stats.ordered_fields)
+    write_html(&p, &main_entries)
   }
   else if p.extension().is_some(){
     match p.extension().unwrap().to_str() {
       Some("csv")    => write_csv(&p, &main_entries, &stats.ordered_fields),
       Some("bib")    => write_bib(&p, &main_entries),
-      Some("html")    => write_html(&p, &main_entries, &stats.ordered_fields),
-      Some("json")    => write_json(&p, &main_entries),
+      Some("html")   => write_html(&p, &main_entries),
+      Some("json")   => write_json(&p, &main_entries),
       Some(ext) => {
-        p.set_extension("csv");
-        write_csv(&p, &main_entries, &stats.ordered_fields)
+        println!("Couldn't recognise extension {}. Defaulting to .html mode.", ext);
+        p.set_extension("html");
+        write_html(&p, &main_entries);
       },
-      None           => println!("No extension detected in {:?}", p.as_os_str()),
+      None           => (), // can't be none. this code is dead.
     }
   }
   else{
     p = env::current_dir().unwrap();
-    p.push("Result.csv");
-    write_csv(&p, &main_entries, &stats.ordered_fields);
+    p.push("Result.html");
+    write_html(&p, &main_entries);
+    println!("No extension found. Defaulting to .html mode.");
   }
+  return Ok(())
 }
 
 fn get_files_from_entries(entries: &mut Vec<Entry>, other_entries: &Vec<Entry>){
