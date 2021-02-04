@@ -1067,11 +1067,12 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
   }
 
   if eq{
+    if entries[j].Reviewed{
+      entries[j].Reviewed = true;
+    }
     entries[i].Files = entries[i].Files.union(&entries[j].Files).map(|x| x.to_owned()).collect();
     entries[i].Tags = entries[i].Tags.union(&entries[j].Tags).map(|x| x.to_owned()).collect();
     entries[i].Tags.insert(MERGED.to_string());
-
-
 
     for field in f2.difference(&f1){
       let value = entries[j].Fields_Values.get_mut(field).unwrap().to_string();
@@ -1094,7 +1095,6 @@ let result = names_to_string(&vec);
 for n in vec{
   println!("f:{}  l:{}", n.first_name, n.last_name);
 }
-
 assert_eq!(output, result);
 }
 
