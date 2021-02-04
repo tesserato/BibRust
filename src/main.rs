@@ -218,7 +218,7 @@ fn parse_tags_field(e: &mut Entry, original_value:&str) {
     e.Reviewed =true;
     tags.remove(REVIEWED);
   }
-  e.Tags = tags;
+  e.Tags.extend(tags);
 }
 
 fn parse_file_field(e: &mut Entry, value:&String) -> HashSet<String>{
@@ -308,7 +308,7 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
             "author" | "editor" | "translator" => {
               let _ = last_entry.Creators.insert(field.to_string(), parse_creators_field(&value));
             },
-            "mendeley-tags"|"groups"|"tags" => parse_tags_field( &mut last_entry,&value),
+            "mendeley-groups"|"mendeley-tags"|"groups"|"tags" => parse_tags_field( &mut last_entry,&value),
             _ => {
 
               if field == "isbn" {
