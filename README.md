@@ -6,6 +6,18 @@ The idea of this script is to consolidate all the bibliographic data one has in 
 
 no assumptions, non destructive behaviour
 
+# types
+article
+book
+inproceedings
+misc
+collection
+unpublished
+incollection
+online
+report
+thesis
+
 # Remarks
 a article
 b book
