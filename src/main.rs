@@ -22,6 +22,9 @@ use walkdir::WalkDir;
 extern crate url;
 use url::Url;
 
+extern crate nom_bibtex;
+use nom_bibtex::*;
+
 extern crate serde;
 use serde::{Deserialize, Serialize};
 
@@ -119,10 +122,16 @@ fn read_bib(path:PathBuf, bib_lines:&mut Vec<String>){
   let file = File::open(path).unwrap();
   let file_buffer = BufReader::new(file);
 
-  let mut inside_comment=false;
+  let mut inside_comment= false;
   for line in file_buffer.lines(){
-    let l = line.unwrap();
-
+    let l =match line {
+      Ok(l) => l.trim().to_string(),
+      Err(e) => {
+        println!("error reading line: {:?}", e);
+        "".to_string()
+      }
+    };
+  
     if std::str::from_utf8(l.as_bytes()).is_err(){
       println!("utf8 error in {}", l);
     }
@@ -1086,7 +1095,41 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
   eq
 }
 
+fn parse_bib_nom_bibtex(lines:&Vec<String> ) -> Vec<Entry>{
 
+  let bibtex = Bibtex::parse(&lines.join("\n\n")).unwrap();
+  let mut Entries : Vec<Entry> = vec![];
+  // let patterns : &[_] = &['{', '}','\t',','];
+
+  for e in bibtex.bibliographies(){
+    let mut entry = Entry{Type:e.entry_type().to_string(), Key:e.citation_key().to_string(),..Default::default()};
+    for (field, mut value) in e.tags().to_owned(){
+      match field.as_ref() {
+        "file" => {parse_file_field(&mut entry, &value.to_string());},
+        "author" | "editor" | "translator" => {
+            entry.Creators.insert(field.to_string(), parse_creators_field(&value));
+          },
+        "mendeley-tags"|"groups"|"tags" => parse_tags_field( &mut entry,&value),
+        _ => {
+          match field.as_ref() {
+            "isbn" => value = value.chars().filter(|x| x.is_numeric()).collect::<String>(),
+            "arxivid" | "eprint" => value = value.split(":").map(|x| x.to_string()).collect::<Vec<String>>().last().unwrap().to_string(),
+            "url" => value = parse_url_field(&value),
+            _ => value = parse_generic_field(&value),
+          }
+          if entry.Fields_Values.contains_key(&field){
+            println!("Repeated entry at {}\n", e.citation_key());
+          }
+          else{
+            entry.Fields_Values.insert(field.to_string(), value.clone());
+          }
+        }
+      }
+    }
+    Entries.push(entry);
+  }
+  Entries
+}
 
 #[test]
 fn test_parse_creators_field(){
