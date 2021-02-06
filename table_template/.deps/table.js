@@ -56,7 +56,25 @@ ww = 200;
 var types = {values:["article","inproceedings","unpublished","incollection","book","report","proceedings","collection","misc","online","thesis"]};
 
 var coldef = [                 //define the table columns
-  {title:"OK?", field:"reviewed", titleDownload:"reviewed", headerFilter:true, hozAlign:"center", formatter:"tickCross", sorter:"boolean", editor:true},
+  {title:"OK?", 
+  field:"reviewed", 
+  titleDownload:"reviewed", 
+  headerFilter:true, 
+  hozAlign:"center", 
+  formatter:"tickCross", 
+  sorter:"boolean", 
+  formatterParams: {
+    allowEmpty: false,
+    allowTruthy:true,
+    tickElement: "&starf;",
+    crossElement: false,
+  },
+  cellClick:function(e, cell){
+    //e - the click event object
+    //cell - cell component
+    cell.setValue(!cell.getValue(), true)
+    },
+},
   {title:"Type", field:"type", titleDownload:"type", editor:"select", editorParams:types, headerFilter:"input", headerContextMenu:hcm, validator:"required"},
   {title:"Key", field:"key", titleDownload:"key", editor:"input", headerFilter:"input", headerContextMenu:hcm, validator:"required", validator:"unique"},
   {title:"Author", field:"author", titleDownload:"author", width:ww, editor:"input", headerFilter:"input", headerContextMenu:hcm},
@@ -135,7 +153,7 @@ function updatealltags(){
   }
   var btn = document.createElement("BUTTON");   // Create a <button> element
   btn.innerHTML = "Clear tags";                   // Insert text
-  btn.id = "cleartagsbutn"
+  btn.classList.add("btn");
   btn.onclick = function(event) {
     selectedtags.clear();
     table.clearFilter();
@@ -148,7 +166,7 @@ function updatealltags(){
 
   var btn = document.createElement("BUTTON");   // Create a <button> element
   btn.innerHTML = "Fullscreen";                   // Insert text
-  btn.id = "fullscreenbutn"
+  btn.classList.add("btn");
   btn.onclick = function(event) {
     var elem = document.documentElement;
     if (elem.requestFullscreen) {
@@ -163,7 +181,7 @@ function updatealltags(){
 
   var btn = document.createElement("BUTTON");   // Create a <button> element
   btn.innerHTML = "Download as .csv";                   // Insert text
-  btn.id = "csvbutn"
+  btn.classList.add("btn");
   btn.onclick = function(event) {
     var elem = document.documentElement;
     table.download("csv", "bibliography.csv", {bom:true});

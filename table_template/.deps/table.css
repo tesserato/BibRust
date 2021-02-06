@@ -1,32 +1,55 @@
-body{
+:root {
+  --hdr: rgb(41, 41, 41); /* column header color */
+  --txt: rgb(255, 255, 255); /* normal text color */
+
+  --arw: #bbb; /* arrows */
+  --lns: rgba(170, 170, 170, 0.342); /* header lines */
+
+  --rwh:rgba(0, 0, 0, 0.863);    /* row and tags hover*/
+  --rw1:rgb(73, 73, 73);    /* row 1 color and selected tags*/
+  --rw2:rgb(39, 39, 39);    /* row 2 color and tags*/
+
+  --c8: #ccc;
+  --c10:#1a1a1a;
+  --c12:#373737;
+  --c13:rgba(0, 0, 0, 0.2);
+  --c14:rgba(0, 0, 0, 0.1);
+  --c15:#262626;
+  --c16:rgba(153, 153, 153, 0.5);
+  --c17:#dd0000;
+  --c18:rgba(0, 0, 0, 0); /* row selected */
+  --c19:#590000;
+  --c20:#D00;
+  --c21:#eee;
+  --c22:rgba(0, 0, 0, 0.4);
+
+  --c24:#f1f1f1; /* scrollbar */
+
+  /* buttons and scrollbar buttons*/
+  --btn:rgb(179, 32, 32);   /* base */
+  --bth:rgb(133, 24, 24);   /* hover */
+
+  --bgr:rgb(22, 22, 22); /* background color */
+}
+
+body {
   margin-top: 0;
   margin-bottom: 0;
-  background-color: #222;
+  background-color: var(--bgr);
 }
 
-html{
-  background-color: #222;
-}
-
-/* width */
-::-webkit-scrollbar {
+::-webkit-scrollbar {/* width */
   width: 1em;
   height: 1em;
 }
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1; 
+::-webkit-scrollbar-track {/* Track */
+  background: var(--c24);
 }
- 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: rgb(221, 28, 70); 
+::-webkit-scrollbar-thumb {/* Handle */
+  background: var(--btn);
 }
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background:rgb(145, 19, 46); 
+::-webkit-scrollbar-thumb:hover {/* Handle on hover */
+  background: var(--bth);
 }
 
 #container {
@@ -36,93 +59,89 @@ html{
   height: 94vh;
 }
 
-#tags{
+#tags { /* tags div */
   width: 100%;
   position: sticky;
   left: 0;
   display: inline-flex;
   flex-wrap: wrap;
-  background-color: #222;
   padding-top: .3em;
   padding-bottom: .3em;
 }
 
-#cleartagsbutn, #fullscreenbutn, #csvbutn{
-  background-color: rgb(221, 28, 70);
-  color: white;
+.btn {
+  background-color: var(--btn);
+  color: var(--txt);
   margin: .3em;
   padding: .3em;
   width: fit-content;
+  border: none;
+}
+.btn:hover {
+  background-color: var(--bth);
+  /* color: var(--c3); */
+  /* margin: .3em; */
+  /* padding: .3em; */
+  /* width: fit-content; */
 }
 
-#cleartagsbutn:hover, #fullscreenbutn:hover, #csvbutn:hover{
-  background-color:rgb(145, 19, 46);
-  color: white;
-  margin: .3em;
-  padding: .3em;
-  width: fit-content;
-}
-
-.tabulator-footer{
+.tabulator-footer {
   width: 100%;
   position: sticky;
   left: 0;
 }
 
-.deselectedtag{
-  background-color: #333;
-  color: white;
+
+.deselectedtag {
+  background-color: var(--rw2);
+  color: var(--txt);
   margin: .3em;
   padding: .3em;
   width: fit-content;
 }
-.deselectedtag:hover{
-  background-color: rgb(77, 77, 77);
+.deselectedtag:hover {
+  background-color: var(--rwh);
 }
-
-.selectedtag{
-  background-color:#999;
-  color: white;
+.selectedtag {
+  background-color: var(--rw1);
+  color: var(--txt);
   margin: .3em;
   padding: .3em;
   width: fit-content;
 }
-.selectedtag:hover{
-  background-color:rgb(116, 115, 115);
+.selectedtag:hover {
+  background-color: var(--rwh);
 }
 
-body{
-  background-color: rgb(66, 61, 61);
-}
 
-/* unvisited link */
+/* body {
+  background-color: var(--c30);
+} */
+
+
 a:link {
   color: rgba(255, 255, 255, 0.89);
 }
-
-/* visited link */
 a:visited {
   color: rgba(255, 255, 255, 0.705);
 }
-
-/* mouse over link */
 a:hover {
-  color: rgb(255, 255, 255);
+  color:var(c3);
 }
-
-/* selected link */
 a:active {
-  color: rgb(0, 0, 0);
+  color: var(c3);
 }
 
 /* ################################### */
+
 /* Tabulator v4.9.3 (c) Oliver Folkerd */
+
 /* ################################### */
 
 .tabulator {
   position: relative;
-  border: 1px solid #333;
-  background-color: #222;
+  border: 1px solid var(--hdr);
+  /* background-color: var(--c2); */
   overflow: visible;
   /* font-size: 14px; */
   text-align: left;
@@ -140,17 +159,17 @@ a:active {
 
 .tabulator.tabulator-block-select {
   -webkit-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .tabulator .tabulator-header {
   position: relative;
   box-sizing: border-box;
   width: 100%;
-  border-bottom: 1px solid #999;
-  background-color: #333;
-  color: #fff;
+  border-bottom: 1px solid var(--lns);
+  background-color: var(--hdr);
+  color: var(--txt);
   font-weight: bold;
   white-space: nowrap;
   overflow: visible;
@@ -168,8 +187,8 @@ a:active {
   display: inline-block;
   position: relative;
   box-sizing: border-box;
-  border-right: 1px solid #aaa;
-  background-color: #333;
+  border-right: 1px solid var(--lns);
+  background-color: var(--hdr);
   text-align: left;
   vertical-align: bottom;
   overflow: hidden;
@@ -177,8 +196,8 @@ a:active {
 
 .tabulator .tabulator-header .tabulator-col.tabulator-moving {
   position: absolute;
-  border: 1px solid #999;
-  background: #1a1a1a;
+  border: 1px solid var(--lns);
+  background: var(--c10);
   pointer-events: none;
 }
 
@@ -213,13 +232,13 @@ a:active {
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title .tabulator-title-editor {
   box-sizing: border-box;
   width: 100%;
-  border: 1px solid #999;
+  border: 1px solid var(--lns);
   padding: 1px;
-  background: #444;
-  color: #fff;
+  background: var(--rw2);
+  color: var(--txt);
 }
 
-.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title .tabulator-header-menu-button + .tabulator-title-editor {
+.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title .tabulator-header-menu-button+.tabulator-title-editor {
   width: calc(100% - 22px);
 }
 
@@ -227,7 +246,7 @@ a:active {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -239,14 +258,14 @@ a:active {
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-bottom: 6px solid #bbb;
+  border-bottom: 6px solid var(--arw);
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-col-group .tabulator-col-group-cols {
   position: relative;
   display: -ms-flexbox;
   display: flex;
-  border-top: 1px solid #aaa;
+  border-top: 1px solid var(--lns);
   overflow: hidden;
   margin-right: -1px;
 }
@@ -272,9 +291,9 @@ a:active {
 }
 
 .tabulator .tabulator-header .tabulator-col .tabulator-header-filter input, .tabulator .tabulator-header .tabulator-col .tabulator-header-filter select {
-  border: 1px solid #999;
-  background: #444;
-  color: #fff;
+  border: 1px solid var(--lns);
+  background: var(--rw2);
+  color: var(--txt);
 }
 
 .tabulator .tabulator-header .tabulator-col .tabulator-header-filter input::-ms-clear {
@@ -288,52 +307,52 @@ a:active {
 
 .tabulator .tabulator-header .tabulator-col.tabulator-sortable:hover {
   cursor: pointer;
-  background-color: #1a1a1a;
+  background-color: var(--c10);
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort="none"] .tabulator-col-content .tabulator-col-sorter {
-  color: #bbb;
+  color: var(--arw);
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort="none"] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
   border-top: none;
-  border-bottom: 6px solid #bbb;
+  border-bottom: 6px solid var(--arw);
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort="asc"] .tabulator-col-content .tabulator-col-sorter {
-  color: #666;
+  color: var(--rw1);
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort="asc"] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
   border-top: none;
-  border-bottom: 6px solid #666;
+  border-bottom: 6px solid var(--rw1);
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort="desc"] .tabulator-col-content .tabulator-col-sorter {
-  color: #666;
+  color: var(--rw1);
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort="desc"] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
   border-bottom: none;
-  border-top: 6px solid #666;
-  color: #666;
+  border-top: 6px solid var(--rw1);
+  color: var(--rw1);
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-col-vertical .tabulator-col-content .tabulator-col-title {
   -ms-writing-mode: tb-rl;
-      writing-mode: vertical-rl;
+  writing-mode: vertical-rl;
   text-orientation: mixed;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   -ms-flex-pack: center;
-      justify-content: center;
+  justify-content: center;
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-col-vertical.tabulator-col-vertical-flip .tabulator-col-title {
   -ms-transform: rotate(180deg);
-      transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-col-vertical.tabulator-sortable .tabulator-col-title {
@@ -348,7 +367,7 @@ a:active {
 
 .tabulator .tabulator-header .tabulator-col.tabulator-col-vertical.tabulator-sortable .tabulator-col-sorter {
   -ms-flex-pack: center;
-      justify-content: center;
+  justify-content: center;
   left: 0;
   right: 0;
   top: 4px;
@@ -362,24 +381,24 @@ a:active {
 }
 
 .tabulator .tabulator-header .tabulator-frozen.tabulator-frozen-left {
-  border-right: 2px solid #888;
+  border-right: 2px solid var(--lns);
 }
 
 .tabulator .tabulator-header .tabulator-frozen.tabulator-frozen-right {
-  border-left: 2px solid #888;
+  border-left: 2px solid var(--lns);
 }
 
 .tabulator .tabulator-header .tabulator-calcs-holder {
   box-sizing: border-box;
   min-width: 600%;
-  background: #1a1a1a !important;
-  border-top: 1px solid #888;
-  border-bottom: 1px solid #aaa;
+  background: var(--c10) !important;
+  border-top: 1px solid var(--lns);
+  border-bottom: 1px solid var(--lns);
   overflow: hidden;
 }
 
 .tabulator .tabulator-header .tabulator-calcs-holder .tabulator-row {
-  background: #1a1a1a !important;
+  background: var(--c10) !important;
 }
 
 .tabulator .tabulator-header .tabulator-calcs-holder .tabulator-row .tabulator-col-resize-handle {
@@ -411,7 +430,7 @@ a:active {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   width: 100%;
 }
 
@@ -424,7 +443,7 @@ a:active {
   display: inline-block;
   margin: 0 auto;
   padding: 10px;
-  color: #eee;
+  color: var(--c21);
   font-weight: bold;
   font-size: 20px;
 }
@@ -432,23 +451,23 @@ a:active {
 .tabulator .tabulator-tableHolder .tabulator-table {
   position: relative;
   display: inline-block;
-  background-color: #666;
+  background-color: var(--rw1);
   white-space: nowrap;
   overflow: visible;
-  color: #fff;
+  color: var(--txt);
 }
 
 .tabulator .tabulator-tableHolder .tabulator-table .tabulator-row.tabulator-calcs {
   font-weight: bold;
-  background: #373737 !important;
+  background: var(--c12) !important;
 }
 
 .tabulator .tabulator-tableHolder .tabulator-table .tabulator-row.tabulator-calcs.tabulator-calcs-top {
-  border-bottom: 2px solid #888;
+  border-bottom: 2px solid var(--lns);
 }
 
 .tabulator .tabulator-tableHolder .tabulator-table .tabulator-row.tabulator-calcs.tabulator-calcs-bottom {
-  border-top: 2px solid #888;
+  border-top: 2px solid var(--lns);
 }
 
 .tabulator .tabulator-col-resize-handle {
@@ -470,14 +489,14 @@ a:active {
 
 .tabulator .tabulator-footer {
   padding: 5px 10px;
-  border-top: 1px solid #999;
-  background-color: #333;
+  border-top: 1px solid var(--lns);
+  background-color: var(--hdr);
   text-align: right;
-  color: #333;
+  color: var(--hdr);
   font-weight: bold;
   white-space: nowrap;
   -ms-user-select: none;
-      user-select: none;
+  user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
@@ -489,15 +508,15 @@ a:active {
   width: calc(100% + 20px);
   margin: -5px -10px 5px -10px;
   text-align: left;
-  background: #262626 !important;
-  border-bottom: 1px solid #888;
-  border-top: 1px solid #888;
+  background: var(--c15) !important;
+  border-bottom: 1px solid var(--lns);
+  border-top: 1px solid var(--lns);
   overflow: hidden;
 }
 
 .tabulator .tabulator-footer .tabulator-calcs-holder .tabulator-row {
-  background: #262626 !important;
-  color: #fff;
+  background: var(--c15) !important;
+  color: var(--txt);
 }
 
 .tabulator .tabulator-footer .tabulator-calcs-holder .tabulator-row .tabulator-col-resize-handle {
@@ -510,14 +529,14 @@ a:active {
 }
 
 .tabulator .tabulator-footer .tabulator-paginator label {
-  color: #fff;
+  color: var(--txt);
 }
 
 .tabulator .tabulator-footer .tabulator-page-size {
   display: inline-block;
   margin: 0 5px;
   padding: 2px 5px;
-  border: 1px solid #aaa;
+  border: 1px solid var(--lns);
   border-radius: 3px;
 }
 
@@ -529,17 +548,17 @@ a:active {
   display: inline-block;
   margin: 0 2px;
   padding: 2px 5px;
-  border: 1px solid #aaa;
+  border: 1px solid var(--lns);
   border-radius: 3px;
-  background: rgba(255, 255, 255, 0.2);
-  color: #333;
+  /* background: var(--c23); */
+  color: var(--hdr);
   font-family: inherit;
   font-weight: inherit;
   font-size: inherit;
 }
 
 .tabulator .tabulator-footer .tabulator-page.active {
-  color: #fff;
+  color: var(--txt);
 }
 
 .tabulator .tabulator-footer .tabulator-page:disabled {
@@ -548,8 +567,8 @@ a:active {
 
 .tabulator .tabulator-footer .tabulator-page:not(.disabled):hover {
   cursor: pointer;
-  background: rgba(0, 0, 0, 0.2);
-  color: #fff;
+  background: var(--c13);
+  color: var(--txt);
 }
 
 .tabulator .tabulator-loader {
@@ -557,13 +576,13 @@ a:active {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   top: 0;
   left: 0;
   z-index: 100;
   height: 100%;
   width: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--c22);
   text-align: center;
 }
 
@@ -572,50 +591,50 @@ a:active {
   margin: 0 auto;
   padding: 10px 20px;
   border-radius: 10px;
-  background: #fff;
+  background: var(--txt);
   font-weight: bold;
   font-size: 16px;
 }
 
 .tabulator .tabulator-loader .tabulator-loader-msg.tabulator-loading {
-  border: 4px solid #333;
-  color: #000;
+  border: 4px solid var(--hdr);
+  color: var(--c18);
 }
 
 .tabulator .tabulator-loader .tabulator-loader-msg.tabulator-error {
-  border: 4px solid #D00;
-  color: #590000;
+  border: 4px solid var(--c20);
+  color: var(--c19);
 }
 
 .tabulator-row {
   position: relative;
   box-sizing: border-box;
   min-height: 22px;
-  background-color: #666;
+  background-color: var(--rw1);
 }
 
 .tabulator-row:nth-child(even) {
-  background-color: #444;
+  background-color: var(--rw2);
 }
 
 .tabulator-row.tabulator-selectable:hover {
-  background-color: #999;
+  background-color: var(--rwh);
   cursor: pointer;
 }
 
 .tabulator-row.tabulator-selected {
-  background-color: #000;
+  background-color: var(--c18);
 }
 
 .tabulator-row.tabulator-selected:hover {
-  background-color: #888;
+  background-color: var(--lns);
   cursor: pointer;
 }
 
 .tabulator-row.tabulator-moving {
   position: absolute;
-  border-top: 1px solid #888;
-  border-bottom: 1px solid #888;
+  border-top: 1px solid var(--lns);
+  border-bottom: 1px solid var(--lns);
   pointer-events: none !important;
   z-index: 15;
 }
@@ -645,18 +664,18 @@ a:active {
 }
 
 .tabulator-row .tabulator-frozen.tabulator-frozen-left {
-  border-right: 2px solid #888;
+  border-right: 2px solid var(--lns);
 }
 
 .tabulator-row .tabulator-frozen.tabulator-frozen-right {
-  border-left: 2px solid #888;
+  border-left: 2px solid var(--lns);
 }
 
 .tabulator-row .tabulator-responsive-collapse {
   box-sizing: border-box;
   padding: 5px;
-  border-top: 1px solid #888;
-  border-bottom: 1px solid #888;
+  border-top: 1px solid var(--lns);
+  border-bottom: 1px solid var(--lns);
 }
 
 .tabulator-row .tabulator-responsive-collapse:empty {
@@ -680,7 +699,7 @@ a:active {
   position: relative;
   box-sizing: border-box;
   padding: 4px;
-  border-right: 1px solid #888;
+  border-right: 1px solid var(--lns);
   vertical-align: middle;
   white-space: nowrap;
   overflow: hidden;
@@ -688,7 +707,7 @@ a:active {
 }
 
 .tabulator-row .tabulator-cell.tabulator-editing {
-  border: 1px solid #999;
+  border: 1px solid var(--lns);
   outline: none;
   padding: 0;
 }
@@ -696,17 +715,17 @@ a:active {
 .tabulator-row .tabulator-cell.tabulator-editing input, .tabulator-row .tabulator-cell.tabulator-editing select {
   border: 2px;
   background: transparent;
-  color: white
+  color: var(--txt);
 }
 
 .tabulator-row .tabulator-cell.tabulator-validation-fail {
-  border: 1px solid #dd0000;
+  border: 1px solid var(--c17);
 }
 
 .tabulator-row .tabulator-cell.tabulator-validation-fail input, .tabulator-row .tabulator-cell.tabulator-validation-fail select {
   border: 1px;
   background: transparent;
-  color: #dd0000;
+  color: var(--c17);
 }
 
 .tabulator-row .tabulator-cell:first-child .tabulator-col-resize-handle.prev {
@@ -717,7 +736,7 @@ a:active {
   display: -ms-inline-flexbox;
   display: inline-flex;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
@@ -732,7 +751,7 @@ a:active {
   width: 100%;
   height: 3px;
   margin-top: 2px;
-  background: #666;
+  background: var(--rw1);
 }
 
 .tabulator-row .tabulator-cell .tabulator-data-tree-branch {
@@ -743,30 +762,30 @@ a:active {
   margin-top: -9px;
   margin-right: 5px;
   border-bottom-left-radius: 1px;
-  border-left: 2px solid #888;
-  border-bottom: 2px solid #888;
+  border-left: 2px solid var(--lns);
+  border-bottom: 2px solid var(--lns);
 }
 
 .tabulator-row .tabulator-cell .tabulator-data-tree-control {
   display: -ms-inline-flexbox;
   display: inline-flex;
   -ms-flex-pack: center;
-      justify-content: center;
+  justify-content: center;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   vertical-align: middle;
   height: 11px;
   width: 11px;
   margin-right: 5px;
-  border: 1px solid #fff;
+  border: 1px solid var(--txt);
   border-radius: 2px;
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--c14);
   overflow: hidden;
 }
 
 .tabulator-row .tabulator-cell .tabulator-data-tree-control:hover {
   cursor: pointer;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--c13);
 }
 
 .tabulator-row .tabulator-cell .tabulator-data-tree-control .tabulator-data-tree-control-collapse {
@@ -784,7 +803,7 @@ a:active {
   top: 3px;
   height: 1px;
   width: 7px;
-  background: #fff;
+  background: var(--txt);
 }
 
 .tabulator-row .tabulator-cell .tabulator-data-tree-control .tabulator-data-tree-control-expand {
@@ -792,7 +811,7 @@ a:active {
   position: relative;
   height: 7px;
   width: 1px;
-  background: #fff;
+  background: var(--txt);
 }
 
 .tabulator-row .tabulator-cell .tabulator-data-tree-control .tabulator-data-tree-control-expand:after {
@@ -802,16 +821,16 @@ a:active {
   top: 3px;
   height: 1px;
   width: 7px;
-  background: #fff;
+  background: var(--txt);
 }
 
 .tabulator-row .tabulator-cell .tabulator-responsive-collapse-toggle {
   display: -ms-inline-flexbox;
   display: inline-flex;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   -ms-flex-pack: center;
-      justify-content: center;
+  justify-content: center;
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
@@ -819,8 +838,8 @@ a:active {
   height: 15px;
   width: 15px;
   border-radius: 20px;
-  background: #fff;
-  color: #666;
+  background: var(--txt);
+  color: var(--rw1);
   font-weight: bold;
   font-size: 1.1em;
 }
@@ -850,27 +869,27 @@ a:active {
 
 .tabulator-row.tabulator-group {
   box-sizing: border-box;
-  border-bottom: 1px solid #999;
-  border-right: 1px solid #888;
-  border-top: 1px solid #999;
+  border: 1px solid var(--lns);
+  /* border-right: 1px solid var(--c6); */
+  /* border-top: 1px solid var(--rwh); */
   padding: 5px;
   padding-left: 10px;
-  background: #ccc;
+  background: var(--c8);
   font-weight: bold;
-  color: #333;
+  color: var(--hdr);
   min-width: 100%;
 }
 
 .tabulator-row.tabulator-group:hover {
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--c14);
 }
 
 .tabulator-row.tabulator-group.tabulator-group-visible .tabulator-arrow {
   margin-right: 10px;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 6px solid #666;
+  border-top: 6px solid var(--rw1);
   border-bottom: 0;
 }
 
@@ -906,27 +925,27 @@ a:active {
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
   border-right: 0;
-  border-left: 6px solid #666;
+  border-left: 6px solid var(--rw1);
   vertical-align: middle;
 }
 
 .tabulator-row.tabulator-group span {
   margin-left: 10px;
-  color: #666;
+  color: var(--rw1);
 }
 
 .tabulator-menu {
   position: absolute;
   display: inline-block;
   box-sizing: border-box;
-  background: #666;
-  border: 1px solid #888;
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  background: var(--rw1);
+  border: 1px solid var(--lns);
+  box-shadow: 0 0 5px 0 var(--c13);
   font-size: 14px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   z-index: 10000;
-  color: white;
+  color: var(--txt);
 }
 
 .tabulator-menu .tabulator-menu-item {
@@ -934,8 +953,8 @@ a:active {
   box-sizing: border-box;
   padding: 5px 10px;
   -webkit-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .tabulator-menu .tabulator-menu-item.tabulator-menu-item-disabled {
@@ -944,7 +963,7 @@ a:active {
 
 .tabulator-menu .tabulator-menu-item:not(.tabulator-menu-item-disabled):hover {
   cursor: pointer;
-  background: #444;
+  background: var(--rw2);
 }
 
 .tabulator-menu .tabulator-menu-item.tabulator-menu-item-submenu {
@@ -961,14 +980,14 @@ a:active {
   content: '';
   border-width: 1px 1px 0 0;
   border-style: solid;
-  border-color: #888;
+  border-color: var(--lns);
   vertical-align: top;
   -ms-transform: rotate(45deg);
-      transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
 .tabulator-menu .tabulator-menu-separator {
-  border-top: 1px solid #888;
+  border-top: 1px solid var(--lns);
 }
 
 .tabulator-edit-select-list {
@@ -976,8 +995,8 @@ a:active {
   display: inline-block;
   box-sizing: border-box;
   max-height: 200px;
-  background: #fff;
-  border: 1px solid #888;
+  background: var(--txt);
+  border: 1px solid var(--lns);
   font-size: 14px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -986,39 +1005,39 @@ a:active {
 
 .tabulator-edit-select-list .tabulator-edit-select-list-item {
   padding: 4px;
-  color: #666;
+  color: var(--rw1);
 }
 
 .tabulator-edit-select-list .tabulator-edit-select-list-item.active {
-  color: #999;
-  background: #444;
+  color: var(--rwh);
+  background: var(--rw2);
 }
 
 .tabulator-edit-select-list .tabulator-edit-select-list-item.active.focused {
-  outline: 1px solid rgba(153, 153, 153, 0.5);
+  outline: 1px solid var(--c16);
 }
 
 .tabulator-edit-select-list .tabulator-edit-select-list-item.focused {
-  outline: 1px solid #444;
+  outline: 1px solid var(--rw2);
 }
 
 .tabulator-edit-select-list .tabulator-edit-select-list-item:hover {
   cursor: pointer;
-  color: #999;
-  background: #666;
+  color: var(--rwh);
+  background: var(--rw1);
 }
 
 .tabulator-edit-select-list .tabulator-edit-select-list-notice {
   padding: 4px;
-  color: #fff;
+  color: var(--txt);
   text-align: center;
 }
 
 .tabulator-edit-select-list .tabulator-edit-select-list-group {
-  border-bottom: 1px solid #888;
+  border-bottom: 1px solid var(--lns);
   padding: 4px;
   padding-top: 6px;
-  color: #fff;
+  color: var(--txt);
   font-weight: bold;
 }
 
@@ -1033,7 +1052,7 @@ a:active {
 
 .tabulator.tabulator-rtl .tabulator-header .tabulator-col {
   text-align: initial;
-  border-left: 1px solid #aaa;
+  border-left: 1px solid var(--lns);
   border-right: initial;
 }
 
@@ -1054,7 +1073,7 @@ a:active {
 
 .tabulator.tabulator-rtl .tabulator-row .tabulator-cell {
   border-right: initial;
-  border-left: 1px solid #888;
+  border-left: 1px solid var(--lns);
 }
 
 .tabulator.tabulator-rtl .tabulator-row .tabulator-cell .tabulator-data-tree-branch {
@@ -1063,7 +1082,7 @@ a:active {
   border-bottom-left-radius: initial;
   border-bottom-right-radius: 1px;
   border-left: initial;
-  border-right: 2px solid #888;
+  border-right: 2px solid var(--lns);
 }
 
 .tabulator.tabulator-rtl .tabulator-row .tabulator-cell .tabulator-data-tree-control {
@@ -1091,7 +1110,7 @@ a:active {
   z-index: 10000;
 }
 
-body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
+body.tabulator-print-fullscreen-hide>*:not(.tabulator-print-fullscreen) {
   display: none !important;
 }
 
@@ -1101,27 +1120,27 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
 
 .tabulator-print-table .tabulator-print-table-group {
   box-sizing: border-box;
-  border-bottom: 1px solid #999;
-  border-right: 1px solid #888;
-  border-top: 1px solid #999;
+  border: 1px solid var(--lns);
+  /* border-right: 1px solid var(--c6); */
+  /* border-top: 1px solid var(--rwh); */
   padding: 5px;
   padding-left: 10px;
-  background: #ccc;
+  background: var(--c8);
   font-weight: bold;
-  color: #333;
+  color: var(--hdr);
   min-width: 100%;
 }
 
 .tabulator-print-table .tabulator-print-table-group:hover {
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--c14);
 }
 
 .tabulator-print-table .tabulator-print-table-group.tabulator-group-visible .tabulator-arrow {
   margin-right: 10px;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 6px solid #666;
+  border-top: 6px solid var(--rw1);
   border-bottom: 0;
 }
 
@@ -1157,13 +1176,13 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
   border-right: 0;
-  border-left: 6px solid #666;
+  border-left: 6px solid var(--rw1);
   vertical-align: middle;
 }
 
 .tabulator-print-table .tabulator-print-table-group span {
   margin-left: 10px;
-  color: #666;
+  color: var(--rw1);
 }
 
 .tabulator-print-table .tabulator-data-tree-branch {
@@ -1174,30 +1193,30 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
   margin-top: -9px;
   margin-right: 5px;
   border-bottom-left-radius: 1px;
-  border-left: 2px solid #888;
-  border-bottom: 2px solid #888;
+  border-left: 2px solid var(--lns);
+  border-bottom: 2px solid var(--lns);
 }
 
 .tabulator-print-table .tabulator-data-tree-control {
   display: -ms-inline-flexbox;
   display: inline-flex;
   -ms-flex-pack: center;
-      justify-content: center;
+  justify-content: center;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   vertical-align: middle;
   height: 11px;
   width: 11px;
   margin-right: 5px;
-  border: 1px solid #fff;
+  border: 1px solid var(--txt);
   border-radius: 2px;
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--c14);
   overflow: hidden;
 }
 
 .tabulator-print-table .tabulator-data-tree-control:hover {
   cursor: pointer;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--c13);
 }
 
 .tabulator-print-table .tabulator-data-tree-control .tabulator-data-tree-control-collapse {
@@ -1215,7 +1234,7 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
   top: 3px;
   height: 1px;
   width: 7px;
-  background: #fff;
+  background: var(--txt);
 }
 
 .tabulator-print-table .tabulator-data-tree-control .tabulator-data-tree-control-expand {
@@ -1223,7 +1242,7 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
   position: relative;
   height: 7px;
   width: 1px;
-  background: #fff;
+  background: var(--txt);
 }
 
 .tabulator-print-table .tabulator-data-tree-control .tabulator-data-tree-control-expand:after {
@@ -1233,5 +1252,5 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
   top: 3px;
   height: 1px;
   width: 7px;
-  background: #fff;
+  background: var(--txt);
 }
