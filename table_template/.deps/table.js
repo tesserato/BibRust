@@ -183,8 +183,18 @@ function updatealltags(){
   btn.innerHTML = "Download as .csv";                   // Insert text
   btn.classList.add("btn");
   btn.onclick = function(event) {
-    var elem = document.documentElement;
+    // var elem = document.documentElement;
     table.download("csv", "bibliography.csv", {bom:true});
+  }
+  parentdiv.appendChild(btn);  
+  
+  var btn = document.createElement("BUTTON");   // Create a <button> element
+  btn.innerHTML = "Show all columns";                   // Insert text
+  btn.classList.add("btn");
+  btn.onclick = function(event) {
+    for (col of table.getColumns()){
+      col.show();
+    }
   }
   parentdiv.appendChild(btn);
 }
