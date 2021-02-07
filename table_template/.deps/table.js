@@ -324,3 +324,11 @@ function hadleKey(e) {
 
 document.body.appendChild(document.getElementsByClassName("tabulator-footer")[0]);
 
+// alert(document.getElementById("container").style.diplay)
+// document.getElementById("container").style.diplay = "block";
+
+// alert(document.getElementById("splash").style.diplay);
+document.getElementById("splash").remove();
+// alert(document.getElementById("splash").style.diplay);
+// alert(document.getElementById("container").style.diplay)
+
