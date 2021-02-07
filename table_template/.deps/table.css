@@ -548,7 +548,7 @@ a:active {
   padding: 10px;
   color: var(--c21);
   font-weight: bold;
-  font-size: 20px;
+  /* font-size: 20px; */
 }
 
 .tabulator .tabulator-tableHolder .tabulator-table {
@@ -655,9 +655,9 @@ a:active {
   border-radius: 3px;
   /* background: var(--c23); */
   color: var(--hdr);
-  font-family: inherit;
-  font-weight: inherit;
-  font-size: inherit;
+  /* font-family: inherit; */
+  /* font-weight: inherit; */
+  /* font-size: inherit; */
 }
 
 .tabulator .tabulator-footer .tabulator-page.active {
@@ -696,7 +696,7 @@ a:active {
   border-radius: 10px;
   background: var(--txt);
   font-weight: bold;
-  font-size: 16px;
+  /* font-size: 16px; */
 }
 
 .tabulator .tabulator-loader .tabulator-loader-msg.tabulator-loading {
@@ -785,9 +785,9 @@ a:active {
   display: none;
 }
 
-.tabulator-row .tabulator-responsive-collapse table {
+/* .tabulator-row .tabulator-responsive-collapse table {
   font-size: 14px;
-}
+} */
 
 .tabulator-row .tabulator-responsive-collapse table tr td {
   position: relative;
@@ -944,7 +944,7 @@ a:active {
   background: var(--txt);
   color: var(--rw1);
   font-weight: bold;
-  font-size: 1.1em;
+  /* font-size: 1.1em; */
 }
 
 .tabulator-row .tabulator-cell .tabulator-responsive-collapse-toggle:hover {
@@ -1044,7 +1044,7 @@ a:active {
   background: var(--rw1);
   border: 1px solid var(--lns);
   box-shadow: 0 0 5px 0 var(--c13);
-  font-size: 14px;
+  /* font-size: 14px; */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   z-index: 10000;
@@ -1098,9 +1098,9 @@ a:active {
   display: inline-block;
   box-sizing: border-box;
   max-height: 200px;
-  background: var(--txt);
+  background: var(--bgr);
   border: 1px solid var(--lns);
-  font-size: 14px;
+  /* font-size: 14px; */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   z-index: 10000;
@@ -1108,11 +1108,11 @@ a:active {
 
 .tabulator-edit-select-list .tabulator-edit-select-list-item {
   padding: 4px;
-  color: var(--rw1);
+  color: var(--txt);
 }
 
 .tabulator-edit-select-list .tabulator-edit-select-list-item.active {
-  color: var(--rwh);
+  /* color: var(--rwh); */
   background: var(--rw2);
 }
 
@@ -1126,13 +1126,13 @@ a:active {
 
 .tabulator-edit-select-list .tabulator-edit-select-list-item:hover {
   cursor: pointer;
-  color: var(--rwh);
+  /* color: var(--rwh); */
   background: var(--rw1);
 }
 
 .tabulator-edit-select-list .tabulator-edit-select-list-notice {
   padding: 4px;
-  color: var(--txt);
+  /* color: var(--txt); */
   text-align: center;
 }
 
@@ -1140,7 +1140,7 @@ a:active {
   border-bottom: 1px solid var(--lns);
   padding: 4px;
   padding-top: 6px;
-  color: var(--txt);
+  /* color: var(--txt); */
   font-weight: bold;
 }
 
