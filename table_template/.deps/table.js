@@ -2,40 +2,40 @@
 
 var fields = {};
 
-for (e of tabledata){
+for (e of tabledata) {
   // console.log(e);
-  for (f in e){
+  for (f in e) {
     // console.log(f);
-    if (fields[f]){
-        fields[f] += 1;
+    if (fields[f]) {
+      fields[f] += 1;
     } else {
       fields[f] = 1;
     }
   }
 }
 
-sortedfields = Object.keys(fields).sort(function(a,b){return fields[b] - fields[a]});
+sortedfields = Object.keys(fields).sort(function (a, b) { return fields[b] - fields[a] });
 
 console.log(sortedfields);
 
 var hcm = [
   {
-    label:"Hide this column",
-    action:function(e, column){
-        column.hide();
+    label: "Hide this column",
+    action: function (e, column) {
+      column.hide();
     }
   },
   {
-    label:"Show all columns",
-    action:function(e, column){
-      for (col of column.getTable().getColumns()){
+    label: "Show all columns",
+    action: function (e, column) {
+      for (col of column.getTable().getColumns()) {
         col.show();
       }
     }
   },
   {
-    label:"Delete this column",
-    action:function(e, column){
+    label: "Delete this column",
+    action: function (e, column) {
       conf = confirm("Really? This can't be undone!");
       if (conf) {
         column.delete();
@@ -43,49 +43,48 @@ var hcm = [
     }
   },
   {
-    label:"Add new column",
-    action:function(e, column){
+    label: "Add new column",
+    action: function (e, column) {
       var [field, title] = window.prompt("field Title").split(' ');
-      table.addColumn({title:title, field:field}, true, column);
-      table.updateColumnDefinition(field, {downloadTitle:field, width:ww, editor:"input", headerFilter:"input", headerContextMenu:hcm})
+      table.addColumn({ title: title, field: field }, true, column);
+      table.updateColumnDefinition(field, { downloadTitle: field, width: ww, editor: "input", headerFilter: "input", headerContextMenu: hcm })
     }
   },
 ];
 
 ww = 200;
-var types = {values:["article","inproceedings","unpublished","incollection","book","report","proceedings","collection","misc","online","thesis"]};
+var types = { values: ["article", "inproceedings", "unpublished", "incollection", "book", "report", "proceedings", "collection", "misc", "online", "thesis"] };
 
 var coldef = [                 //define the table columns
-  {title:"OK?", 
-  field:"reviewed", 
-  titleDownload:"reviewed", 
-  headerFilter:true, 
-  hozAlign:"center", 
-  formatter:"tickCross", 
-  sorter:"boolean", 
-  formatterParams: {
-    allowEmpty: false,
-    allowTruthy:true,
-    tickElement: "&starf;",
-    crossElement: false,
-  },
-  cellClick:function(e, cell){
-    //e - the click event object
-    //cell - cell component
-    cell.setValue(!cell.getValue(), true)
+  {
+    title: "OK?",
+    field: "reviewed",
+    titleDownload: "reviewed",
+    headerFilter: true,
+    hozAlign: "center",
+    formatter: "tickCross",
+    sorter: "boolean",
+    formatterParams: {
+      allowEmpty: false,
+      allowTruthy: true,
+      tickElement: "&starf;",
+      crossElement: false,
     },
-},
-  {title:"Type", field:"type", titleDownload:"type", editor:"select", editorParams:types, headerFilter:"input", headerContextMenu:hcm, validator:"required"},
-  {title:"Key", field:"key", titleDownload:"key", editor:"input", headerFilter:"input", headerContextMenu:hcm, validator:"required", validator:"unique"},
-  {title:"Author", field:"author", titleDownload:"author", width:ww, editor:"input", headerFilter:"input", headerContextMenu:hcm},
-  {title:"Editor", field:"editor", titleDownload:"editor", width:ww, editor:"input", headerFilter:"input", headerContextMenu:hcm},
-  {title:"Title", field:"title", titleDownload:"title", width:ww, editor:"input", headerFilter:"input", headerContextMenu:hcm},
-  {title:"Year", field:"year", titleDownload:"year", editor:"input", headerFilter:"input", headerContextMenu:hcm},
-  {title:"Journal", field:"journal", titleDownload:"journal", width:ww, editor:"input", headerFilter:"input", headerContextMenu:hcm},
-  {title:"url", field:"url", titleDownload:"url", width:ww, editor:"input", headerFilter:"input",formatter:"link", headerContextMenu:hcm},
-  {title:"File", field:"file", titleDownload:"file", width:ww, editor:"input", headerFilter:"input",formatter:"link", headerContextMenu:hcm},
-  {title:"Abstract", field:"abstract", titleDownload:"abstract", width:ww, editor:"input", headerFilter:"input", headerContextMenu:hcm},
-  {title:"Tags", field:"tags", titleDownload:"tags", width:ww/2, editor:"input", headerFilter:"input", headerContextMenu:hcm},
+    cellClick: function (e, cell) {
+      cell.setValue(!cell.getValue(), true)
+    },
+  },
+  { title: "Type", field: "type", titleDownload: "type", editor: "select", editorParams: types, headerFilter: "input", headerContextMenu: hcm, validator: "required" },
+  { title: "Key", field: "key", titleDownload: "key", editor: "input", headerFilter: "input", headerContextMenu: hcm, validator: "required", validator: "unique" },
+  { title: "Author", field: "author", titleDownload: "author", width: ww, editor: "input", headerFilter: "input", headerContextMenu: hcm },
+  { title: "Editor", field: "editor", titleDownload: "editor", width: ww, editor: "input", headerFilter: "input", headerContextMenu: hcm },
+  { title: "Title", field: "title", titleDownload: "title", width: ww, editor: "input", headerFilter: "input", headerContextMenu: hcm },
+  { title: "Year", field: "year", titleDownload: "year", editor: "input", headerFilter: "input", headerContextMenu: hcm },
+  { title: "Journal", field: "journal", titleDownload: "journal", width: ww, editor: "input", headerFilter: "input", headerContextMenu: hcm },
+  { title: "url", field: "url", titleDownload: "url", width: ww, editor: "input", headerFilter: "input", formatter: "link", headerContextMenu: hcm },
+  { title: "File", field: "file", titleDownload: "file", width: ww, editor: "input", headerFilter: "input", formatter: "link", headerContextMenu: hcm },
+  { title: "Abstract", field: "abstract", titleDownload: "abstract", width: ww, editor: "input", headerFilter: "input", headerContextMenu: hcm },
+  { title: "Tags", field: "tags", titleDownload: "tags", width: ww / 2, editor: "input", headerFilter: "input", headerContextMenu: hcm },
 
 
   // {title:"Task Progress", field:"progress", hozAlign:"left", formatter:"progress", editor:true},
@@ -102,16 +101,16 @@ for (o of coldef) {
   existingfields.add(o.field)
 }
 
-for (field of sortedfields){
-  if (!existingfields.has(field)){
+for (field of sortedfields) {
+  if (!existingfields.has(field)) {
     e = {
-      title:field[0].toUpperCase() + field.slice(1), 
-      field:field, 
-      titleDownload:field, 
-      width:ww/2, 
-      editor:"input", 
-      headerFilter:"input", 
-      headerContextMenu:hcm
+      title: field[0].toUpperCase() + field.slice(1),
+      field: field,
+      titleDownload: field,
+      width: ww / 2,
+      editor: "input",
+      headerFilter: "input",
+      headerContextMenu: hcm
     }
     coldef.push(e);
   }
@@ -127,11 +126,11 @@ function fullscreen() {
   }
 }
 
-function updatealltags(){
+function updatealltags() {
   alltags = new Set([]);
-  for (const e of tabledata){
-    if (e['tags']){
-      for (const tag of e['tags'].split(",")){
+  for (const e of tabledata) {
+    if (e['tags']) {
+      for (const tag of e['tags'].split(",")) {
         alltags.add(tag);
       }
     }
@@ -142,7 +141,7 @@ function updatealltags(){
 
   parentdiv = document.getElementById("tags");
   parentdiv.innerHTML = "";
-  for (const tag of alltags){
+  for (const tag of alltags) {
     div = document.createElement("div");
     txt = document.createTextNode(tag);
     div.appendChild(txt);
@@ -154,10 +153,10 @@ function updatealltags(){
   var btn = document.createElement("BUTTON");   // Create a <button> element
   btn.innerHTML = "Clear tags";                   // Insert text
   btn.classList.add("btn");
-  btn.onclick = function(event) {
+  btn.onclick = function (event) {
     selectedtags.clear();
     table.clearFilter();
-    for (e of document.getElementsByClassName("tag")){
+    for (e of document.getElementsByClassName("tag")) {
       e.classList.remove("selectedtag");
       e.classList.add("deselectedtag");
     }
@@ -167,7 +166,7 @@ function updatealltags(){
   var btn = document.createElement("BUTTON");   // Create a <button> element
   btn.innerHTML = "Fullscreen";                   // Insert text
   btn.classList.add("btn");
-  btn.onclick = function(event) {
+  btn.onclick = function (event) {
     var elem = document.documentElement;
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
@@ -182,17 +181,17 @@ function updatealltags(){
   var btn = document.createElement("BUTTON");   // Create a <button> element
   btn.innerHTML = "Download as .csv";                   // Insert text
   btn.classList.add("btn");
-  btn.onclick = function(event) {
+  btn.onclick = function (event) {
     // var elem = document.documentElement;
-    table.download("csv", "bibliography.csv", {bom:true});
+    table.download("csv", "bibliography.csv", { bom: true });
   }
-  parentdiv.appendChild(btn);  
-  
+  parentdiv.appendChild(btn);
+
   var btn = document.createElement("BUTTON");   // Create a <button> element
   btn.innerHTML = "Show all columns";                   // Insert text
   btn.classList.add("btn");
-  btn.onclick = function(event) {
-    for (col of table.getColumns()){
+  btn.onclick = function (event) {
+    for (col of table.getColumns()) {
       col.show();
     }
   }
@@ -205,16 +204,16 @@ var table = new Tabulator("#table", {
   //   "undo" : "ctrl + z",
   //   "redo" : "ctrl + y",
   // },
-  cellEdited:function(cell){
-    if (cell.getColumn().getField() == "tags"){
+  cellEdited: function (cell) {
+    if (cell.getColumn().getField() == "tags") {
       updatealltags();
     }
   },
-  rowContextMenu:[
+  rowContextMenu: [
     {
-      label:"Toggle freeze row",
-      action:function(e, row){
-        if (row.isFrozen()){
+      label: "Toggle freeze row",
+      action: function (e, row) {
+        if (row.isFrozen()) {
           row.unfreeze();
         } else {
           row.freeze()
@@ -222,47 +221,47 @@ var table = new Tabulator("#table", {
       }
     },
     {
-      label:"Insert row above",
-      action:function(e, row){
+      label: "Insert row above",
+      action: function (e, row) {
         table.addData([{}], true, row.getElement());
       }
     },
     {
-      label:"Insert row below",
-      action:function(e, row){
+      label: "Insert row below",
+      action: function (e, row) {
         table.addData([{}], false, row.getElement());
       }
     },
     {
-      label:"Delete Row",
-      action:function(e, row){
-          row.delete();
+      label: "Delete Row",
+      action: function (e, row) {
+        row.delete();
       }
     },
     {
-      label:"Download data as .csv",
-      action:function(e, row){
-          table.download("csv", "bibliography.csv", {bom:true});
+      label: "Download data as .csv",
+      action: function (e, row) {
+        table.download("csv", "bibliography.csv", { bom: true });
       }
     },
   ],
   // selectable:true,
-  data:tabledata,           //load row data from array
-  downloadRowRange:"all",
-  layout:"fitDataFill",      //fit columns to width of table
+  data: tabledata,           //load row data from array
+  downloadRowRange: "all",
+  layout: "fitDataFill",      //fit columns to width of table
   // responsiveLayout:"hide",  //hide columns that dont fit on the table
-  tooltips:true,            //show tool tips on cells
-  addRowPos:"top",          //when adding a new row, add it to the top of the table
-  history:true,             //allow undo and redo actions on the table
+  tooltips: true,            //show tool tips on cells
+  addRowPos: "top",          //when adding a new row, add it to the top of the table
+  history: true,             //allow undo and redo actions on the table
 
-  pagination:"local",       //paginate the data
-  paginationSize:100,         //allow 100 rows per page of data
+  pagination: "local",       //paginate the data
+  paginationSize: 100,         //allow 100 rows per page of data
 
-  movableColumns:true,      //allow column order to be changed
-  resizableRows:true,       //allow row order to be changed
+  movableColumns: true,      //allow column order to be changed
+  resizableRows: true,       //allow row order to be changed
   // autoColumns:true,
-  initialSort:[             //set the initial sort order of the data
-      {column:"name", dir:"asc"},
+  initialSort: [             //set the initial sort order of the data
+    { column: "name", dir: "asc" },
   ],
   columns: coldef,
 });
@@ -273,15 +272,15 @@ var table = new Tabulator("#table", {
 
 updatealltags(table.getColumn("tags"));
 
-function customFilter(data, selectedtags){
-  if (!data.tags){
+function customFilter(data, selectedtags) {
+  if (!data.tags) {
     return false;
   }
   else {
     let tags = new Set(data.tags.split(","));
     for (let elem of selectedtags) {
       if (!tags.has(elem)) {
-          return false;
+        return false;
       }
     }
     return true;
@@ -292,19 +291,19 @@ function customFilter(data, selectedtags){
 selectedtags = new Set([]);
 function handleClick(event) {
   let tag = event.target.textContent;
-  if (selectedtags.has(tag)){
+  if (selectedtags.has(tag)) {
     selectedtags.delete(tag);
     event.target.classList.remove("selectedtag");
     event.target.classList.add("deselectedtag");
-    if (selectedtags.length == 0){
+    if (selectedtags.length == 0) {
       table.clearFilter();
     }
-    else{
+    else {
       table.setFilter(customFilter, selectedtags);
     }
     // table.update();
   }
-  else{
+  else {
     selectedtags.add(tag);
     event.target.classList.remove("deselectedtag");
     event.target.classList.add("selectedtag");
@@ -316,8 +315,8 @@ function handleClick(event) {
 document.addEventListener('keydown', hadleKey);
 function hadleKey(e) {
   console.log(e);
-  if (e.ctrlKey){
-    switch(e.key) {
+  if (e.ctrlKey) {
+    switch (e.key) {
       case "z":
         console.log("undo");
         table.undo();
@@ -327,7 +326,7 @@ function hadleKey(e) {
         table.redo();
         break;
       default:
-        // code block
+      // code block
     }
   }
 }

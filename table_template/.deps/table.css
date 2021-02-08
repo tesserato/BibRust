@@ -38,6 +38,8 @@ html{
 }
 
 #splash{
+  font-size: 2em;
+  letter-spacing: 0.2em;
   position: fixed;
   width: 100%;
   height: 100%;
@@ -175,6 +177,7 @@ body {
 }
 
 .btn {
+  font-weight: bold;
   background-color: var(--btn);
   color: var(--txt);
   margin: .3em;
