@@ -7,8 +7,8 @@ matrix:
   fast_finish: true
 os:
 - windows
-- linux
-- osx
+# - linux
+# - osx
 deploy:
   edge: true # opt in to dpl v2
   skip_cleanup: true
