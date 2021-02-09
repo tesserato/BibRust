@@ -15,9 +15,7 @@ deploy:
   provider: releases
   api_key: $GITHUB
   file_glob: true
-  file: 
-    - $TRAVIS_BUILD_DIR/deps/*
-    - $TRAVIS_BUILD_DIR/target/release/bibrust.exe
+  file: $TRAVIS_BUILD_DIR/deps/*
   overwrite: true
   # draft: true
   on:
