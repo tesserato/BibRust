@@ -7,14 +7,14 @@ matrix:
   fast_finish: true
 os:
 - windows
-# - linux
-# - osx
+- linux
+- osx
 deploy:
   # edge: true # opt in to dpl v2
   skip_cleanup: true
   provider: releases
   api_key: $GITHUB
-  # file: target/release/bibrust
+  file: target/release/bibrust
   overwrite: true
   draft: true
   # on:
