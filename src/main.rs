@@ -1209,15 +1209,56 @@ fn test_json(){
 #[test]
 fn test_bib(){
   let path = Path::new("tests/res.json");
-  let mut entries = read_and_parse_json(path);
-  let path2 = Path::new("tests/res.bib").to_owned();
-  write_bib(&path2, &entries);
+  let baseentries = read_and_parse_json(path);
+
+  let path2 = Path::new("tests/res1.bib").to_owned();
+  write_bib(&path2, &baseentries);
+
   let mut lines: Vec<String> =vec![];
   read_bib(path2, &mut lines);
-  let mut entries2 = parse_bib(&lines);
-  // entries.sort();
-  // entries2.sort();
-  let path3 = Path::new("tests/res_from_bib.json").to_owned();
-  write_json(&path3, &entries2);
-  assert_eq!(entries, entries2, "Problem!");
+  let entries1 = parse_bib(&lines);
+
+  let path3 = Path::new("tests/res2.bib").to_owned();
+  write_bib(&path3, &entries1);
+
+  let mut lines: Vec<String> =vec![];
+  read_bib(path3, &mut lines);
+  let entries2 = parse_bib(&lines);  
+
+  // let path4 = Path::new("tests/res_from_bib.json").to_owned();
+  // write_json(&path4, &entries2);
+  assert_eq!(entries2, entries1, "Problem!");
+}
+
+#[test]
+fn test_csv(){
+  let path = Path::new("tests/res.json");
+  let mut baseentries = read_and_parse_json(path);
+  let stats =get_statistics(&mut baseentries, false);
+
+  let path2 = Path::new("tests/res1.csv").to_owned();
+  write_csv(&path2, &baseentries, &stats.ordered_fields);
+
+
+  let mut entries1 = read_and_parse_csv(path2);
+  let stats =get_statistics(&mut entries1, false);
+  let path3 = Path::new("tests/res2.csv").to_owned();
+  write_csv(&path3, &entries1, &stats.ordered_fields);
+
+  let entries2 = read_and_parse_csv(path3);
+
+  assert_eq!(entries2, entries1, "Problem!");
+}
+
+#[test]
+fn test_bib_csv(){
+  let path1 = Path::new("tests/res1.bib").to_owned();
+  let mut lines: Vec<String> =vec![];
+  read_bib(path1, &mut lines);
+  let entries1 = parse_bib(&lines);
+
+  let path2 = Path::new("tests/res1.csv").to_owned();
+  let entries2 = read_and_parse_csv(path2);
+
+  assert_eq!(entries2, entries1, "Problem!");
 }
