@@ -26,7 +26,13 @@ extern crate nom_bibtex;
 use nom_bibtex::*;
 
 extern crate serde;
-use serde::{Deserialize, Serialize, de::value::StringDeserializer};
+use serde::{Deserialize, Serialize};
+
+extern crate html_minifier;
+use html_minifier::HTMLMinifier;
+
+extern crate minifier;
+use minifier::js::minify;
 
 static INTERNAL_TAG_MARKER: char ='#';
 static REVIEWED: &str = "#reviewed";
@@ -415,6 +421,9 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
   let tabulator = std::fs::read_to_string("deps/02tabulator.js").expect("Something went wrong reading 02tabulator.js");
   let table = std::fs::read_to_string("deps/04table.js").expect("Something went wrong reading 04table.js");
 
+  let mut js = tabulator;
+  js.push_str(&entries_to_js_obj(entries));
+  js.push_str(&table);
 
   html = html_template
     .replace(
@@ -423,15 +432,14 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
     )
     .replace(
       "  <script type=\"text/javascript\" src=\"02tabulator.js\"></script>",
-      &format!("<script>\n{}", tabulator)
-    )
+      "")
     .replace(
       "  <script type=\"text/javascript\" src=\"03result.js\"></script>",
-      &entries_to_js_obj(entries)
+      ""
     )
     .replace(
 "  <script src=\"04table.js\"></script>",
-  &format!("{}\n</script>", table)
+  &format!("<script>\n{}\n</script>", (&js))
     );
     
 
@@ -442,8 +450,13 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
       Ok(file) => file,
   };
 
-  f.write_all(&html.as_bytes()).expect("unable to write html to disk");
+  let mut html_minifier = HTMLMinifier::new();
+  match html_minifier.digest(html) {
+    Ok(m)  => println!("{:?}", m),
+    Err(e) => println!("{:?}", e),
+  }
 
+  f.write_all(html_minifier.get_html()).expect("unable to write html to disk");
 }
 
 fn entries_to_js_obj(entries: &Vec<Entry>) -> String{
