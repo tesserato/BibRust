@@ -31,8 +31,8 @@ use serde::{Deserialize, Serialize};
 extern crate html_minifier;
 use html_minifier::HTMLMinifier;
 
-extern crate minifier;
-use minifier::js::minify;
+// extern crate minifier;
+// use minifier::js::minify;
 
 static INTERNAL_TAG_MARKER: char ='#';
 static REVIEWED: &str = "#reviewed";
@@ -418,12 +418,13 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
   let mut html = String::new();
   let html_template = std::fs::read_to_string("deps/table.html").expect("Something went wrong reading table.html");
   let css = std::fs::read_to_string("deps/01table.css").expect("Something went wrong reading 01table.css");
-  let tabulator = std::fs::read_to_string("deps/02tabulator.js").expect("Something went wrong reading 02tabulator.js");
+  let mut js = std::fs::read_to_string("deps/02tabulator.js").expect("Something went wrong reading 02tabulator.js");
   let table = std::fs::read_to_string("deps/04table.js").expect("Something went wrong reading 04table.js");
 
-  let mut js = tabulator;
+  // let mut js = tabulator;
   js.push_str(&entries_to_js_obj(entries));
-  js.push_str(&table);
+  js.push_str((&table));
+  // js = minify(&js);
 
   html = html_template
     .replace(
@@ -438,8 +439,8 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
       ""
     )
     .replace(
-"  <script src=\"04table.js\"></script>",
-  &format!("<script>\n{}\n</script>", (&js))
+      "  <script src=\"04table.js\"></script>",
+      &format!("<script>\n{}\n</script>", js)
     );
     
 
@@ -452,7 +453,7 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
 
   let mut html_minifier = HTMLMinifier::new();
   match html_minifier.digest(html) {
-    Ok(m)  => println!("{:?}", m),
+    Ok(m)  => (),//println!("{:?}", m),
     Err(e) => println!("{:?}", e),
   }
 

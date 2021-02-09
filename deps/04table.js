@@ -15,8 +15,7 @@ for (e of tabledata) {
 }
 
 sortedfields = Object.keys(fields).sort(function (a, b) { return fields[b] - fields[a] });
-
-console.log(sortedfields);
+// console.log(sortedfields);
 
 var hcm = [
   {
@@ -161,7 +160,8 @@ function updatealltags() {
     div.appendChild(txt);
     div.classList.add("tag");
     div.classList.add("deselectedtag");
-    div.onclick = handleClick;
+    div.onclick = handleLeftClick;
+    div.oncontextmenu = handleRightCLick;
     parentdiv.appendChild(div);
   }
   var btn = document.createElement("BUTTON");   // Create a <button> element
@@ -219,7 +219,6 @@ function updatealltags() {
   // };
   // parentdiv.appendChild(btn);
 }
-
 
 var table = new Tabulator("#table", {
   // keybindings:{
@@ -282,9 +281,9 @@ var table = new Tabulator("#table", {
   movableColumns: true,      //allow column order to be changed
   resizableRows: true,       //allow row order to be changed
   // autoColumns:true,
-  initialSort: [             //set the initial sort order of the data
-    { column: "name", dir: "asc" },
-  ],
+  // initialSort: [             //set the initial sort order of the data
+  //   { column: "name", dir: "asc" },
+  // ],
   columns: coldef,
 });
 
@@ -309,9 +308,9 @@ function customFilter(data, selectedtags) {
   }
 }
 
-
 selectedtags = new Set([]);
-function handleClick(event) {
+
+function handleLeftClick(event) {  
   let tag = event.target.textContent;
   if (selectedtags.has(tag)) {
     selectedtags.delete(tag);
@@ -334,9 +333,30 @@ function handleClick(event) {
   }
 }
 
+function handleRightCLick(event) {
+  event.preventDefault()
+  // console.log(event)
+  var oldtag = event.target.textContent;
+  var newtag = prompt("Rename tag ( Warning: Can't be undone! )", oldtag);
+  console.log(newtag)
+  if (newtag != null) {
+    console.log("renaming", oldtag, " to ", newtag)
+    for (const e of tabledata) {
+      if (e['tags']) {
+        e['tags'] = e['tags'].replace(oldtag, newtag).split(',').map(e => e.trim()).filter(e => e).join(',');
+      }
+    }
+    if (selectedtags.has(oldtag)){
+      selectedtags.remove(oldtag);
+      selectedtags.add(newtag);
+    }
+    updatealltags()
+  }
+}
+
 document.addEventListener('keydown', hadleKey);
 function hadleKey(e) {
-  console.log(e);
+  // console.log(e);
   if (e.ctrlKey) {
     switch (e.key) {
       case "z":
