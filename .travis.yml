@@ -13,7 +13,7 @@ deploy:
   edge: true # opt in to dpl v2
   skip_cleanup: true
   provider: releases
-  token: GITHUB_TOKEN
+  api_key: GITHUB_TOKEN
   file: target/release/bibrust
   overwrite: true
   draft: true
