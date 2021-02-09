@@ -10,6 +10,8 @@ os:
 - linux
 - osx
 deploy:
+  api_key:
+    secure: "14c1b5a76b06a2a72a84cfe8084b7d7ac7ed2689"   
   provider: releases
   token: <encrypted token>
   file: target/release/bibrust
