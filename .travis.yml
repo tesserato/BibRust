@@ -16,7 +16,7 @@ deploy:
   provider: releases
   api_key: $GITHUB
   file_glob: true
-  file: "*/target/*.exe"
+  file: "*bibrust*"
   overwrite: true
   # draft: true
   on:
