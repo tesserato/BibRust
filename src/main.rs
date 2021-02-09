@@ -26,7 +26,7 @@ extern crate nom_bibtex;
 use nom_bibtex::*;
 
 extern crate serde;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize, de::value::StringDeserializer};
 
 static INTERNAL_TAG_MARKER: char ='#';
 static REVIEWED: &str = "#reviewed";
@@ -409,23 +409,48 @@ fn write_csv(path: &PathBuf, entries: &Vec<Entry>, ordered_fields: &Vec<String>)
 }
 
 fn write_html(path: &PathBuf, entries: &Vec<Entry>){
+  let mut html = String::new();
+  let html_template = std::fs::read_to_string("deps/table.html").expect("Something went wrong reading table.html");
+  let css = std::fs::read_to_string("deps/01table.css").expect("Something went wrong reading 01table.css");
+  let tabulator = std::fs::read_to_string("deps/02tabulator.js").expect("Something went wrong reading 02tabulator.js");
+  let table = std::fs::read_to_string("deps/04table.js").expect("Something went wrong reading 04table.js");
 
-  fn remove_backticks(text: &String) -> String{
-    text.chars().filter(|x| x != &'`').collect::<String>().replace("\\", "/").replace("$", "\\$")
-  }
+
+  html = html_template
+    .replace(
+    "  <link href=\"01table.css\" rel=\"stylesheet\">",
+     &format!("<style>\n{}\n</style>", css)
+    )
+    .replace(
+      "  <script type=\"text/javascript\" src=\"02tabulator.js\"></script>",
+      &format!("<script>\n{}", tabulator)
+    )
+    .replace(
+      "  <script type=\"text/javascript\" src=\"03result.js\"></script>",
+      &entries_to_js_obj(entries)
+    )
+    .replace(
+"  <script src=\"04table.js\"></script>",
+  &format!("{}\n</script>", table)
+    );
+    
+
   let display = path.display();
 
-
-  let mut lpath = path.to_owned();
-  lpath.pop();
-  lpath.push(".deps/result");
-  lpath.set_extension("js");
-  let mut f = match File::create(&lpath) {
+  let mut f = match File::create(&path) {
       Err(why) => panic!("couldn't create {}: {}", display, why),
       Ok(file) => file,
   };
 
-  writeln!(f, "tabledata = [").unwrap();
+  f.write_all(&html.as_bytes()).expect("unable to write html to disk");
+
+}
+
+fn entries_to_js_obj(entries: &Vec<Entry>) -> String{
+  fn remove_backticks(text: &String) -> String{
+    text.chars().filter(|x| x != &'`').collect::<String>().replace("\\", "/").replace("$", "\\$")
+  }
+  let mut obj = "tabledata = [\n".to_string();
   for e in entries{
       // type and key
   let mut row: Vec<String> = vec![];
@@ -465,9 +490,10 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
     let t = hashset_to_string(&e.Tags);
     row.push(format!("tags: `{}`", remove_backticks(&t)));
   }
-  writeln!(f, "  {{{}}},",row.join(",")).unwrap();
+  obj.push_str(&format!("  {{{}}},\n",row.join(",")));
   }
-  writeln!(f, "];").unwrap();
+  obj.push_str(&format!("];\n"));
+  obj
 }
 
 fn write_json(path: &PathBuf, entries: &Vec<Entry>){
