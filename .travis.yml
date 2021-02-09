@@ -11,7 +11,7 @@ os:
 - osx
 deploy:
   provider: releases
-  token: <encrypted token>
+  token: $GITHUB_TOKEN
   file: target/release/bibrust
   edge: true # opt in to dpl v2
   overwrite: true
