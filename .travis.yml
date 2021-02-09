@@ -10,12 +10,11 @@ os:
 - linux
 - osx
 deploy:
+  edge: true # opt in to dpl v2
   skip_cleanup: true
   provider: releases
-  token: 
-    secure: $GITHUB_TOKEN
+  token: GITHUB_TOKEN
   file: target/release/bibrust
-  edge: true # opt in to dpl v2
   overwrite: true
   draft: true
   # on:
