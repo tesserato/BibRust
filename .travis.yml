@@ -9,3 +9,12 @@ os:
 - windows
 - linux
 - osx
+deploy:
+  provider: releases
+  token: <encrypted token>
+  file: target/release/bibrust
+  edge: true # opt in to dpl v2
+  overwrite: true
+  draft: true
+  # on:
+  #   tags: true
