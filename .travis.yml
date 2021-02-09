@@ -14,7 +14,7 @@ deploy:
   skip_cleanup: true
   provider: releases
   api_key: $GITHUB
-  file: target/release/bibrust
+  file: $TRAVIS_BUILD_DIR/target/release/bibrust
   overwrite: true
   draft: true
   # on:
