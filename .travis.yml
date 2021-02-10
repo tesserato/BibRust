@@ -23,7 +23,7 @@ deploy:
   provider: releases
   api_key: $GITHUB
   file_glob: true
-  file: release.zip
+  file: $TRAVIS_BUILD_DIR/release.tar
   overwrite: true
   # draft: true
   on:
