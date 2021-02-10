@@ -14,7 +14,9 @@ os:
 - linux
 - osx
 before_deploy:
-  - cp $TRAVIS_BUILD_DIR/target/release/bibrust.exe $TRAVIS_BUILD_DIR/bundle
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then cp $TRAVIS_BUILD_DIR/target/release/bibrust.exe $TRAVIS_BUILD_DIR/bundle
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then cp $TRAVIS_BUILD_DIR/target/release/bibrust $TRAVIS_BUILD_DIR/bundle
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then cp $TRAVIS_BUILD_DIR/target/release/bibrust $TRAVIS_BUILD_DIR/bundle
   - cd $TRAVIS_BUILD_DIR
   - tar -cf $TRAVIS_OS_NAME.tar bundle
 deploy:
