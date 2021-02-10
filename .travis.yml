@@ -2,6 +2,9 @@ language: rust
 cache: cargo
 rust:
   - nightly
+script:
+  # - cargo test --verbose
+  - cargo build --release
 matrix:
   allow_failures:
   - rust: nightly
@@ -16,7 +19,7 @@ deploy:
   provider: releases
   api_key: $GITHUB
   file_glob: true
-  file: *bibrust*
+  file: "*/release/bibrust*"
   overwrite: true
   # draft: true
   on:
