@@ -26,7 +26,7 @@ deploy:
   provider: releases
   api_key: $GITHUB
   file_glob: true
-  file: $TRAVIS_BUILD_DIR/release.tar
+  file: $TRAVIS_BUILD_DIR/$TRAVIS_OS_NAME.tar
   overwrite: true
   # draft: true
   # on:
