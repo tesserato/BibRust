@@ -11,12 +11,12 @@ matrix:
   fast_finish: true
 os:
 - windows
-# - linux
-# - osx
+- linux
+- osx
 before_deploy:
   - cp $TRAVIS_BUILD_DIR/target/release/bibrust.exe $TRAVIS_BUILD_DIR/bundle
   - cd $TRAVIS_BUILD_DIR
-  - tar -cf release.tar bundle
+  - tar -cf $TRAVIS_OS_NAME.tar bundle
 deploy:
   # edge: true # opt in to dpl v2
   skip_cleanup: true
