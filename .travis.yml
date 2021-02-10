@@ -14,7 +14,7 @@ os:
 - linux
 - osx
 before_deploy:
-  # - export TRAVIS_TAG="latest"-$TRAVIS_OS_NAME
+  - export TRAVIS_TAG="latest"-$TRAVIS_OS_NAME
   - 'if [[ "$TRAVIS_OS_NAME" = "windows" ]]; then cp $TRAVIS_BUILD_DIR/target/release/bibrust.exe $TRAVIS_BUILD_DIR/bundle; fi'
   - 'if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then cp $TRAVIS_BUILD_DIR/target/release/bibrust $TRAVIS_BUILD_DIR/bundle; fi'
   - 'if [[ "$TRAVIS_OS_NAME" = "linux" ]]; then cp $TRAVIS_BUILD_DIR/target/release/bibrust $TRAVIS_BUILD_DIR/bundle; fi'
@@ -30,5 +30,5 @@ deploy:
   overwrite: true
   # draft: true
   on:
-    tags: false
+    tags: true
     all_branches: true
