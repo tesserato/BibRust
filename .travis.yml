@@ -14,8 +14,8 @@ os:
 # - linux
 # - osx
 before_deploy:
-  cp  $TRAVIS_BUILD_DIR/target/release/bibrust.exe $TRAVIS_BUILD_DIR/bundle
-  zip $TRAVIS_BUILD_DIR/release.zip $TRAVIS_BUILD_DIR/bundle -r
+  - cp $TRAVIS_BUILD_DIR/target/release/bibrust.exe $TRAVIS_BUILD_DIR/bundle
+  - zip $TRAVIS_BUILD_DIR/release.zip $TRAVIS_BUILD_DIR/bundle -r
 deploy:
   # edge: true # opt in to dpl v2
   skip_cleanup: true
