@@ -1,8 +1,8 @@
-Found a total of 4403 entries
-(20 reviewed, 4403 with author, 2192 with doi, 1917 with files, 1327 whith url):
-article 2615
+Found a total of 4398 entries
+(24 reviewed, 4398 with author, 2188 with doi, 1917 with files, 1324 whith url):
+article 2609
 book 1049
-inproceedings 298
+inproceedings 299
 misc 156
 collection 50
 incollection 42
@@ -26,28 +26,28 @@ mastersthesis 1
 proceedings paper 1
 
 Fields:
-title 4403
-year 3042
-pages 3039
-abstract 2678
-volume 2299
-doi 2192
-issn 1863
-number 1848
-journal 1780
-isbn 1536
+title 4398
+year 3039
+pages 3034
+abstract 2673
+volume 2295
+doi 2188
+issn 1860
+number 1846
+journal 1778
+isbn 1534
 publisher 1447
-url 1327
-keywords 1285
-date 1065
-booktitle 924
-langid 639
-eprint 511
-journaltitle 503
+url 1324
+keywords 1280
+date 1063
+booktitle 923
+langid 638
+eprint 508
+journaltitle 501
 shorttitle 500
-arxivid 437
+arxivid 434
 urldate 420
-archiveprefix 399
+archiveprefix 396
 edition 350
 pmid 337
 location 286
