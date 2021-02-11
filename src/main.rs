@@ -419,12 +419,12 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
   // let mut html = String::new();
   let mut html = std::fs::read_to_string("00table.html").expect("Something went wrong reading table.html");
   let css = std::fs::read_to_string("01table.css").expect("Something went wrong reading 01table.css");
-  let mut js = std::fs::read_to_string("02tabulator.js").expect("Something went wrong reading 02tabulator.js");
-  let table = std::fs::read_to_string("04table.js").expect("Something went wrong reading 04table.js");
+  let mut js = std::fs::read_to_string("bundle.js").expect("Something went wrong reading 02tabulator.js");
+  // let table = std::fs::read_to_string("04table.js").expect("Something went wrong reading 04table.js");
 
   // let mut js = tabulator;
-  js.push_str(&entries_to_js_obj(entries));
-  js.push_str(&table);
+  // js.push_str(&entries_to_js_obj(entries));
+  // js.push_str(&table);
   // js = minify(&js);
 
   html = html
@@ -432,16 +432,16 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
     "  <link href=\"01table.css\" rel=\"stylesheet\">",
      &format!("<style>\n{}\n</style>", css)
     )
+    // .replace(
+    //   "  <script type=\"text/javascript\" src=\"02tabulator.js\"></script>",
+    //   "")
     .replace(
-      "  <script type=\"text/javascript\" src=\"02tabulator.js\"></script>",
-      "")
-    .replace(
-      "  <script type=\"text/javascript\" src=\"03tabledata.js\"></script>",
+      "  <script type=\"text/javascript\" src=\"tabledata.js\"></script>",
       ""
     )
     .replace(
-      "  <script src=\"04table.js\"></script>",
-      &format!("<script>\n{}\n</script>", js)
+      "  <script src=\"bundle.js\"></script>",
+      &format!("<script>\n{}\n{}\n</script>", &entries_to_js_obj(entries), js)
     );
     
 
@@ -452,13 +452,14 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
       Ok(file) => file,
   };
 
-  let mut html_minifier = HTMLMinifier::new();
-  match html_minifier.digest(html) {
-    Ok(_)  => (),//println!("{:?}", m),
-    Err(e) => println!("{:?}", e),
-  }
+  // let mut html_minifier = HTMLMinifier::new();
+  // match html_minifier.digest(html) {
+  //   Ok(_)  => (),//println!("{:?}", m),
+  //   Err(e) => println!("{:?}", e),
+  // }
+  // f.write_all(html_minifier.get_html()).expect("unable to write html to disk");
 
-  f.write_all(html_minifier.get_html()).expect("unable to write html to disk");
+  f.write_all(html.as_bytes()).expect("unable to write html to disk");
 }
 
 fn entries_to_js_obj(entries: &Vec<Entry>) -> String{
