@@ -149,7 +149,7 @@ fn read_bib(path:PathBuf, bib_lines:&mut Vec<String>){
     }
 
     if l.starts_with("@") && !l.ends_with(",") && !inside_comment{
-      println!("{}", l);
+      println!("Flat entry found: {}", l);
 
       let mut sls = l.split("}, ");
       let (sl0, sl1) = sls.next().unwrap().split_once(",").unwrap();
@@ -416,18 +416,18 @@ fn write_csv(path: &PathBuf, entries: &Vec<Entry>, ordered_fields: &Vec<String>)
 }
 
 fn write_html(path: &PathBuf, entries: &Vec<Entry>){
-  let mut html = String::new();
-  let html_template = std::fs::read_to_string("deps/table.html").expect("Something went wrong reading table.html");
-  let css = std::fs::read_to_string("deps/01table.css").expect("Something went wrong reading 01table.css");
-  let mut js = std::fs::read_to_string("deps/02tabulator.js").expect("Something went wrong reading 02tabulator.js");
-  let table = std::fs::read_to_string("deps/04table.js").expect("Something went wrong reading 04table.js");
+  // let mut html = String::new();
+  let mut html = std::fs::read_to_string("00table.html").expect("Something went wrong reading table.html");
+  let css = std::fs::read_to_string("01table.css").expect("Something went wrong reading 01table.css");
+  let mut js = std::fs::read_to_string("02tabulator.js").expect("Something went wrong reading 02tabulator.js");
+  let table = std::fs::read_to_string("03table.js").expect("Something went wrong reading 04table.js");
 
   // let mut js = tabulator;
   js.push_str(&entries_to_js_obj(entries));
-  js.push_str((&table));
+  js.push_str(&table);
   // js = minify(&js);
 
-  html = html_template
+  html = html
     .replace(
     "  <link href=\"01table.css\" rel=\"stylesheet\">",
      &format!("<style>\n{}\n</style>", css)
@@ -454,7 +454,7 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
 
   let mut html_minifier = HTMLMinifier::new();
   match html_minifier.digest(html) {
-    Ok(m)  => (),//println!("{:?}", m),
+    Ok(_)  => (),//println!("{:?}", m),
     Err(e) => println!("{:?}", e),
   }
 
@@ -727,7 +727,7 @@ fn generate_key(entry: &Entry) -> String{
     year = entry.Fields_Values["year"].to_owned();
   }
   else if entry.Fields_Values.contains_key("date"){
-    let optyear = entry.Fields_Values["date"].split( '-').next();
+    let optyear = entry.Fields_Values["date"].split("-").next();
     year = match optyear {
       Some(y) => y.to_string(),
       None => "year".to_string()
