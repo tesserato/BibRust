@@ -22,8 +22,8 @@ use walkdir::WalkDir;
 extern crate url;
 use url::Url;
 
-extern crate nom_bibtex;
-use nom_bibtex::*;
+// extern crate nom_bibtex;
+// use nom_bibtex::*;
 
 extern crate serde;
 use serde::{Deserialize, Serialize};
@@ -90,8 +90,10 @@ fn Entry_to_String_bib(e: & Entry) -> String{
 
   // authors
   if e.Creators.len() > 0 {
-    for (c, v) in &e.Creators{
-      let t = names_to_string(v);
+    let mut creators = e.Creators.iter().map(|x| x.0.to_string()).collect::<Vec<String>>();
+    creators.sort();
+    for c in creators{
+      let t = names_to_string(&e.Creators[&c]);
       s.push_str(&format!("{} = {{{}}},\n", c, t));
     }
   }
@@ -275,6 +277,30 @@ fn parse_generic_field(original_value:&str) -> String{
   // .chars().rev().collect::<String>()
 }
 
+fn parse_field_value(field: &str, value: &mut String, last_entry: &mut Entry){
+  match field {
+    "file" => last_entry.Files = parse_file_field(last_entry, &value.to_string()),
+    "author" | "editor" | "translator" => {
+      let _ = last_entry.Creators.insert(field.to_string(), parse_creators_field(&value));
+    },
+    "mendeley-groups"|"mendeley-tags"|"groups"|"tags" => parse_tags_field( last_entry,&value),
+    _ => {
+      match field.as_ref() {
+        "isbn" => *value = value.chars().filter(|x| x.is_numeric()).collect::<String>(),
+        "arxivid" | "eprint" => *value = value.split(":").map(|x| x.to_string()).collect::<Vec<String>>().last().unwrap().to_string(),
+        "url" => *value = parse_url_field(&value),
+        _ => *value = parse_generic_field(&value),
+      }
+      if last_entry.Fields_Values.contains_key(field){
+        println!("Repeated entry at {} {}\n", field, value);
+      }
+      else{
+        last_entry.Fields_Values.insert(field.to_string(), value.clone());
+      }
+    }
+  };
+}
+
 fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
   let mut Entries : Vec<Entry> = vec![];
   let patterns : &[_] = &['{', '}','\t',',']; 
@@ -309,32 +335,7 @@ fn parse_bib(lines:&Vec<String> )->Vec<Entry>{
           let field:&str = &vec[0].trim().trim_matches(patterns).to_lowercase();
           let mut value = vec[1].to_string();
           let mut last_entry = Entries.last_mut().unwrap();
-          match field {
-            "file" => last_entry.Files = parse_file_field(&mut last_entry, &value.to_string()),
-            "author" | "editor" | "translator" => {
-              let _ = last_entry.Creators.insert(field.to_string(), parse_creators_field(&value));
-            },
-            "mendeley-groups"|"mendeley-tags"|"groups"|"tags" => parse_tags_field( &mut last_entry,&value),
-            _ => {
-
-              if field == "isbn" {
-                value = value.chars().filter(|x| x.is_numeric()).collect()
-              }
-              else if field == "arxivid" || field == "eprint" {
-                value = value.split(":").map(|x| x.to_string()).collect::<Vec<String>>().last().unwrap().to_string()
-              }
-              else if field == "url"{
-                value = parse_url_field(&value);
-              }
-
-              if Entries.last().unwrap().Fields_Values.contains_key(field){
-                println!("Repeated entry at {}\n", field_value);
-              }
-              else{
-                Entries.last_mut().unwrap().Fields_Values.insert(field.to_string(), parse_generic_field(&value));
-              }
-            }
-          };
+          parse_field_value(field, &mut value, &mut last_entry);
         }
         else{
           println!("Split vector with size != 2 at {}\n", field_value);
@@ -535,21 +536,6 @@ fn write_bib(path: &PathBuf, entries: & Vec<Entry>){
   }
 }
 
-fn write_raw_bib(path: &str, bib_vec : &Vec<String>){
-  let path = Path::new(path);
-  let display = path.display();
-
-  // Open a file in write-only mode, returns `io::Result<File>`
-  let mut f = match File::create(&path) {
-      Err(why) => panic!("couldn't create {}: {}", display, why),
-      Ok(file) => file,
-  };
-
-  for l in bib_vec{
-    writeln!(f, "{}",l).unwrap();
-  }
-}
-
 fn find_paths_to_files_with_ext(root_path:&PathBuf, exts:& Vec<String> ) -> Vec<PathBuf>{
   let mut paths: Vec<PathBuf> = vec![];
   for direntry in WalkDir::new(root_path).into_iter().filter_map(|e| e.ok()){
@@ -579,8 +565,8 @@ fn read_and_parse_csv(path:PathBuf) -> Vec<Entry>{
   let mut rdr = csv::ReaderBuilder::new().from_path(path).unwrap();
 
   let keys:Vec<String> = rdr.headers().unwrap().into_iter().map(|x| x.to_string()).collect();
-  let n = keys.len();
-  println!("{:?}", keys);
+  // let n = keys.len();
+  println!("Found the folowing fields in .csv header: {}", keys.join(" | "));
   let mut Entries : Vec<Entry> = vec![];
 
   while let Some(result) = rdr.records().next() {
@@ -591,33 +577,14 @@ fn read_and_parse_csv(path:PathBuf) -> Vec<Entry>{
         continue
       },
     }
-    let v:Vec<String> = result.unwrap().into_iter().map(|x| x.to_string()).collect();
+    let mut v:Vec<String> = result.unwrap().into_iter().map(|x| x.to_string()).collect();
     let mut e = Entry{Type: v[1].to_owned(), Key: v[2].to_owned(),..Default::default()};
-    if !v[3].trim().is_empty(){
-      e.Creators.insert("author".to_string(), parse_creators_field(&v[3]));
-    }
-    if !v[4].trim().is_empty(){
-      e.Creators.insert("editor".to_string(), parse_creators_field(&v[4]));
-    }
-    if !v[5].trim().is_empty(){
-      e.Creators.insert("translator".to_string(), parse_creators_field(&v[5]));
-    }
 
-    if !v[0].trim().is_empty() || !v[n-2].is_empty(){
-      parse_tags_field(&mut e,&v[n-2]);
-      if !v[0].is_empty(){
-        e.Reviewed=true;
-      }
+    if !v[0].is_empty(){
+      e.Reviewed=true;
     }
-
-    for j in 6..n-2{
-      if !v[j].trim().is_empty(){
-        e.Fields_Values.insert(keys[j].to_owned(), v[j].to_owned());
-      }
-    }
-
-    if !v[n-1].trim().is_empty(){
-      e.Files = parse_file_field(&mut e,&v[n-1]);
+    for i in 3..keys.len() {
+      parse_field_value(&keys[i].to_lowercase(), &mut v[i],&mut e);
     }
     Entries.push(e);
   }
@@ -625,8 +592,8 @@ fn read_and_parse_csv(path:PathBuf) -> Vec<Entry>{
 }
 
 fn read_and_parse_json(path: &Path) -> Vec<Entry>{
-  let file = File::open(path).expect("file not found");
-  serde_json::from_reader(file).expect("error while reading")
+  let file = File::open(path).expect("File not found");
+  serde_json::from_reader(file).expect("Error while reading")
 }
 
 fn parse_cl_args() -> ArgMatches<'static> {
@@ -831,7 +798,10 @@ fn get_statistics(Entries:&mut Vec<Entry>, tidy:bool) -> Statistics{
       stats.has_author += 1;
     }
   
-    for (field, _) in &entry.Fields_Values{
+    for (field, value) in &entry.Fields_Values{
+      if value.trim().is_empty(){
+        continue
+      }
       match field.as_ref() {
         "doi" => stats.has_doi += 1,
         "url" => stats.has_url += 1,
@@ -1075,16 +1045,16 @@ fn remove_redundant_Entries(entries: & mut Vec<Entry>){
   for i in repeated{
     entries.remove(i);
   }
-
+  remove_by_field(entries, "title");// Check entries with same abstract
+  remove_by_field(entries, "abstract");// Check entries with same abstract
   remove_by_field(entries, "doi");// Check entries with same doi
   remove_by_field(entries, "isbn");// Check entries with same isbn
-  // remove_by_field( entries, "url");// Check entries with same url
-  // remove_by_field( entries, "shorttitle");// Check entries with same shorttitle
-  // remove_by_field( entries, "pmid");// Check entries with same pmid
-  // remove_by_field( entries, "abstract");// Check entries with same abstract
-  // remove_by_field( entries, "eprint");// Check entries with same eprint
-  // remove_by_field( entries, "arxivid");// Check entries with same arxivid
-  // println!("");
+  remove_by_field(entries, "url");// Check entries with same url
+  remove_by_field(entries, "booktitle");// Check entries with same booktitle
+  remove_by_field(entries, "eprint");// Check entries with same eprint
+  remove_by_field(entries, "arxivid");// Check entries with same arxivid  
+  remove_by_field(entries, "shorttitle");// Check entries with same shorttitle
+  remove_by_field(entries, "pmid");// Check entries with same pmid
 }
 
 fn remove_by_field(mut entries: & mut Vec<Entry>, field:&str){
@@ -1148,41 +1118,6 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
   eq
 }
 
-fn parse_bib_nom_bibtex(lines:&Vec<String> ) -> Vec<Entry>{
-
-  let bibtex = Bibtex::parse(&lines.join("\n\n")).unwrap();
-  let mut Entries : Vec<Entry> = vec![];
-  // let patterns : &[_] = &['{', '}','\t',','];
-
-  for e in bibtex.bibliographies(){
-    let mut entry = Entry{Type:e.entry_type().to_string(), Key:e.citation_key().to_string(),..Default::default()};
-    for (field, mut value) in e.tags().to_owned(){
-      match field.as_ref() {
-        "file" => {parse_file_field(&mut entry, &value.to_string());},
-        "author" | "editor" | "translator" => {
-            entry.Creators.insert(field.to_string(), parse_creators_field(&value));
-          },
-        "mendeley-tags"|"groups"|"tags" => parse_tags_field( &mut entry,&value),
-        _ => {
-          match field.as_ref() {
-            "isbn" => value = value.chars().filter(|x| x.is_numeric()).collect::<String>(),
-            "arxivid" | "eprint" => value = value.split(":").map(|x| x.to_string()).collect::<Vec<String>>().last().unwrap().to_string(),
-            "url" => value = parse_url_field(&value),
-            _ => value = parse_generic_field(&value),
-          }
-          if entry.Fields_Values.contains_key(&field){
-            println!("Repeated entry at {}\n", e.citation_key());
-          }
-          else{
-            entry.Fields_Values.insert(field.to_string(), value.clone());
-          }
-        }
-      }
-    }
-    Entries.push(entry);
-  }
-  Entries
-}
 
 #[test]
 fn test_parse_creators_field(){
@@ -1262,3 +1197,104 @@ fn test_bib_csv(){
 
   assert_eq!(entries2, entries1, "Problem!");
 }
+
+// fn read_and_parse_csv(path:PathBuf) -> Vec<Entry>{
+//   let mut rdr = csv::ReaderBuilder::new().from_path(path).unwrap();
+
+//   let keys:Vec<String> = rdr.headers().unwrap().into_iter().map(|x| x.to_string()).collect();
+//   let n = keys.len();
+//   println!("{:?}", keys);
+//   let mut Entries : Vec<Entry> = vec![];
+
+//   while let Some(result) = rdr.records().next() {
+//     match result {
+//       Ok(_) => (),
+//       Err(e) =>{
+//         println!("{:?}\n", e);
+//         continue
+//       },
+//     }
+//     let v:Vec<String> = result.unwrap().into_iter().map(|x| x.to_string()).collect();
+//     let mut e = Entry{Type: v[1].to_owned(), Key: v[2].to_owned(),..Default::default()};
+//     if !v[3].trim().is_empty(){
+//       e.Creators.insert("author".to_string(), parse_creators_field(&v[3]));
+//     }
+//     if !v[4].trim().is_empty(){
+//       e.Creators.insert("editor".to_string(), parse_creators_field(&v[4]));
+//     }
+//     if !v[5].trim().is_empty(){
+//       e.Creators.insert("translator".to_string(), parse_creators_field(&v[5]));
+//     }
+
+//     if !v[0].trim().is_empty() || !v[n-2].is_empty(){
+//       parse_tags_field(&mut e,&v[n-2]);
+//       if !v[0].is_empty(){
+//         e.Reviewed=true;
+//       }
+//     }
+
+//     for j in 6..n-2{
+//       if !v[j].trim().is_empty(){
+//         e.Fields_Values.insert(keys[j].to_owned(), v[j].to_owned());
+//       }
+//     }
+
+//     if !v[n-1].trim().is_empty(){
+//       e.Files = parse_file_field(&mut e,&v[n-1]);
+//     }
+//     Entries.push(e);
+//   }
+//   Entries
+// }
+
+
+// fn parse_bib_nom_bibtex(lines:&Vec<String> ) -> Vec<Entry>{
+//   let bibtex = Bibtex::parse(&lines.join("\n\n")).unwrap();
+//   let mut Entries : Vec<Entry> = vec![];
+//   // let patterns : &[_] = &['{', '}','\t',','];
+
+//   for e in bibtex.bibliographies(){
+//     let mut entry = Entry{Type:e.entry_type().to_string(), Key:e.citation_key().to_string(),..Default::default()};
+//     for (field, mut value) in e.tags().to_owned(){
+//       match field.as_ref() {
+//         "file" => {parse_file_field(&mut entry, &value.to_string());},
+//         "author" | "editor" | "translator" => {
+//             entry.Creators.insert(field.to_string(), parse_creators_field(&value));
+//           },
+//         "mendeley-tags"|"groups"|"tags" => parse_tags_field( &mut entry,&value),
+//         _ => {
+//           match field.as_ref() {
+//             "isbn" => value = value.chars().filter(|x| x.is_numeric()).collect::<String>(),
+//             "arxivid" | "eprint" => value = value.split(":").map(|x| x.to_string()).collect::<Vec<String>>().last().unwrap().to_string(),
+//             "url" => value = parse_url_field(&value),
+//             _ => value = parse_generic_field(&value),
+//           }
+//           if entry.Fields_Values.contains_key(&field){
+//             println!("Repeated entry at {}\n", e.citation_key());
+//           }
+//           else{
+//             entry.Fields_Values.insert(field.to_string(), value.clone());
+//           }
+//         }
+//       }
+//     }
+//     Entries.push(entry);
+//   }
+//   Entries
+// }
+
+
+// fn write_raw_bib(path: &str, bib_vec : &Vec<String>){
+//   let path = Path::new(path);
+//   let display = path.display();
+
+//   // Open a file in write-only mode, returns `io::Result<File>`
+//   let mut f = match File::create(&path) {
+//       Err(why) => panic!("couldn't create {}: {}", display, why),
+//       Ok(file) => file,
+//   };
+
+//   for l in bib_vec{
+//     writeln!(f, "{}",l).unwrap();
+//   }
+// }
