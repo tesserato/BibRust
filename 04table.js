@@ -1,5 +1,5 @@
 // tabledata
-
+selectedtags = new Set([]);
 var fields = {};
 
 for (e of tabledata) {
@@ -163,7 +163,11 @@ function updatealltags() {
     txt = document.createTextNode(tag);
     div.appendChild(txt);
     div.classList.add("tag");
-    div.classList.add("deselectedtag");
+    if (selectedtags.has(tag)){
+      div.classList.add("selectedtag");
+    } else {
+      div.classList.add("deselectedtag");
+    }
     div.onclick = handleLeftClick;
     div.oncontextmenu = handleRightCLick;
     parentdiv.appendChild(div);
@@ -271,6 +275,12 @@ var table = new Tabulator("#table", {
     },
   ],
   // selectable:true,
+  persistenceID:"bibtable",
+  persistence:{
+    sort:true, //Enable sort persistence
+    filter:true, //Enable filter persistence
+    columns:true //Enable column layout persistence
+  },
   data: tabledata,           //load row data from array
   downloadRowRange: "all",
   layout: "fitDataFill",      //fit columns to width of table
@@ -291,10 +301,6 @@ var table = new Tabulator("#table", {
   columns: coldef,
 });
 
-//////////
-// logic//
-//////////
-
 updatealltags(table.getColumn("tags"));
 
 function customFilter(data, selectedtags) {
@@ -311,8 +317,6 @@ function customFilter(data, selectedtags) {
     return true;
   }
 }
-
-selectedtags = new Set([]);
 
 function handleLeftClick(event) {  
   let tag = event.target.textContent;
@@ -342,16 +346,18 @@ function handleRightCLick(event) {
   // console.log(event)
   var oldtag = event.target.textContent;
   var newtag = prompt("Rename tag ( Warning: Can't be undone! )", oldtag);
-  console.log(newtag)
+  // console.log(newtag)
   if (newtag != null) {
-    console.log("renaming", oldtag, " to ", newtag)
-    for (const e of tabledata) {
-      if (e['tags']) {
-        e['tags'] = e['tags'].replace(oldtag, newtag).split(',').map(e => e.trim()).filter(e => e).join(',');
+    console.log("renaming", oldtag, " to ", newtag);
+    // console.log(table.getColumn("tags").getCells());
+    for (c of table.getColumn("tags").getCells()) {
+      // console.log(c.getValue())
+      if (c.getValue()) {
+        c.setValue(c.getValue().replace(oldtag, newtag).split(',').map(e => e.trim()).filter(e => e).join(','));
       }
     }
     if (selectedtags.has(oldtag)){
-      selectedtags.remove(oldtag);
+      selectedtags.delete(oldtag);
       selectedtags.add(newtag);
     }
     updatealltags()
@@ -384,11 +390,4 @@ function hadleKey(e) {
 
 document.body.appendChild(document.getElementsByClassName("tabulator-footer")[0]);
 
-// alert(document.getElementById("container").style.diplay)
-// document.getElementById("container").style.diplay = "block";
-
-// alert(document.getElementById("splash").style.diplay);
 document.getElementById("splash").remove();
-// alert(document.getElementById("splash").style.diplay);
-// alert(document.getElementById("container").style.diplay)
-
