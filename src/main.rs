@@ -420,7 +420,7 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
   let mut html = std::fs::read_to_string("00table.html").expect("Something went wrong reading table.html");
   let css = std::fs::read_to_string("01table.css").expect("Something went wrong reading 01table.css");
   let mut js = std::fs::read_to_string("02tabulator.js").expect("Something went wrong reading 02tabulator.js");
-  let table = std::fs::read_to_string("03table.js").expect("Something went wrong reading 04table.js");
+  let table = std::fs::read_to_string("04table.js").expect("Something went wrong reading 04table.js");
 
   // let mut js = tabulator;
   js.push_str(&entries_to_js_obj(entries));
@@ -436,7 +436,7 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
       "  <script type=\"text/javascript\" src=\"02tabulator.js\"></script>",
       "")
     .replace(
-      "  <script type=\"text/javascript\" src=\"03result.js\"></script>",
+      "  <script type=\"text/javascript\" src=\"03tabledata.js\"></script>",
       ""
     )
     .replace(
@@ -578,7 +578,7 @@ fn read_and_parse_csv(path:PathBuf) -> Vec<Entry>{
       },
     }
     let mut v:Vec<String> = result.unwrap().into_iter().map(|x| x.to_string()).collect();
-    let mut e = Entry{Type: v[1].to_owned(), Key: v[2].to_owned(),..Default::default()};
+    let mut e = Entry{Type: v[1].to_lowercase().to_owned(), Key: v[2].to_owned(),..Default::default()};
 
     if !v[0].is_empty(){
       e.Reviewed=true;
@@ -825,6 +825,7 @@ fn get_statistics(Entries:&mut Vec<Entry>, tidy:bool) -> Statistics{
     "\nFound a total of {} entries\n({} reviewed, {} with author, {} with doi, {} with files, {} whith url):", 
                         n, stats.reviewed, stats.has_author, stats.has_doi, stats.has_file, stats.has_url);
     
+  types_vec.sort();
   types_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
   for (key, value) in types_vec {
     println!("{} {}", key, value);
@@ -838,6 +839,7 @@ fn get_statistics(Entries:&mut Vec<Entry>, tidy:bool) -> Statistics{
     fields_vec.push((t.to_string(), *c));
   }  
 
+  fields_vec.sort();
   fields_vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
   for (key, value) in fields_vec {
     println!("{} {}", key, value);

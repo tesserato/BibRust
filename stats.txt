@@ -1,10 +1,9 @@
 Found a total of 4403 entries
 (20 reviewed, 4403 with author, 2192 with doi, 1917 with files, 1327 whith url):
-article 2514
+article 2615
 book 1049
 inproceedings 298
 misc 156
-Article 95
 collection 50
 incollection 42
 unpublished 41
@@ -12,20 +11,19 @@ online 28
 electronic 27
 phdthesis 23
 mvbook 13
-techreport 11
 resreport 11
-Review 7
+techreport 11
+review 7
 inreference 6
-Article; Proceedings Paper 6
-report 5
+editorial material 5
 manual 5
-Editorial Material 5
-software 3
+report 5
 reference 3
+software 3
 candthesis 2
-mastersthesis 1
-Proceedings Paper 1
 inbook 1
+mastersthesis 1
+proceedings paper 1
 
 Fields:
 title 4403
@@ -66,8 +64,8 @@ organization 59
 eventtitle 54
 howpublished 43
 ean 17
-timestamp 16
 biburl 16
+timestamp 16
 bibsource 15
 titleaddon 15
 school 8
@@ -76,25 +74,25 @@ rights 6
 eprintclass 5
 volumes 5
 editorb 4
-shortjournal 4
 editorbtype 4
+shortjournal 4
 primaryclass 3
 unidentified 3
 editora 2
 editoratype 2
 qualityassured 2
-numpages 1
-language 1
+acmid 1
+adsnote 1
+adsurl 1
+annotation 1
+collection 1
+comment 1
+ee 1
+id 1
 interhash 1
 intrahash 1
-comment 1
+language 1
 n 1
-ee 1
-annotation 1
-id 1
-adsurl 1
-adsnote 1
+numpages 1
 place 1
 subtitle 1
-collection 1
-acmid 1
