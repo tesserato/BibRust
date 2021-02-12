@@ -1,7 +1,7 @@
 #![feature(str_split_once)]
 #![allow(non_snake_case)]
 
-use std::{cmp::Ordering, vec};
+use std::{cmp::Ordering, collections::hash_map, vec};
 use std::io::BufReader;
 use std::fs::File;
 use std::io::prelude::*;
@@ -28,8 +28,8 @@ use url::Url;
 extern crate serde;
 use serde::{Deserialize, Serialize};
 
-extern crate html_minifier;
-use html_minifier::HTMLMinifier;
+// extern crate html_minifier;
+// use html_minifier::HTMLMinifier;
 
 // extern crate minifier;
 // use minifier::js::minify;
@@ -38,7 +38,7 @@ static INTERNAL_TAG_MARKER: char ='#';
 static REVIEWED: &str = "#reviewed";
 static MERGED: &str = "#merged";
 
-static SEPARATOR: &str = ",";
+// static SEPARATOR: &str = ",";
 static INTERNAL_SEPARATOR: &str = ",";
 static NAMES_SEPARATOR: &str = " and ";
 
@@ -370,7 +370,7 @@ fn write_csv(path: &PathBuf, entries: &Vec<Entry>, ordered_fields: &Vec<String>)
       Ok(file) => file,
   };
 
-  write!(f,"\u{feff}"); // BOM, indicating uft8 for excel
+  write!(f,"\u{feff}").expect("Couldn't write BOM while writing .csv"); // BOM, indicating uft8 for excel
 
   let top_row
   = String::from("reviewed,entry type,key,author,editor,translator,") + (&ordered_fields.join(",")) + ",tags,file";
@@ -419,7 +419,7 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
   // let mut html = String::new();
   let mut html = std::fs::read_to_string("00table.html").expect("Something went wrong reading table.html");
   let css = std::fs::read_to_string("01table.css").expect("Something went wrong reading 01table.css");
-  let mut js = std::fs::read_to_string("bundle.js").expect("Something went wrong reading 02tabulator.js");
+  let js = std::fs::read_to_string("02bundle.js").expect("Something went wrong reading 02tabulator.js");
   // let table = std::fs::read_to_string("04table.js").expect("Something went wrong reading 04table.js");
 
   // let mut js = tabulator;
@@ -440,7 +440,7 @@ fn write_html(path: &PathBuf, entries: &Vec<Entry>){
       ""
     )
     .replace(
-      "  <script src=\"bundle.js\"></script>",
+      "  <script src=\"02bundle.js\"></script>",
       &format!("<script>\n{}\n{}\n</script>", &entries_to_js_obj(entries), js)
     );
     
@@ -724,14 +724,22 @@ struct Statistics{
 
 fn generate_key(entry: &Entry) -> String{
   let mut year = "year".to_string();
-  if entry.Fields_Values.contains_key("year"){
+  if entry.Fields_Values.contains_key("year") && entry.Fields_Values["year"].len() >= 2 {
     year = entry.Fields_Values["year"].to_owned();
   }
   else if entry.Fields_Values.contains_key("date"){
-    let optyear = entry.Fields_Values["date"].split("-").next();
-    year = match optyear {
-      Some(y) => y.to_string(),
-      None => "year".to_string()
+    let mut chars = entry.Fields_Values["date"].chars().filter(|x| x.is_digit(10));
+    let mut optyear = String::new();
+    let mut char = chars.next();
+    while optyear.len() < 4 && char.is_some(){
+      optyear.push(char.unwrap());
+      char = chars.next();
+    }
+    if optyear.trim().is_empty() {
+      year = "year".to_string();
+    }
+    else{
+      year = optyear;
     }
   }
 
@@ -742,16 +750,18 @@ fn generate_key(entry: &Entry) -> String{
     }
   }
   roles.sort();
+  let mut creator = "creator".to_string();
   let mut etal = "";
-  let creator = match roles.first() {
-    Some(n) => {
-      if entry.Creators[n].len() > 1 {
-        etal = "_etal";
+  for role in roles{
+    for name in &entry.Creators[&role]{
+      if !name.last_name.trim().is_empty(){
+        creator = name.last_name.clone();
+        if entry.Creators[&role].len() > 1 {
+          etal = "_etal";
+        }
       }
-      &entry.Creators[n][0].last_name
     }
-    None => "creator",
-  };
+  }
 
   format!("{}_{}{}", year, creator.chars().filter(|x| x.is_alphabetic()).collect::<String>().to_lowercase(), etal)
 }
@@ -874,7 +884,13 @@ fn rename_files(Entries:&mut Vec<Entry>){
         Some(t) => t,
         None => "NO_TITLE"
       };
-      println!("!{} {{{}}} {}", typ, key, tit);
+      let iterexts = e.Files.iter().map(|x| Path::new(x).extension());
+
+      for ext in iterexts{
+        if ext.is_some(){
+          println!("!{} {{{}}} {}.{}", typ, key, tit, ext.unwrap().to_str().unwrap());
+        }
+      }
     }
   }
 }
