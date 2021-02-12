@@ -95,4 +95,4 @@ language 1
 n 1
 numpages 1
 place 1
-subtitle 1  
+subtitle 1
