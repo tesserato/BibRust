@@ -1,0 +1,31 @@
+{
+  "name": "bibrust",
+  "version": "1.0.0",
+  "description": "samarabib",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tesserato/BibRust.git"
+  },
+  "keywords": [
+    "bibliography"
+  ],
+  "author": "tesserato",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tesserato/BibRust/issues"
+  },
+  "homepage": "https://github.com/tesserato/BibRust#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2"
+  },
+  "dependencies": {
+    "vinyl": "^2.2.1"
+  }
+}

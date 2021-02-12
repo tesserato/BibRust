@@ -1,7 +1,6 @@
-// declare var tabledata;
 var Tabulator = require('tabulator-tables');
 
-
+declare var tabledata:Array<any>
 
 
 var selectedtags = new Set([]);

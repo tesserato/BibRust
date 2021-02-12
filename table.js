@@ -1,4 +1,3 @@
-// declare var tabledata;
 var Tabulator = require('tabulator-tables');
 var selectedtags = new Set([]);
 var fields = {};

@@ -1,0 +1,1 @@
+browserify table.ts -o bundle.js -p tinyify
