@@ -18,8 +18,9 @@ jobs:
           args: --release
       - name: Step 1 - Create a temporary artifact downloads folder
         run: |
-          pwd
-          mkdir release -Force
+          echo pwd
+          cd ${{ GITHUB_WORKSPACE }}
+          mkdir /release -Force
           cp ./target/release/bibrust.exe release
           cp ./00table.html release
           cp ./01table.css release
