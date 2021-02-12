@@ -18,13 +18,13 @@ jobs:
           args: --release
       - name: Step 1 - Create a temporary artifact downloads folder
         run: |
-          echo pwd
+          pwd
           cd ${{ github.workspace }}
           mkdir /release -Force
-          cp ./target/release/bibrust.exe release
           cp ./00table.html release
           cp ./01table.css release
           cp ./02bundle.js release
+          cp ./target/release/bibrust.exe release
           zip ./release.zip ./release –m –r
       - name: Create Release
         id: create_release
