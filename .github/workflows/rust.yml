@@ -18,12 +18,13 @@ jobs:
           args: --release
       - name: Step 1 - Create a temporary artifact downloads folder
         run: |
+          pwd
           mkdir release -Force
-          cp target/release/bibrust.exe release
-          cp 00table.html release
-          cp 01table.css release
-          cp 02bundle.js release
-          zip release.zip release –m –r
+          cp ./target/release/bibrust.exe release
+          cp ./00table.html release
+          cp ./01table.css release
+          cp ./02bundle.js release
+          zip ./release.zip ./release –m –r
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -41,6 +42,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: release.zip
+          asset_path: ./release.zip
           asset_name: release.zip
           asset_content_type: application/zip
