@@ -94,7 +94,9 @@ fn Entry_to_String_bib(e: & Entry) -> String{
     creators.sort();
     for c in creators{
       let t = names_to_string(&e.Creators[&c]);
-      s.push_str(&format!("{} = {{{}}},\n", c, t));
+      if !t.trim().is_empty(){
+        s.push_str(&format!("{} = {{{}}},\n", c, t));
+      }
     }
   }
 
@@ -264,6 +266,47 @@ fn parse_url_field(value:&String) -> String{
   checked.join(INTERNAL_SEPARATOR)
 }
 
+fn parse_edition_field(value:&String) -> String{
+  let edition = value.to_lowercase();
+  let mut norm_edition = String::new();
+
+  let numeric = edition.chars().filter(|x| x.is_digit(10)).next();
+
+  if numeric.is_some(){
+    norm_edition.push(numeric.unwrap());
+    return norm_edition
+  }
+
+  if edition.contains("first") {
+    norm_edition="1".to_string();
+  }
+  else if edition.contains("second") {
+    norm_edition="2".to_string();
+  }
+  else if edition.contains("third") {
+    norm_edition="3".to_string();
+  }
+  else if edition.contains("fourth") {
+    norm_edition="4".to_string();
+  }
+  else if edition.contains("fifth"){
+    norm_edition="5".to_string();
+  }
+  else if edition.contains("sixth") {
+    norm_edition="6".to_string();
+  }
+  else if edition.contains("seventh") {
+    norm_edition="7".to_string();
+  }
+  else if edition.contains("eighth") {
+    norm_edition="8".to_string();
+  }
+  else{
+    norm_edition = edition;
+  }
+  norm_edition
+}
+
 fn parse_generic_field(original_value:&str) -> String{
   let patterns : &[_] = &['\t',',',' ','"','\''];
   original_value
@@ -281,7 +324,10 @@ fn parse_field_value(field: &str, value: &mut String, last_entry: &mut Entry){
   match field {
     "file" => last_entry.Files = parse_file_field(last_entry, &value.to_string()),
     "author" | "editor" | "translator" => {
-      let _ = last_entry.Creators.insert(field.to_string(), parse_creators_field(&value));
+      let creators =parse_creators_field(&value);
+      if creators.len() > 0{
+      let _ = last_entry.Creators.insert(field.to_string(), creators);
+      }
     },
     "mendeley-groups"|"mendeley-tags"|"groups"|"tags" => parse_tags_field( last_entry,&value),
     _ => {
@@ -289,12 +335,13 @@ fn parse_field_value(field: &str, value: &mut String, last_entry: &mut Entry){
         "isbn" => *value = value.chars().filter(|x| x.is_numeric()).collect::<String>(),
         "arxivid" | "eprint" => *value = value.split(":").map(|x| x.to_string()).collect::<Vec<String>>().last().unwrap().to_string(),
         "url" => *value = parse_url_field(&value),
+        "edition" => *value = parse_edition_field(&value),
         _ => *value = parse_generic_field(&value),
       }
       if last_entry.Fields_Values.contains_key(field){
         println!("Repeated entry at {} {}\n", field, value);
       }
-      else{
+      else if !value.trim().is_empty(){
         last_entry.Fields_Values.insert(field.to_string(), value.clone());
       }
     }
@@ -1144,33 +1191,30 @@ fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
   let f2:HashSet<String> = entries[j].Fields_Values.iter().filter(|x| !x.1.trim().is_empty()).map(|x| x.0.to_owned()).collect();
   let intersection = f1.intersection(&f2).to_owned();
   let common_fields:Vec<&String> = intersection.collect();
-  let mut eq = true;
   for field in common_fields{
     let val_i: String = entries[i].Fields_Values[field].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
     let val_j: String = entries[j].Fields_Values[field].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
-
     if val_i != val_j {
-      eq = false;
-      break;
+      return false
     }
   }
 
-  if eq{
-    if entries[j].Reviewed{
-      entries[j].Reviewed = true;
-    }
-    entries[i].Files = entries[i].Files.union(&entries[j].Files).map(|x| x.to_owned()).collect();
-    entries[i].Tags = entries[i].Tags.union(&entries[j].Tags).map(|x| x.to_owned()).collect();
-    entries[i].Tags.insert(MERGED.to_string());
+  // entries are equivalent, merging
+  if entries[j].Reviewed{
+    entries[i].Reviewed = true;
+    entries[i].Type = entries[j].Type.clone();
+  }
+  entries[i].Files = entries[i].Files.union(&entries[j].Files).map(|x| x.to_owned()).collect();
+  entries[i].Tags = entries[i].Tags.union(&entries[j].Tags).map(|x| x.to_owned()).collect();
+  entries[i].Tags.insert(MERGED.to_string());
 
-    for field in f2.difference(&f1){
-      let value = entries[j].Fields_Values.get_mut(field).unwrap().to_string();
-      if let Some(x) = entries[i].Fields_Values.get_mut(field) {
-        *x = value;
-      }
+  for field in f2.difference(&f1){
+    let value = entries[j].Fields_Values.get_mut(field).unwrap().to_string();
+    if let Some(x) = entries[i].Fields_Values.get_mut(field) {
+      *x = value;
     }
   }
-  eq
+  true
 }
 
 
@@ -1260,7 +1304,7 @@ fn remove_redundant(){
 
   let path = Path::new("tests/tomerge.bib").to_owned();
   write_bib(&path, &entries);
-  
+
   remove_redundant_Entries(&mut entries);
 
   let path = Path::new("tests/tomerge_out.bib").to_owned();
