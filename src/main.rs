@@ -1057,7 +1057,7 @@ fn remove_redundant_Entries(entries: & mut Vec<Entry>){
       }
     }
   }  
-  println!("Removed {} Identical entries\n", &repeated.len());
+  println!("Removed {} Identical entries", &repeated.len());
   repeated.sort_unstable_by(|a, b| b.cmp(a));
   repeated.dedup();
 
@@ -1081,20 +1081,20 @@ fn remove_by_field(mut entries: & mut Vec<Entry>, field:&str){
   let mut repeated: Vec<usize> = vec![];
   for i in 0..entries.len(){
     for j in (i+1)..entries.len(){
-      if 
-      entries[i].Fields_Values.contains_key(field) &&
-      entries[j].Fields_Values.contains_key(field) &&
-      entries[i].Fields_Values[field].to_lowercase() == entries[j].Fields_Values[field].to_lowercase()
-      {
-        let merged = merge(&mut entries, i, j);
-        if merged{
-          repeated.push(j);
+      if entries[i].Fields_Values.contains_key(field) && entries[j].Fields_Values.contains_key(field){
+        let val_i: String = entries[i].Fields_Values[field].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
+        let val_j: String = entries[j].Fields_Values[field].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
+        if val_i == val_j{
+          let merged = merge(&mut entries, i, j);
+          if merged{
+            repeated.push(j);
+          }
         }
       }
     }
   }
 
-  println!("Same {}, compatible {}\n", field, &repeated.len());
+  println!("Same {}, compatible {}", field, &repeated.len());
   repeated.sort_unstable_by(|a, b| b.cmp(a));
   repeated.dedup();
 
@@ -1104,16 +1104,52 @@ fn remove_by_field(mut entries: & mut Vec<Entry>, field:&str){
 }
 
 fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
-  if entries[i].Creators != entries[j].Creators {
+  // checking creators field
+  let mut creators_i:HashSet<String> = HashSet::new();
+  for (_, names) in &entries[i].Creators{
+    for name in names{
+      if !name.last_name.trim().is_empty() {
+        creators_i.insert(
+          name.last_name.chars().filter(|x| x.is_alphabetic()).collect()
+        );
+      }
+      if !name.first_name.trim().is_empty() {
+        creators_i.insert(
+          name.last_name.chars().filter(|x| x.is_alphabetic()).collect()
+        );
+      }
+    }
+  }
+  let mut creators_j:HashSet<String> = HashSet::new();
+  for (_, names) in &entries[j].Creators{
+    for name in names{
+      if !name.last_name.trim().is_empty() {
+        creators_j.insert(
+          name.last_name.chars().filter(|x| x.is_alphabetic()).collect()
+        );
+      }
+      if !name.first_name.trim().is_empty() {
+        creators_j.insert(
+          name.last_name.chars().filter(|x| x.is_alphabetic()).collect()
+        );
+      }
+    }
+  }
+
+  if creators_i != creators_j {
     return false
   }
+
   let f1:HashSet<String> = entries[i].Fields_Values.iter().filter(|x| !x.1.trim().is_empty()).map(|x| x.0.to_owned()).collect();
   let f2:HashSet<String> = entries[j].Fields_Values.iter().filter(|x| !x.1.trim().is_empty()).map(|x| x.0.to_owned()).collect();
   let intersection = f1.intersection(&f2).to_owned();
   let common_fields:Vec<&String> = intersection.collect();
   let mut eq = true;
   for field in common_fields{
-    if entries[i].Fields_Values[field].to_lowercase() != entries[j].Fields_Values[field].to_lowercase(){
+    let val_i: String = entries[i].Fields_Values[field].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
+    let val_j: String = entries[j].Fields_Values[field].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
+
+    if val_i != val_j {
       eq = false;
       break;
     }
@@ -1216,6 +1252,60 @@ fn test_bib_csv(){
 
   assert_eq!(entries2, entries1, "Problem!");
 }
+
+#[test]
+fn remove_redundant(){
+  let path = Path::new("tests/tomerge.csv").to_owned();
+  let mut entries = read_and_parse_csv(path);
+
+  let path = Path::new("tests/tomerge.bib").to_owned();
+  write_bib(&path, &entries);
+  
+  remove_redundant_Entries(&mut entries);
+
+  let path = Path::new("tests/tomerge_out.bib").to_owned();
+  write_bib(&path, &entries);
+
+  // assert_eq!(entries2, entries1, "Problem!");
+}
+
+
+
+
+// fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
+//   if entries[i].Creators != entries[j].Creators {
+//     return false
+//   }
+//   let f1:HashSet<String> = entries[i].Fields_Values.iter().filter(|x| !x.1.trim().is_empty()).map(|x| x.0.to_owned()).collect();
+//   let f2:HashSet<String> = entries[j].Fields_Values.iter().filter(|x| !x.1.trim().is_empty()).map(|x| x.0.to_owned()).collect();
+//   let intersection = f1.intersection(&f2).to_owned();
+//   let common_fields:Vec<&String> = intersection.collect();
+//   let mut eq = true;
+//   for field in common_fields{
+//     if entries[i].Fields_Values[field].to_lowercase() != entries[j].Fields_Values[field].to_lowercase(){
+//       eq = false;
+//       break;
+//     }
+//   }
+
+//   if eq{
+//     if entries[j].Reviewed{
+//       entries[j].Reviewed = true;
+//     }
+//     entries[i].Files = entries[i].Files.union(&entries[j].Files).map(|x| x.to_owned()).collect();
+//     entries[i].Tags = entries[i].Tags.union(&entries[j].Tags).map(|x| x.to_owned()).collect();
+//     entries[i].Tags.insert(MERGED.to_string());
+
+//     for field in f2.difference(&f1){
+//       let value = entries[j].Fields_Values.get_mut(field).unwrap().to_string();
+//       if let Some(x) = entries[i].Fields_Values.get_mut(field) {
+//         *x = value;
+//       }
+//     }
+//   }
+//   eq
+// }
+
 
 // fn read_and_parse_csv(path:PathBuf) -> Vec<Entry>{
 //   let mut rdr = csv::ReaderBuilder::new().from_path(path).unwrap();
