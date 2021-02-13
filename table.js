@@ -176,7 +176,7 @@ function updatealltags() {
     div.oncontextmenu = handleRightCLick;
     parentdiv.appendChild(div);
   }
-  var btn = document.createElement("BUTTON");   // Create a <button> element
+  var btn = document.createElement("div");   // Create a <button> element
   btn.innerHTML = "Clear tags";                   // Insert text
   btn.classList.add("btn");
   btn.onclick = function (event) {
@@ -189,7 +189,7 @@ function updatealltags() {
   }
   parentdiv.appendChild(btn);
 
-  var btn = document.createElement("BUTTON");   // Create a <button> element
+  var btn = document.createElement("div");   // Create a <button> element
   btn.innerHTML = "Fullscreen";                   // Insert text
   btn.classList.add("btn");
   btn.onclick = function (event) {
@@ -204,7 +204,7 @@ function updatealltags() {
   }
   parentdiv.appendChild(btn);
 
-  var btn = document.createElement("BUTTON");   // Create a <button> element
+  var btn = document.createElement("div");   // Create a <button> element
   btn.innerHTML = "Download as .csv";                   // Insert text
   btn.classList.add("btn");
   btn.onclick = function (event) {
@@ -213,7 +213,7 @@ function updatealltags() {
   }
   parentdiv.appendChild(btn);
 
-  var btn = document.createElement("BUTTON");   // Create a <button> element
+  var btn = document.createElement("div");   // Create a <button> element
   btn.innerHTML = "Show all columns";                   // Insert text
   btn.classList.add("btn");
   btn.onclick = function (event) {

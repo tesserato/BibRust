@@ -559,6 +559,14 @@ fn entries_to_js_obj(entries: &Vec<Entry>) -> String{
   obj
 }
 
+fn write_js_object(path: &PathBuf, entries: &Vec<Entry>){
+  let mut f = match File::create(&path) {
+    Err(why) => panic!("couldn't create {}: {}", path.display(), why),
+    Ok(file) => file,
+  };
+  writeln!(f, "{}", entries_to_js_obj(entries)).unwrap();
+}
+
 fn write_json(path: &PathBuf, entries: &Vec<Entry>){
   let mut f = match File::create(&path) {
     Err(why) => panic!("couldn't create {}: {}", path.display(), why),
@@ -1036,6 +1044,7 @@ fn main() -> Result<()> {
       Some("bib")    => write_bib(&p, &main_entries),
       Some("html")   => write_html(&p, &main_entries),
       Some("json")   => write_json(&p, &main_entries),
+      Some("js")     => write_js_object(&p, &main_entries),
       Some(ext) => {
         println!("Couldn't recognise extension {}. Defaulting to .html mode.", ext);
         p.set_extension("html");
