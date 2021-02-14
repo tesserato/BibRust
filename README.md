@@ -19,6 +19,8 @@ report
 thesis
 
 # Remarks
+- info like year and month is consolidated in date field, if clean is set
+
 a article
 b book
 r reference

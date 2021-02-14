@@ -311,7 +311,7 @@ fn parse_edition_field(value:&String) -> String{
 }
 
 fn parse_generic_field(original_value:&str) -> String{
-  let patterns : &[_] = &['\t',',',' ','"','\''];
+  let patterns : &[_] = &['\t',',',' ','"','\'','{','}'];
   original_value
   .trim()
   .trim_matches(patterns)
@@ -324,6 +324,7 @@ fn parse_generic_field(original_value:&str) -> String{
 }
 
 fn parse_field_value(field: &str, value: &mut String, last_entry: &mut Entry){
+  let pattern : &[_] = &['\t',',',' ','"','\'','{','}'];
   match field {
     "file" => last_entry.Files = parse_file_field(last_entry, &value.to_string()),
     "author" | "editor" | "translator" => {
@@ -336,7 +337,7 @@ fn parse_field_value(field: &str, value: &mut String, last_entry: &mut Entry){
     _ => {
       match field.as_ref() {
         "isbn" => *value = value.chars().filter(|x| x.is_numeric()).collect::<String>(),
-        "arxivid" | "eprint" => *value = value.split(":").map(|x| x.to_string()).collect::<Vec<String>>().last().unwrap().to_string(),
+        "arxivid" | "eprint" => *value = value.split(":").map(|x| x.to_string()).collect::<Vec<String>>().last().unwrap().trim_matches(pattern).to_string(),
         "url" => *value = parse_url_field(&value),
         "edition" => *value = parse_edition_field(&value),
         _ => *value = parse_generic_field(&value),
@@ -656,25 +657,25 @@ fn read_and_parse_json(path: &Path) -> Vec<Entry>{
 }
 
 fn parse_cl_args() -> ArgMatches<'static> {
-  App::new("BibRust")
+  App::new("SAMARA")
     .version("1.0")
-    .about("Tame your (bib)liographic files!")
+    .about("Tame your (bib)liography!")
     .author("https://carlos-tarjano.web.app/")
     .arg(Arg::with_name("input_pos")
-      .short("OP")
+      // .short("ip")
       .long("INPUT")
       .value_name("INPUT")
-      .help("positional: The input file to convert from (.bib or .csv), or the root folder in which to search for .bib files")
+      .help("positional alternative to -i: The path to the input file to convert from, or the root folder in which to search for .bib files")
       .takes_value(true)
       .required(false)
       .index(1)
       .conflicts_with("input")
     )
     .arg(Arg::with_name("output_pos")
-      .short("OP")
+      // .short("op")
       .long("OUTPUT")
       .value_name("OUTPUT")
-      .help("positional: Path[s] to output file[s] (.bib and / or .csv)")
+      .help("positional alternative to -o: Path to output file")
       .takes_value(true)
       .required(false)
       .index(2)
@@ -684,7 +685,7 @@ fn parse_cl_args() -> ArgMatches<'static> {
       .short("i")
       .long("input")
       .value_name("path to file or folder")
-      .help("The input file to convert from (.bib or .csv), or the root folder in which to search for .bib files")
+      .help("The path to the input file to convert from, or the root folder in which to search for .bib files")
       .takes_value(true)
       .required(false)
     )
@@ -692,7 +693,7 @@ fn parse_cl_args() -> ArgMatches<'static> {
       .short("o")
       .long("output")
       .value_name("path to file")
-      .help("Path[s] to output file[s] (.bib and / or .csv)")
+      .help("Path[s] to output file")
       .takes_value(true)
       .required(false)
     )
@@ -700,7 +701,7 @@ fn parse_cl_args() -> ArgMatches<'static> {
       .short("a")
       .long("auxiliary")
       .value_name("path to file or folder")
-      .help("The file (.bib or .csv), or the root folder in which to search for .bib files to be used to complement the info")
+      .help("The file, or the root folder in which to search for .bib files to be used to complement the info")
       .takes_value(true)
       .required(false)
     )
@@ -712,11 +713,11 @@ fn parse_cl_args() -> ArgMatches<'static> {
       .takes_value(true)
       .required(false)
     )
-    .arg(Arg::with_name("keys")
-      .short("k")
-      .long("keys")
-      .value_name("update keys?")
-      .help("if set, new unique keys will be created as [year]_[first author last name]_[number]")
+    .arg(Arg::with_name("clean")
+      .short("c")
+      .long("clean")
+      .value_name("clean entries?")
+      .help("if set, new unique keys will be created, and other cleaning procedures will be executed")
       .takes_value(false)
       .required(false)
     )
@@ -825,24 +826,90 @@ fn generate_key(entry: &Entry) -> String{
   format!("{}_{}{}", year, creator.chars().filter(|x| x.is_alphabetic()).collect::<String>().to_lowercase(), etal)
 }
 
-fn get_statistics(Entries:&mut Vec<Entry>, tidy:bool) -> Statistics{
-  if tidy{
-    println!("Generating keys:");
+fn get_statistics_and_clean(Entries:&mut Vec<Entry>, clean:bool) -> Statistics{
+  if clean{
+    println!("Cleaning entries");
   }
   let mut stats = Statistics{..Default::default()};
   let n = Entries.len();
   for entry in Entries{
-    if tidy{
+    if clean{
+      // generating unique key
       let base_key = generate_key(entry);
       let mut ctr = 0;
       let mut key = base_key.clone();
       while stats.keys.contains(&key) {
         ctr +=1;
         key = format!{"{}{}", base_key, ctr};
-      }
-      stats.keys.insert(key.clone());
+      }      
       entry.Key = key;
+
+      // date and year
+      let mut date: Vec<String> = vec![];
+      if entry.Fields_Values.contains_key("date"){
+        date = entry.Fields_Values["date"].split("-").map(|x| x.to_owned()).collect::<Vec<String>>();
+        if entry.Fields_Values.contains_key("year"){
+          if date[0] == entry.Fields_Values["year"]{
+           entry.Fields_Values.remove("date");
+           entry.Fields_Values.remove("month");
+          }
+        }
+        else{
+          entry.Fields_Values.insert("year".to_string(), date[0].clone());
+          entry.Fields_Values.remove("date");
+          entry.Fields_Values.remove("month");
+        }
+      }
+      // journaltitle
+      if entry.Fields_Values.contains_key("journaltitle"){
+        if entry.Fields_Values.contains_key("journal"){
+          if entry.Fields_Values["journal"] == entry.Fields_Values["journaltitle"]{
+            entry.Fields_Values.remove("journaltitle");
+          }
+        }
+        else{
+          entry.Fields_Values.insert("journal".to_string(), entry.Fields_Values["journaltitle"].clone());
+          entry.Fields_Values.remove("journaltitle");
+        }
+      }
+      // booktitle
+      if entry.Fields_Values.contains_key("booktitle"){
+        if entry.Fields_Values.contains_key("journal"){
+          if entry.Fields_Values["journal"] == entry.Fields_Values["booktitle"]{
+            entry.Fields_Values.remove("booktitle");
+          }
+        }
+        else{
+          entry.Fields_Values.insert("journal".to_string(), entry.Fields_Values["booktitle"].clone());
+          entry.Fields_Values.remove("booktitle");
+        }
+      }
+      // eventtitle
+      if entry.Fields_Values.contains_key("eventtitle"){
+        if entry.Fields_Values.contains_key("journal"){
+          if entry.Fields_Values["journal"] == entry.Fields_Values["eventtitle"]{
+            entry.Fields_Values.remove("eventtitle");
+          }
+        }
+        else{
+          entry.Fields_Values.insert("journal".to_string(), entry.Fields_Values["eventtitle"].clone());
+          entry.Fields_Values.remove("eventtitle");
+        }
+      }
+      // shorttitle
+      if entry.Fields_Values.contains_key("shorttitle"){
+        if entry.Fields_Values.contains_key("title"){
+          if entry.Fields_Values["title"] == entry.Fields_Values["shorttitle"]{
+            entry.Fields_Values.remove("shorttitle");
+          }
+        }
+        else{
+          entry.Fields_Values.insert("title".to_string(), entry.Fields_Values["shorttitle"].clone());
+          entry.Fields_Values.remove("shorttitle");
+        }
+      }
     }
+    stats.keys.insert(entry.Key.clone());
 
     for (_, creators) in &entry.Creators{
       for creator in creators{
@@ -1008,12 +1075,12 @@ fn main() -> Result<()> {
   }
 
 
-  // tidy
+  // clean
   let mut generate_keys = false;
-  if args.is_present("keys"){
+  if args.is_present("clean"){
     generate_keys = true;
   }
-  let stats = get_statistics(&mut main_entries, generate_keys);
+  let stats = get_statistics_and_clean(&mut main_entries, generate_keys);
 
   temp_clean(&mut main_entries);
 
@@ -1281,14 +1348,14 @@ fn test_bib(){
 fn test_csv(){
   let path = Path::new("tests/res.json");
   let mut baseentries = read_and_parse_json(path);
-  let stats =get_statistics(&mut baseentries, false);
+  let stats =get_statistics_and_clean(&mut baseentries, false);
 
   let path2 = Path::new("tests/res1.csv").to_owned();
   write_csv(&path2, &baseentries, &stats.ordered_fields);
 
 
   let mut entries1 = read_and_parse_csv(path2);
-  let stats =get_statistics(&mut entries1, false);
+  let stats =get_statistics_and_clean(&mut entries1, false);
   let path3 = Path::new("tests/res2.csv").to_owned();
   write_csv(&path3, &entries1, &stats.ordered_fields);
 
