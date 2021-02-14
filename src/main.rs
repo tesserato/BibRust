@@ -1,7 +1,7 @@
 #![feature(str_split_once)]
 #![allow(non_snake_case)]
 
-use std::{cmp::Ordering, collections::hash_map, vec};
+use std::{cmp::Ordering, vec};
 use std::io::BufReader;
 use std::fs::File;
 use std::io::prelude::*;
@@ -21,6 +21,9 @@ use walkdir::WalkDir;
 
 extern crate url;
 use url::Url;
+
+extern crate crossref;
+use crossref::Crossref;
 
 // extern crate nom_bibtex;
 // use nom_bibtex::*;
@@ -324,7 +327,7 @@ fn parse_generic_field(original_value:&str) -> String{
 }
 
 fn parse_field_value(field: &str, value: &mut String, last_entry: &mut Entry){
-  let pattern : &[_] = &['\t',',',' ','"','\'','{','}'];
+  // let pattern : &[_] = &['\t',',',' ','"','\'','{','}'];
   match field {
     "file" => last_entry.Files = parse_file_field(last_entry, &value.to_string()),
     "author" | "editor" | "translator" => {
@@ -337,7 +340,7 @@ fn parse_field_value(field: &str, value: &mut String, last_entry: &mut Entry){
     _ => {
       match field.as_ref() {
         "isbn" => *value = value.chars().filter(|x| x.is_numeric()).collect::<String>(),
-        "arxivid" | "eprint" => *value = value.split(":").map(|x| x.to_string()).collect::<Vec<String>>().last().unwrap().trim_matches(pattern).to_string(),
+        // "arxivid" | "eprint" => *value = value.split(":").map(|x| x.to_string()).collect::<Vec<String>>().last().unwrap().trim_matches(pattern).to_string(),
         "url" => *value = parse_url_field(&value),
         "edition" => *value = parse_edition_field(&value),
         _ => *value = parse_generic_field(&value),
@@ -986,6 +989,24 @@ fn get_statistics_and_clean(Entries:&mut Vec<Entry>, clean:bool) -> Statistics{
   stats
 }
 
+fn lookup(Entries:&mut Vec<Entry>) {
+  let client = Crossref::builder()
+    .polite("tesserato@hotmail.com")
+    .build().expect("Couldn't build client");
+
+  for e in Entries{
+    if e.Fields_Values.contains_key("doi") && e.Reviewed{
+      match client.work(&e.Fields_Values["doi"]){
+        Ok(w) => {
+          println!("{}", e.Fields_Values["title"]);
+          println!("{}\n", w.title.join(" | "));
+        },
+        Err(er) => println!("{}\n", er),
+      };
+    }
+  }
+}
+
 fn temp_clean(Entries:&mut Vec<Entry>){
   for e in Entries{
     if e.Fields_Values.contains_key("broken-files"){
@@ -1074,6 +1095,7 @@ fn main() -> Result<()> {
     remove_redundant_Entries(&mut main_entries);
   }
 
+  // lookup(&mut main_entries);
 
   // clean
   let mut generate_keys = false;
@@ -1192,6 +1214,7 @@ fn remove_redundant_Entries(entries: & mut Vec<Entry>){
     entries.remove(i);
   }
   remove_by_field(entries, "title");// Check entries with same abstract
+  remove_by_field(entries, "file");// Check entries with same abstract
   remove_by_field(entries, "abstract");// Check entries with same abstract
   remove_by_field(entries, "doi");// Check entries with same doi
   remove_by_field(entries, "isbn");// Check entries with same isbn

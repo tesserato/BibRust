@@ -1,11 +1,11 @@
-Found a total of 3781 entries
-(52 reviewed, 3781 with author, 1821 with doi, 1797 with files, 1124 whith url):
-article 2211
-book 939
-inproceedings 248
+Found a total of 3771 entries
+(58 reviewed, 3771 with author, 1817 with doi, 1796 with files, 1122 whith url):
+article 2205
+book 937
+inproceedings 243
 misc 142
 collection 47
-unpublished 40
+unpublished 43
 incollection 33
 online 28
 electronic 26
@@ -26,35 +26,35 @@ mastersthesis 1
 proceedings paper 1
 
 Fields:
-title 3781
-year 3418
-journal 2595
-pages 2554
-abstract 2252
-volume 1907
-doi 1821
-issn 1551
-number 1521
-isbn 1353
-publisher 1197
-url 1124
-keywords 1087
-langid 599
-eprint 451
+title 3771
+year 3408
+journal 2585
+pages 2546
+abstract 2245
+volume 1906
+doi 1817
+issn 1549
+number 1519
+isbn 1350
+publisher 1194
+url 1122
+keywords 1085
+langid 598
+eprint 448
 shorttitle 424
-urldate 395
-arxivid 380
-archiveprefix 342
-edition 279
-pmid 276
+urldate 394
+arxivid 377
+archiveprefix 339
+edition 278
+pmid 274
 location 272
 pagetotal 190
 month 156
-annote 152
 address 151
+annote 151
 series 135
 note 126
-eprinttype 106
+eprinttype 105
 institution 58
 __markedentry 53
 howpublished 42
@@ -74,11 +74,11 @@ eprintclass 5
 editorb 4
 editorbtype 4
 date 3
-primaryclass 3
 shortjournal 3
 unidentified 3
 editora 2
 editoratype 2
+primaryclass 2
 qualityassured 2
 acmid 1
 adsnote 1

@@ -17,6 +17,7 @@ serde_json = "1"
 html-minifier = "3.0.8"
 minifier = "0.0.36"
 unidecode = "0.3.0"
+crossref = "0.2.2"
 
 [profile.release]
 opt-level = 3
