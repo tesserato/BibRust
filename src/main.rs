@@ -11,9 +11,13 @@ use std::collections::HashSet;
 use std::str;
 use std::env;
 // use std::ffi::OsStr;
+use std::io::{self, Read};
+// use chrono::NaiveDate;
+
 extern crate csv;
 
 extern crate clap;
+// use chrono::format;
 use clap::{App, Arg, ArgMatches, Result};
 
 extern crate walkdir;
@@ -23,7 +27,7 @@ extern crate url;
 use url::Url;
 
 extern crate crossref;
-use crossref::Crossref;
+use crossref::{Crossref, Work};
 
 // extern crate nom_bibtex;
 // use nom_bibtex::*;
@@ -43,6 +47,7 @@ use serde::{Deserialize, Serialize};
 static INTERNAL_TAG_MARKER: char ='#';
 static REVIEWED: &str = "#reviewed";
 static MERGED: &str = "#merged";
+static RETRIEVED: &str = "#retrieved";
 
 // static SEPARATOR: &str = ",";
 static INTERNAL_SEPARATOR: &str = ",";
@@ -989,19 +994,203 @@ fn get_statistics_and_clean(Entries:&mut Vec<Entry>, clean:bool) -> Statistics{
   stats
 }
 
+fn parse_crossref(w:Work, e: &mut Entry){
+  println!("Processing entry:");
+
+  e.Tags.insert(RETRIEVED.to_string());
+
+  e.Fields_Values.insert("title".to_string(), w.title[0].clone());
+
+  println!("{}", w.type_);
+  match w.type_.as_ref() {
+    "journal-article" => e.Type = "article".to_string(),
+    "proceedings-article" => e.Type = "inproceedings".to_string(),
+    "book" | "book-chapter" => e.Type = "book".to_string(),
+    "other" => e.Type = "misc".to_string(),
+    _ => (),
+  }
+  match w.issued.date_parts.0[0][0]{/////////////////////////////////////////////////////
+    Some(year) => {
+    println!("year = {}", year);
+    e.Fields_Values.insert("year".to_string(), year.to_string());
+    e.Fields_Values.remove("date");
+    e.Fields_Values.remove("month");
+  },
+    None => (),
+  }
+  match w.author{/////////////////////////////////////////////////////
+    Some(author) => {
+      let mut fauthors:Vec<Name> = vec![];
+      print!("author(s) = ");
+      for a in author{
+        let first = match a.given {
+          Some(n) => n,
+          None => "".to_string(),
+        };
+        print!(" {} {} |", first, a.family);
+        fauthors.push(Name{first_name:first, last_name:a.family});
+      }
+      e.Creators.insert("author".to_string(), fauthors);
+      println!("");
+    }
+    None => (),
+  }
+  match w.editor{/////////////////////////////////////////////////////
+    Some(editor) => {
+      let mut feditors:Vec<Name> = vec![];
+      print!("editor(s) = ");
+      for a in editor{
+        let first = match a.given {
+          Some(n) => n,
+          None => "".to_string(),
+        };
+
+        print!(" {} {} |", first, a.family);
+        feditors.push(Name{first_name:first, last_name:a.family});
+      }
+      e.Creators.insert("editor".to_string(), feditors);
+      println!("");
+    }
+    None => (),
+  }
+  match w.translator{/////////////////////////////////////////////////////
+    Some(translator) => {
+      let mut ftranslators:Vec<Name> = vec![];
+      print!("translator(s) = ");
+      for a in translator{
+        let first = match a.given {
+          Some(n) => n,
+          None => "".to_string(),
+        };
+        print!(" {} {} |", first, a.family);
+        ftranslators.push(Name{first_name:first, last_name:a.family});
+      }
+      e.Creators.insert("translator".to_string(), ftranslators);
+      println!("");
+    }
+    None => (),
+  }
+  match w.container_title{/////////////////////////////////////////////////////
+    Some(journal) => {
+      println!("journal = {}", journal[0]);
+      e.Fields_Values.insert("journal".to_string(), journal[0].clone());
+      e.Fields_Values.remove("journaltitle");
+    },
+    None => (),
+  }
+  match w.link{/////////////////////////////////////////////////////
+    Some(link) => {
+      println!("url = {}", link[0].url);
+      e.Fields_Values.insert("url".to_string(), link[0].url.clone());
+    },
+    None => (),
+  }
+
+  match w.isbn{/////////////////////////////////////////////////////
+    Some(isbn) => {
+      println!("isbn = {}", isbn.join(","));
+      e.Fields_Values.insert("isbn".to_string(), isbn.join(","));
+    },
+    None => (),
+  }
+  match w.issn{/////////////////////////////////////////////////////
+    Some(issn) => {
+      println!("issn = {}", issn.join(","));
+      e.Fields_Values.insert("issn".to_string(), issn.join(","));
+    },
+    None => (),
+  }
+
+  println!("publisher = {}", w.publisher);
+  e.Fields_Values.insert("publisher".to_string(), w.publisher);
+
+  // match w.article_number{/////////////////////////////////////////////////////
+  //   Some(number) => {
+  //     println!("number = {}", number);
+  //     e.Fields_Values.insert("number".to_string(), number);
+  //   },
+  //   None => (),
+  // }
+  match w.volume{/////////////////////////////////////////////////////
+    Some(volume) => {
+      println!("volume = {}", volume);
+      e.Fields_Values.insert("volume".to_string(), volume);
+    },
+    None => (),
+  }
+  match w.page{/////////////////////////////////////////////////////
+    Some(pages) => {
+      println!("pages = {}", pages);
+      e.Fields_Values.insert("pages".to_string(), pages.replace("-", "--"));
+    },
+    None => (),
+  }
+  match w.language{/////////////////////////////////////////////////////
+    Some(langid) => {
+      println!("langid = {}", langid);
+      e.Fields_Values.insert("langid".to_string(), langid);
+    },
+    None => (),
+  }
+  match w.journal_issue{/////////////////////////////////////////////////////
+    Some(issue) => {
+      let number = issue.issue.unwrap();
+      println!("number = {}", number);
+      e.Fields_Values.insert("number".to_string(), number);
+    },
+    None => (),
+  }
+  match w.archive{/////////////////////////////////////////////////////
+    Some(archive) => {
+      println!("archive = {}", archive.join(","));
+    }
+    None => (),
+  }
+  match w.subject{/////////////////////////////////////////////////////
+    Some(keywords) => {
+      println!("keywords = {}", keywords.join(",").replace(" and ", ","));
+    },
+    None => (),
+  }
+  match w.abstract_{/////////////////////////////////////////////////////
+    Some(abstr) => {
+      println!("abstract = {}", abstr);
+    },
+    None => (),
+  }
+  println!("\n----------------------------------------------------------------------------")
+}
+
 fn lookup(Entries:&mut Vec<Entry>) {
   let client = Crossref::builder()
     .polite("tesserato@hotmail.com")
     .build().expect("Couldn't build client");
 
-  for e in Entries{
-    if e.Fields_Values.contains_key("doi") && e.Reviewed{
+  println!("\nPress 'enter' to accept, enter any other input to skip current entry and 'e' to abort:\n");
+  'outer:for e in Entries{
+    if e.Fields_Values.contains_key("doi") && e.Files.len() >0 && !e.Reviewed{
       match client.work(&e.Fields_Values["doi"]){
         Ok(w) => {
-          println!("{}", e.Fields_Values["title"]);
-          println!("{}\n", w.title.join(" | "));
+          println!("original {}", e.Fields_Values["title"]);
+          println!("fetched  {}", w.title.join(" | "));
+          println!("file     {}", hashset_to_string(&e.Files));
+
+          let mut input = String::new();
+          let stdin = io::stdin(); // We get `Stdin` here.
+          let mut res = stdin.read_line(&mut input);
+          while res.is_err(){
+            let er = res.err().unwrap();
+            println!{"{}", er};
+            res = stdin.read_line(&mut input);
+          }
+          // println!("{:?}", input);
+          match input.as_ref(){
+            "e\r\n" => {println!("Exiting..."); break 'outer;},
+            "\r\n"  => {parse_crossref(w, e); println!("");},
+            _       => println!("Skipping entry\n"),
+          }
         },
-        Err(er) => println!("{}\n", er),
+        Err(er) => println!("{}\n----------------------------------------------------------------------------", er),
       };
     }
   }
@@ -1089,13 +1278,12 @@ fn main() -> Result<()> {
     }
   }
 
+  // lookup(&mut main_entries);
 
   // merge
   if args.is_present("merge"){
     remove_redundant_Entries(&mut main_entries);
   }
-
-  // lookup(&mut main_entries);
 
   // clean
   let mut generate_keys = false;
