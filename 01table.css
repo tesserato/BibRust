@@ -20,6 +20,16 @@
   background: #0d0d0d;
 }
 
+input {
+  margin: 0%;
+  padding: 0%;
+  color: #fff;
+  background-color: #151515;
+  border: none;
+  font-family: "Roboto Condensed", sans-serif;
+  font-size: 1em;
+}
+
 html {
   font-family: "Roboto Condensed", sans-serif;
   font-size: 1em;
@@ -168,12 +178,12 @@ body {
 ::-webkit-scrollbar-thumb {
   /* Handle */
   border-radius: 0.3em;
-  background: #bbb;
+  background: #333;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   /* Handle on hover */
-  background: #666;
+  background: #1a1a1a;
 }
 
 #container {
@@ -262,7 +272,6 @@ a:active {
 
 .tabulator {
   position: relative;
-  border: 1px solid #333;
   background-color: #222;
   overflow: visible;
   font-size: 1em;
@@ -286,7 +295,6 @@ a:active {
   position: relative;
   box-sizing: border-box;
   width: 100%;
-  border-bottom: 1px solid #999;
   background-color: #333;
   color: #fff;
   font-weight: bold;
@@ -304,7 +312,6 @@ a:active {
   display: inline-block;
   position: relative;
   box-sizing: border-box;
-  border-right: 1px solid #aaa;
   background-color: #333;
   text-align: left;
   vertical-align: bottom;
@@ -342,7 +349,6 @@ a:active {
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title .tabulator-title-editor {
   box-sizing: border-box;
   width: 100%;
-  border: 1px solid #999;
   padding: 1px;
   background: #444;
   color: #fff;
@@ -368,7 +374,6 @@ a:active {
 .tabulator .tabulator-header .tabulator-col.tabulator-col-group .tabulator-col-group-cols {
   position: relative;
   display: flex;
-  border-top: 1px solid #aaa;
   overflow: hidden;
   margin-right: -1px;
 }
@@ -378,7 +383,8 @@ a:active {
 .tabulator .tabulator-header .tabulator-col .tabulator-header-filter {
   position: relative;
   box-sizing: border-box;
-  margin-top: 2px;
+  border: 0px solid #999;
+  border-radius: 0.3em;
   width: 100%;
   text-align: center;
 }
@@ -389,7 +395,7 @@ a:active {
   margin-top: 3px;
 }
 .tabulator .tabulator-header .tabulator-col .tabulator-header-filter input, .tabulator .tabulator-header .tabulator-col .tabulator-header-filter select {
-  border: 1px solid #999;
+  border: 0px solid #999;
   background: #444;
   color: #fff;
 }
@@ -702,20 +708,10 @@ a:active {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.tabulator-row .tabulator-cell.tabulator-editing {
-  border: 1px solid #999;
-  outline: none;
-  padding: 0;
-}
-.tabulator-row .tabulator-cell.tabulator-editing input, .tabulator-row .tabulator-cell.tabulator-editing select {
-  border: 1px;
-  background: transparent;
-}
 .tabulator-row .tabulator-cell.tabulator-validation-fail {
   border: 1px solid #dd0000;
 }
 .tabulator-row .tabulator-cell.tabulator-validation-fail input, .tabulator-row .tabulator-cell.tabulator-validation-fail select {
-  border: 1px;
   background: transparent;
   color: #dd0000;
 }
@@ -894,9 +890,8 @@ a:active {
   position: absolute;
   display: inline-block;
   box-sizing: border-box;
+  color: #fff;
   background: #666;
-  border: 1px solid #888;
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
   font-size: 1em;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;

@@ -1,15 +1,15 @@
-Found a total of 3798 entries
-(45 reviewed, 3798 with author, 1826 with doi, 1798 with files, 1128 whith url):
-article 2223
-book 942
-inproceedings 249
-misc 143
+Found a total of 3781 entries
+(52 reviewed, 3781 with author, 1821 with doi, 1797 with files, 1124 whith url):
+article 2211
+book 939
+inproceedings 248
+misc 142
 collection 47
 unpublished 40
 incollection 33
 online 28
 electronic 26
-phdthesis 17
+phdthesis 16
 resreport 7
 review 7
 techreport 7
@@ -20,46 +20,46 @@ software 3
 candthesis 2
 reference 2
 report 2
+thesis 2
 inbook 1
 mastersthesis 1
 proceedings paper 1
-thesis 1
 
 Fields:
-title 3798
-pages 2566
-year 2502
-abstract 2253
-volume 1918
-doi 1826
-issn 1555
-number 1527
-journal 1433
-isbn 1354
-publisher 1204
-url 1128
-keywords 1088
-date 1002
-booktitle 767
-langid 601
-journaltitle 471
+title 3781
+pages 2554
+year 2490
+abstract 2252
+volume 1907
+doi 1821
+issn 1551
+number 1521
+journal 1426
+isbn 1353
+publisher 1197
+url 1124
+keywords 1087
+date 998
+booktitle 765
+langid 599
+journaltitle 468
 eprint 451
-shorttitle 432
-urldate 396
+shorttitle 430
+urldate 395
 arxivid 380
 archiveprefix 342
-edition 280
-pmid 277
-location 274
+edition 279
+pmid 276
+location 272
 pagetotal 190
-month 168
-address 153
-annote 153
-series 136
+month 167
+annote 152
+address 151
+series 135
 note 126
 eprinttype 106
 institution 58
-__markedentry 54
+__markedentry 53
 eventtitle 51
 howpublished 42
 organization 40

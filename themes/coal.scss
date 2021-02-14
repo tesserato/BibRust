@@ -1,4 +1,3 @@
-
 //Main Theme Variables
 $backgroundColor: #222 !default; //background color of tabulator
 $borderColor:#333 !default; //border to tabulator
@@ -62,6 +61,16 @@ $footerActiveColor:#fff !default; //footer bottom active text color
       // color:darken($headerTextColor, 15%);
     }
   }
+}
+
+input{
+  margin: 0%;
+  padding: 0%;
+  color: $rowTextColor;
+  background-color: darken($backgroundColor,5%);
+  border: none;
+  font-family: $fontfamily;
+  font-size:$textSize;
 }
 
 html{
@@ -187,10 +196,10 @@ body {
 }
 ::-webkit-scrollbar-thumb {/* Handle */
   border-radius: .3em;
-  background: $sortArrowInactive;
+  background: $headerBackgroundColor;
 }
 ::-webkit-scrollbar-thumb:hover {/* Handle on hover */
-  background: $sortArrowActive;
+  background: darken($color:$headerBackgroundColor, $amount: 10%);
 }
 
 
@@ -278,7 +287,7 @@ a:active {
 //Tabulator Containing Element//
 .tabulator{
 	position: relative;
-	border: 1px solid $borderColor;
+	// border: 1px solid $borderColor;
 	background-color: $backgroundColor;
 	overflow:visible;
 	font-size:$textSize;
@@ -313,7 +322,7 @@ a:active {
 
 		width:100%;
 
-		border-bottom:1px solid $headerSeperatorColor;
+		// border-bottom:1px solid $headerSeperatorColor;
 		background-color: $headerBackgroundColor;
 		color: $headerTextColor;
 		font-weight:bold;
@@ -334,7 +343,7 @@ a:active {
 			display:inline-block;
 			position:relative;
 			box-sizing:border-box;
-			border-right:1px solid $headerBorderColor;
+			// border-right:1px solid $headerBorderColor;
 			background-color: $headerBackgroundColor;
 			text-align:left;
 			vertical-align: bottom;
@@ -383,7 +392,7 @@ a:active {
 						box-sizing: border-box;
 						width: 100%;
 
-						border:1px solid #999;
+						// border:1px solid #999;
 
 						padding:1px;
 
@@ -426,7 +435,7 @@ a:active {
 					position:relative;
 					display: flex;
 
-					border-top:1px solid $headerBorderColor;
+					// border-top:1px solid $headerBorderColor;
 					overflow: hidden;
 
 					margin-right:-1px;
@@ -444,7 +453,8 @@ a:active {
 			.tabulator-header-filter{
 				position: relative;
 				box-sizing: border-box;
-				margin-top:2px;
+				border:0px solid #999;
+        border-radius: .3em;
 				width:100%;
 				text-align: center;
 
@@ -458,7 +468,7 @@ a:active {
 				}
 
 				input, select{
-					border:1px solid #999;
+					border:0px solid #999;
 					background: #444;
 					color: #fff;
 				}
@@ -943,6 +953,8 @@ a:active {
 		display:inline-block;
 		position: relative;
 		box-sizing:border-box;
+    // margin-left: .1em;
+    // padding-left: .4em;
 		padding:4px;
 		border-right:1px solid $rowBorderColor;
 		vertical-align:middle;
@@ -951,22 +963,34 @@ a:active {
 		text-overflow:ellipsis;
 
 
-		&.tabulator-editing{
-			border:1px solid  $editBoxColor;
-			outline:none;
-
-			padding: 0;
-
-			input, select{
-				border:1px;
-				background:transparent;
-			}
-		}
+		// &.tabulator-editing{
+    //   // display:inline-block;
+    //   // position: relative;
+    //   // box-sizing:border-box;
+    //   // padding:4px;
+    //   // border-right:1px solid $rowBorderColor;
+    //   // vertical-align:middle;
+    //   // white-space:nowrap;
+    //   // overflow:hidden;
+    //   // text-overflow:ellipsis;
+		// 	input, select{
+    //     display:inline-block;
+    //     position: relative;
+    //     box-sizing:border-box;
+    //     // padding:4px;
+    //     // border-right:1px solid $rowBorderColor;
+    //     vertical-align:middle;
+    //     white-space:nowrap;
+    //     overflow:hidden;
+    //     text-overflow:ellipsis;
+		// 		background:transparent;
+		// 	}
+		// }
 
 		&.tabulator-validation-fail{
 			border:1px solid $errorColor;
 			input, select{
-				border:1px;
+				// border:1px;
 				background:transparent;
 
 				color: $errorColor;
@@ -1217,10 +1241,10 @@ a:active {
 	position: absolute;
 	display:inline-block;
 	box-sizing:border-box;
-
+  color: $rowTextColor;
 	background:$rowBackgroundColor;
-	border:1px solid $rowBorderColor;
-	box-shadow: 0 0 5px 0 rgba(0, 0, 0, .2);
+	// border:1px solid $rowBorderColor;
+	// box-shadow: 0 0 5px 0 rgba(0, 0, 0, .2);
 
 	font-size:$textSize;
 

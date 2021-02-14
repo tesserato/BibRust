@@ -89,13 +89,33 @@ var coldef = [                 //define the table columns
       cell.setValue(!cell.getValue(), true)
     },
     headerFilterFunc: customHeaderFilter,
-
   },
   { title: "Type", field: "type", titleDownload: "type", editor: "select", editorParams: types, headerFilter: "input", headerContextMenu: hcm, validator: "required" },
   { title: "Key", field: "key", titleDownload: "key", editor: "input", headerFilter: "input", headerContextMenu: hcm, validator: "required", validator: "unique" },
   { title: "Author", field: "author", titleDownload: "author", width: ww, editor: "input", headerFilter: "input", headerContextMenu: hcm },
   { title: "Editor", field: "editor", titleDownload: "editor", width: ww, editor: "input", headerFilter: "input", headerContextMenu: hcm },
   { title: "Title", field: "title", titleDownload: "title", width: ww, editor: "input", headerFilter: "input", headerContextMenu: hcm },
+  {
+    title: "&check;",
+    field: "V",
+    // titleDownload: "reviewed",
+    download:false,
+    headerFilter: true,
+    hozAlign: "center",
+    formatter: "tickCross",
+    sorter: "boolean",
+    formatterParams: {
+      allowEmpty: false,
+      allowTruthy: true,
+      tickElement: "&check;",
+      crossElement: false,
+    },
+    cellClick: function (e, cell) {
+      cell.setValue(!cell.getValue(), true);
+      cell.getRow().toggleSelect();
+    },
+    headerFilterFunc: customHeaderFilter,
+  },
   { title: "Year", field: "year", titleDownload: "year", editor: "input", headerFilter: "input", headerContextMenu: hcm },
   { title: "Journal", field: "journal", titleDownload: "journal", width: ww, editor: "input", headerFilter: "input", headerContextMenu: hcm },
   { title: "url", field: "url", titleDownload: "url", width: ww, editor: "input", headerFilter: "input", 
@@ -137,15 +157,15 @@ for (field of sortedfields) {
   }
 }
 
-function fullscreen() {
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen) { /* Safari */
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) { /* IE11 */
-    elem.msRequestFullscreen();
-  }
-}
+// function fullscreen() {
+//   if (elem.requestFullscreen) {
+//     elem.requestFullscreen();
+//   } else if (elem.webkitRequestFullscreen) { /* Safari */
+//     elem.webkitRequestFullscreen();
+//   } else if (elem.msRequestFullscreen) { /* IE11 */
+//     elem.msRequestFullscreen();
+//   }
+// }
 
 function updatealltags() {
   alltags = new Set([]);

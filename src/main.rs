@@ -25,6 +25,9 @@ use url::Url;
 // extern crate nom_bibtex;
 // use nom_bibtex::*;
 
+extern crate unidecode;
+use unidecode::unidecode;
+
 extern crate serde;
 use serde::{Deserialize, Serialize};
 
@@ -191,7 +194,7 @@ fn parse_creators_field(original_value:&str) -> Vec<Name>{
     .trim()
     .to_string()
   }
-  for fl in original_value.trim_matches(pattern).split("and").map(|x| x.trim()){
+  for fl in original_value.trim_matches(pattern).split(" and ").map(|x| x.trim()){
     if fl.contains(","){
       let fl_vec = fl.split_once(",").unwrap();
       authors.push(Name{
@@ -807,13 +810,14 @@ fn generate_key(entry: &Entry) -> String{
   roles.sort();
   let mut creator = "creator".to_string();
   let mut etal = "";
-  for role in roles{
+  'outer:for role in roles{
     for name in &entry.Creators[&role]{
       if !name.last_name.trim().is_empty(){
-        creator = name.last_name.clone();
+        creator = unidecode(&name.last_name);
         if entry.Creators[&role].len() > 1 {
           etal = "_etal";
         }
+        break 'outer;
       }
     }
   }
