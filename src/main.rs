@@ -1461,7 +1461,16 @@ fn remove_redundant_Entries(entries: & mut Vec<Entry>){
   let mut repeated: Vec<usize> = vec![];
   for i in 0..entries.len(){
     for j in (i+1)..entries.len(){
-      if entries[i] == entries[j] {
+      if 
+      entries[i].Creators == entries[j].Creators &&
+      entries[i].Fields_Values == entries[j].Fields_Values &&
+      entries[i].Type == entries[j].Type
+      { 
+        if entries[j].Reviewed{
+          entries[i].Reviewed = true;
+        }
+        entries[i].Files = entries[i].Files.union(&entries[j].Files).map(|x| x.to_owned()).collect();
+        entries[i].Tags = entries[i].Tags.union(&entries[j].Tags).map(|x| x.to_owned()).collect();
         repeated.push(j);
       }
     }
