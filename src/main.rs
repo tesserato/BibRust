@@ -1403,15 +1403,15 @@ fn remove_redundant_Entries(entries: & mut Vec<Entry>){
   }
   remove_by_field(entries, "title");// Check entries with same abstract
   remove_by_field(entries, "file");// Check entries with same abstract
-  remove_by_field(entries, "abstract");// Check entries with same abstract
-  remove_by_field(entries, "doi");// Check entries with same doi
-  remove_by_field(entries, "isbn");// Check entries with same isbn
-  remove_by_field(entries, "url");// Check entries with same url
-  remove_by_field(entries, "booktitle");// Check entries with same booktitle
-  remove_by_field(entries, "eprint");// Check entries with same eprint
-  remove_by_field(entries, "arxivid");// Check entries with same arxivid  
-  remove_by_field(entries, "shorttitle");// Check entries with same shorttitle
-  remove_by_field(entries, "pmid");// Check entries with same pmid
+  // remove_by_field(entries, "abstract");// Check entries with same abstract
+  // remove_by_field(entries, "doi");// Check entries with same doi
+  // remove_by_field(entries, "isbn");// Check entries with same isbn
+  // remove_by_field(entries, "url");// Check entries with same url
+  // remove_by_field(entries, "booktitle");// Check entries with same booktitle
+  // remove_by_field(entries, "eprint");// Check entries with same eprint
+  // remove_by_field(entries, "arxivid");// Check entries with same arxivid  
+  // remove_by_field(entries, "shorttitle");// Check entries with same shorttitle
+  // remove_by_field(entries, "pmid");// Check entries with same pmid
 }
 
 fn remove_by_field(mut entries: & mut Vec<Entry>, field:&str){
@@ -1423,6 +1423,8 @@ fn remove_by_field(mut entries: & mut Vec<Entry>, field:&str){
         let val_i: String = entries[i].Fields_Values[field].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
         let val_j: String = entries[j].Fields_Values[field].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
         if val_i == val_j{
+          println!("\n{}", entries[i].Fields_Values[field]);
+          println!("{}\n", entries[j].Fields_Values[field]);
           let merged = merge(&mut entries, i, j);
           if merged{
             repeated.push(j);

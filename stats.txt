@@ -1,21 +1,21 @@
-Found a total of 3769 entries
-(96 reviewed, 3769 with author, 1805 with doi, 1794 with files, 1138 whith url):
-article 2195
-book 936
-inproceedings 246
-misc 147
-collection 47
+Found a total of 3702 entries
+(100 reviewed, 3702 with author, 1770 with doi, 1770 with files, 1112 whith url):
+article 2149
+book 923
+inproceedings 245
+misc 145
+collection 46
 unpublished 44
-incollection 33
+incollection 32
 online 28
 electronic 26
 phdthesis 16
-resreport 7
 review 7
-techreport 7
 inreference 6
+resreport 6
 editorial material 5
 manual 5
+techreport 5
 software 3
 candthesis 2
 reference 2
@@ -26,41 +26,41 @@ mastersthesis 1
 proceedings paper 1
 
 Fields:
-title 3769
-year 3413
-journal 2584
-pages 2536
-abstract 2236
-volume 1904
-doi 1805
-issn 1546
-number 1516
-isbn 1350
-publisher 1218
-url 1138
-keywords 1082
-langid 616
-eprint 446
-shorttitle 422
-urldate 392
-arxivid 375
-archiveprefix 339
-edition 277
-pmid 274
-location 270
-pagetotal 190
-month 156
-annote 151
-address 150
+title 3702
+year 3351
+journal 2531
+pages 2488
+abstract 2192
+volume 1861
+doi 1770
+issn 1514
+number 1486
+isbn 1325
+publisher 1197
+url 1112
+keywords 1062
+langid 600
+eprint 439
+shorttitle 411
+urldate 380
+arxivid 369
+archiveprefix 334
+edition 275
+pmid 267
+location 264
+pagetotal 185
+month 155
+address 149
+annote 149
 series 133
-note 125
-eprinttype 103
-institution 58
-__markedentry 53
+note 121
+eprinttype 101
+institution 56
+__markedentry 52
 howpublished 42
 organization 40
-booktitle 26
 eventtitle 26
+booktitle 25
 ean 16
 biburl 15
 timestamp 15
@@ -85,7 +85,6 @@ adsurl 1
 annotation 1
 collection 1
 ee 1
-id 1
 interhash 1
 intrahash 1
 language 1
