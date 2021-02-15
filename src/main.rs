@@ -1394,15 +1394,89 @@ fn remove_redundant_Entries(entries: & mut Vec<Entry>){
       }
     }
   }  
-  println!("Removed {} Identical entries", &repeated.len());
+  println!("Removed {} identical entries", &repeated.len());
   repeated.sort_unstable_by(|a, b| b.cmp(a));
   repeated.dedup();
 
   for i in repeated{
     entries.remove(i);
   }
-  remove_by_field(entries, "title");// Check entries with same abstract
-  remove_by_field(entries, "file");// Check entries with same abstract
+
+  // Remove identical entries
+  let mut repeated: Vec<usize> = vec![];
+  for i in 0..entries.len(){
+    if entries[i].Fields_Values.contains_key("title") && entries[i].Reviewed {
+      for j in (i+1)..entries.len(){
+        if entries[j].Fields_Values.contains_key("title"){
+          let val_i: String = entries[i].Fields_Values["title"].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
+          let val_j: String = entries[j].Fields_Values["title"].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
+          if val_i == val_j{
+            println!("\n{}", entries[i].Fields_Values["title"]);
+            println!("{}\n", entries[j].Fields_Values["title"]);
+          repeated.push(j);
+          }
+        }
+      }
+    }  
+  }
+  println!("Removed {} entries that mirror reviewed ones", &repeated.len());
+  repeated.sort_unstable_by(|a, b| b.cmp(a));
+  repeated.dedup();
+
+  for i in repeated{
+    entries.remove(i);
+  }
+
+  // Remove identical entries
+  let mut repeated: Vec<usize> = vec![];
+  for i in 0..entries.len(){
+    if entries[i].Files.len() > 0 && entries[i].Reviewed {
+      for j in (i+1)..entries.len(){
+        if entries[j].Files.len() > 0{
+          if entries[i].Files == entries[j].Files{
+            println!("\n{}", entries[i].Fields_Values["title"]);
+            println!("{}\n", entries[j].Fields_Values["title"]);
+            repeated.push(j);
+          }
+        }
+      }
+    }  
+  }
+  println!("Removed {} entries that point to the same file as reviewed ones", &repeated.len());
+  repeated.sort_unstable_by(|a, b| b.cmp(a));
+  repeated.dedup();
+
+  for i in repeated{
+    entries.remove(i);
+  }
+
+  // Remove identical entries
+  let mut repeated: Vec<usize> = vec![];
+  for i in 0..entries.len(){
+    if entries[i].Fields_Values.contains_key("title") && entries[i].Files.len() > 0 {
+      for j in (i+1)..entries.len(){
+        if entries[j].Fields_Values.contains_key("title") && entries[j].Files.len() > 0 && !entries[j].Reviewed{
+          let val_i: String = entries[i].Fields_Values["title"].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
+          let val_j: String = entries[j].Fields_Values["title"].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
+          if val_i == val_j && entries[i].Files == entries[j].Files {
+            println!("\n{}", entries[i].Fields_Values["title"]);
+            println!("{}\n", entries[j].Fields_Values["title"]);
+            repeated.push(j);
+          }
+        }
+      }
+    }  
+  }
+  println!("Removed {} redundand entries", &repeated.len());
+  repeated.sort_unstable_by(|a, b| b.cmp(a));
+  repeated.dedup();
+
+  for i in repeated{
+    entries.remove(i);
+  }
+
+  // remove_by_field(entries, "title");// Check entries with same abstract
+  // remove_by_field(entries, "file");// Check entries with same abstract
   // remove_by_field(entries, "abstract");// Check entries with same abstract
   // remove_by_field(entries, "doi");// Check entries with same doi
   // remove_by_field(entries, "isbn");// Check entries with same isbn
