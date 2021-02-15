@@ -1351,7 +1351,7 @@ fn main() -> Result<()> {
   if args.is_present("lookup"){
     lookup(&mut main_entries);
   }
-  
+
   // merge
   if args.is_present("merge"){
     remove_redundant_Entries(&mut main_entries);
@@ -1483,8 +1483,8 @@ fn remove_redundant_Entries(entries: & mut Vec<Entry>){
           let val_i: String = entries[i].Fields_Values["title"].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
           let val_j: String = entries[j].Fields_Values["title"].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
           if val_i == val_j{
-            println!("\n{}", entries[i].Fields_Values["title"]);
-            println!("{}\n", entries[j].Fields_Values["title"]);
+            // println!("\n{}", entries[i].Fields_Values["title"]);
+            // println!("{}\n", entries[j].Fields_Values["title"]);
           repeated.push(j);
           }
         }
@@ -1506,8 +1506,8 @@ fn remove_redundant_Entries(entries: & mut Vec<Entry>){
       for j in (i+1)..entries.len(){
         if entries[j].Files.len() > 0{
           if entries[i].Files == entries[j].Files{
-            println!("\n{}", entries[i].Fields_Values["title"]);
-            println!("{}\n", entries[j].Fields_Values["title"]);
+            // println!("\n{}", entries[i].Fields_Values["title"]);
+            // println!("{}\n", entries[j].Fields_Values["title"]);
             repeated.push(j);
           }
         }
@@ -1531,8 +1531,8 @@ fn remove_redundant_Entries(entries: & mut Vec<Entry>){
           let val_i: String = entries[i].Fields_Values["title"].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
           let val_j: String = entries[j].Fields_Values["title"].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
           if val_i == val_j && entries[i].Files == entries[j].Files {
-            println!("\n{}", entries[i].Fields_Values["title"]);
-            println!("{}\n", entries[j].Fields_Values["title"]);
+            // println!("\n{}", entries[i].Fields_Values["title"]);
+            // println!("{}\n", entries[j].Fields_Values["title"]);
             repeated.push(j);
           }
         }
@@ -1547,10 +1547,10 @@ fn remove_redundant_Entries(entries: & mut Vec<Entry>){
     entries.remove(i);
   }
 
-  // remove_by_field(entries, "title");// Check entries with same abstract
+  // remove_by_field(entries, "title");
   // remove_by_field(entries, "file");// Check entries with same abstract
-  // remove_by_field(entries, "abstract");// Check entries with same abstract
-  // remove_by_field(entries, "doi");// Check entries with same doi
+  // remove_by_field(entries, "abstract");
+  remove_by_field(entries, "doi");
   // remove_by_field(entries, "isbn");// Check entries with same isbn
   // remove_by_field(entries, "url");// Check entries with same url
   // remove_by_field(entries, "booktitle");// Check entries with same booktitle
@@ -1569,8 +1569,8 @@ fn remove_by_field(mut entries: & mut Vec<Entry>, field:&str){
         let val_i: String = entries[i].Fields_Values[field].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
         let val_j: String = entries[j].Fields_Values[field].trim().to_lowercase().chars().filter(|x| x.is_alphanumeric()).collect();
         if val_i == val_j{
-          println!("\n{}", entries[i].Fields_Values[field]);
-          println!("{}\n", entries[j].Fields_Values[field]);
+          // println!("\n{}", entries[i].Fields_Values[field]);
+          // println!("{}\n", entries[j].Fields_Values[field]);
           let merged = merge(&mut entries, i, j);
           if merged{
             repeated.push(j);

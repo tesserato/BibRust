@@ -1,7 +1,7 @@
-Found a total of 3486 entries
-(100 reviewed, 3485 with author, 1599 with doi, 1555 with files, 1041 whith url):
-article 1986
-book 907
+Found a total of 3484 entries
+(106 reviewed, 3484 with author, 1599 with doi, 1555 with files, 1039 whith url):
+article 1985
+book 906
 inproceedings 224
 misc 143
 collection 46
@@ -26,20 +26,20 @@ proceedings paper 1
 reference 1
 
 Fields:
-title 3486
-year 3138
-journal 2335
-pages 2303
+title 3484
+year 3136
+journal 2333
+pages 2301
 abstract 2004
-volume 1716
+volume 1715
 doi 1599
-number 1399
-issn 1382
-isbn 1264
-publisher 1136
-url 1041
+number 1398
+issn 1380
+isbn 1263
+publisher 1134
+url 1039
 keywords 948
-langid 603
+langid 602
 shorttitle 397
 eprint 384
 urldate 378
