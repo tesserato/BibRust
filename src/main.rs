@@ -1014,6 +1014,11 @@ fn parse_crossref(w:Work, e: &mut Entry) -> bool{
 
   let mut new_entry = Entry{Type: new_type, Key: e.Key.clone(),..Default::default()};
 
+  match e.Fields_Values.get("doi") {
+    Some(d) => {new_entry.Fields_Values.insert("doi".to_string(), d.to_owned()); ()},
+    None => println!("Doi error"),
+  };
+
   if e.Files.len() > 0 {
     println!("file(s): {}", hashset_to_string(&e.Files));
     new_entry.Files = e.Files.clone();
@@ -1116,7 +1121,6 @@ fn parse_crossref(w:Work, e: &mut Entry) -> bool{
     },
     None => (),
   }
-
   match w.isbn{/////////////////////////////////////////////////////
     Some(isbn) => {
       new_entry.Fields_Values.insert("isbn".to_string(), isbn.join(","));
