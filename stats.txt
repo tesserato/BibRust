@@ -1,13 +1,13 @@
 Found a total of 3486 entries
-(100 reviewed, 3486 with author, 1619 with doi, 1555 with files, 1028 whith url):
-article 1988
-book 902
-inproceedings 223
-misc 145
+(100 reviewed, 3485 with author, 1599 with doi, 1555 with files, 1041 whith url):
+article 1986
+book 907
+inproceedings 224
+misc 143
 collection 46
 unpublished 39
-incollection 28
 online 28
+incollection 27
 electronic 26
 phdthesis 14
 review 7
@@ -15,7 +15,7 @@ inreference 6
 resreport 6
 editorial material 5
 manual 5
-techreport 5
+techreport 4
 software 3
 candthesis 2
 report 2
@@ -27,35 +27,35 @@ reference 1
 
 Fields:
 title 3486
-year 3136
-journal 2333
-pages 2305
-abstract 2019
-volume 1719
-doi 1619
+year 3138
+journal 2335
+pages 2303
+abstract 2004
+volume 1716
+doi 1599
 number 1399
-issn 1378
-isbn 1261
-publisher 1125
-url 1028
-keywords 951
-langid 595
-shorttitle 399
-eprint 388
+issn 1382
+isbn 1264
+publisher 1136
+url 1041
+keywords 948
+langid 603
+shorttitle 397
+eprint 384
 urldate 378
-arxivid 319
-archiveprefix 284
-edition 268
+arxivid 315
+archiveprefix 280
+edition 266
 location 262
-pmid 237
+pmid 233
 pagetotal 185
-month 151
+month 149
 address 147
-annote 136
+annote 134
 series 132
 note 120
 eprinttype 100
-institution 52
+institution 51
 __markedentry 49
 howpublished 41
 organization 37

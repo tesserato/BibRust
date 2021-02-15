@@ -729,6 +729,14 @@ fn parse_cl_args() -> ArgMatches<'static> {
       .takes_value(false)
       .required(false)
     )
+    .arg(Arg::with_name("lookup")
+      .short("l")
+      .long("lookup")
+      .value_name("lookup entries?")
+      .help("if set, searches for data from crossref for entries with doi and prompts the user to accept changes")
+      .takes_value(false)
+      .required(false)
+  )
     .arg(Arg::with_name("merge")
       .short("m")
       .long("merge")
@@ -994,44 +1002,61 @@ fn get_statistics_and_clean(Entries:&mut Vec<Entry>, clean:bool) -> Statistics{
   stats
 }
 
-fn parse_crossref(w:Work, e: &mut Entry){
+fn parse_crossref(w:Work, e: &mut Entry) -> bool{
   println!("Processing entry:");
 
-  e.Tags.insert(RETRIEVED.to_string());
+  let new_type = match w.type_.as_ref() {
+    "journal-article" => "article".to_string(),
+    "proceedings-article" =>  "inproceedings".to_string(),
+    "book" | "book-chapter" =>  "book".to_string(),
+    _ =>  "misc".to_string(),
+  };
 
-  e.Fields_Values.insert("title".to_string(), w.title[0].clone());
+  let mut new_entry = Entry{Type: new_type, Key: e.Key.clone(),..Default::default()};
 
-  println!("{}", w.type_);
-  match w.type_.as_ref() {
-    "journal-article" => e.Type = "article".to_string(),
-    "proceedings-article" => e.Type = "inproceedings".to_string(),
-    "book" | "book-chapter" => e.Type = "book".to_string(),
-    "other" => e.Type = "misc".to_string(),
-    _ => (),
+  if e.Files.len() > 0 {
+    println!("file(s): {}", hashset_to_string(&e.Files));
+    new_entry.Files = e.Files.clone();
   }
+  println!("type: {} → {}", e.Type, new_entry.Type);
+
+  new_entry.Tags = e.Tags.clone();
+  new_entry.Tags.insert(RETRIEVED.to_string());
+
+  new_entry.Fields_Values.insert("title".to_string(), w.title[0].clone());
+  let val = match e.Fields_Values.get("title"){
+    Some(v) => v,
+    None => "",
+  };
+  println!("title: {} → {}", val, new_entry.Fields_Values["title"]);
+
   match w.issued.date_parts.0[0][0]{/////////////////////////////////////////////////////
     Some(year) => {
-    println!("year = {}", year);
-    e.Fields_Values.insert("year".to_string(), year.to_string());
-    e.Fields_Values.remove("date");
-    e.Fields_Values.remove("month");
+    new_entry.Fields_Values.insert("year".to_string(), year.to_string());
+    let val = match e.Fields_Values.get("year"){
+      Some(v) => v,
+      None => "",
+    };
+    println!("year: {} → {}", val, new_entry.Fields_Values["year"]);
   },
     None => (),
   }
   match w.author{/////////////////////////////////////////////////////
     Some(author) => {
       let mut fauthors:Vec<Name> = vec![];
-      print!("author(s) = ");
       for a in author{
         let first = match a.given {
           Some(n) => n,
           None => "".to_string(),
         };
-        print!(" {} {} |", first, a.family);
         fauthors.push(Name{first_name:first, last_name:a.family});
       }
-      e.Creators.insert("author".to_string(), fauthors);
-      println!("");
+      new_entry.Creators.insert("author".to_string(), fauthors);
+      let val = match e.Creators.get("author"){
+        Some(v) => names_to_string(v),
+        None => "".to_string(),
+      };
+      println!("author: {} → {}", val, names_to_string(new_entry.Creators.get("author").unwrap()));
     }
     None => (),
   }
@@ -1044,7 +1069,6 @@ fn parse_crossref(w:Work, e: &mut Entry){
           Some(n) => n,
           None => "".to_string(),
         };
-
         print!(" {} {} |", first, a.family);
         feditors.push(Name{first_name:first, last_name:a.family});
       }
@@ -1072,93 +1096,155 @@ fn parse_crossref(w:Work, e: &mut Entry){
   }
   match w.container_title{/////////////////////////////////////////////////////
     Some(journal) => {
-      println!("journal = {}", journal[0]);
-      e.Fields_Values.insert("journal".to_string(), journal[0].clone());
-      e.Fields_Values.remove("journaltitle");
+      new_entry.Fields_Values.insert("journal".to_string(), journal[0].clone());
+      let val = match e.Fields_Values.get("journal"){
+        Some(v) => v,
+        None => "",
+      };
+      println!("journal: {} → {}", val, new_entry.Fields_Values["journal"]);
     },
     None => (),
   }
   match w.link{/////////////////////////////////////////////////////
     Some(link) => {
-      println!("url = {}", link[0].url);
-      e.Fields_Values.insert("url".to_string(), link[0].url.clone());
+      new_entry.Fields_Values.insert("url".to_string(), link[0].url.clone());
+      let val = match e.Fields_Values.get("url"){
+        Some(v) => v,
+        None => "",
+      };
+      println!("url: {} → {}", val, new_entry.Fields_Values["url"]);
     },
     None => (),
   }
 
   match w.isbn{/////////////////////////////////////////////////////
     Some(isbn) => {
-      println!("isbn = {}", isbn.join(","));
-      e.Fields_Values.insert("isbn".to_string(), isbn.join(","));
+      new_entry.Fields_Values.insert("isbn".to_string(), isbn.join(","));
+      let val = match e.Fields_Values.get("isbn"){
+        Some(v) => v,
+        None => "",
+      };
+      println!("isbn: {} → {}", val, new_entry.Fields_Values["isbn"]);
     },
     None => (),
   }
   match w.issn{/////////////////////////////////////////////////////
     Some(issn) => {
-      println!("issn = {}", issn.join(","));
-      e.Fields_Values.insert("issn".to_string(), issn.join(","));
+      new_entry.Fields_Values.insert("issn".to_string(), issn.join(","));
+      let val = match e.Fields_Values.get("issn"){
+        Some(v) => v,
+        None => "",
+      };
+      println!("issn: {} → {}", val, new_entry.Fields_Values["issn"]);
     },
     None => (),
   }
 
-  println!("publisher = {}", w.publisher);
-  e.Fields_Values.insert("publisher".to_string(), w.publisher);
+  new_entry.Fields_Values.insert("publisher".to_string(), w.publisher);
+  let val = match e.Fields_Values.get("publisher"){
+    Some(v) => v,
+    None => "",
+  };
+  println!("publisher: {} → {}", val, new_entry.Fields_Values["publisher"]);
 
-  // match w.article_number{/////////////////////////////////////////////////////
-  //   Some(number) => {
-  //     println!("number = {}", number);
-  //     e.Fields_Values.insert("number".to_string(), number);
-  //   },
-  //   None => (),
-  // }
   match w.volume{/////////////////////////////////////////////////////
     Some(volume) => {
-      println!("volume = {}", volume);
-      e.Fields_Values.insert("volume".to_string(), volume);
+      new_entry.Fields_Values.insert("volume".to_string(), volume);
+      let val = match e.Fields_Values.get("volume"){
+        Some(v) => v,
+        None => "",
+      };
+      println!("volume: {} → {}", val, new_entry.Fields_Values["volume"]);
     },
     None => (),
   }
   match w.page{/////////////////////////////////////////////////////
     Some(pages) => {
-      println!("pages = {}", pages);
-      e.Fields_Values.insert("pages".to_string(), pages.replace("-", "--"));
+      new_entry.Fields_Values.insert("pages".to_string(), pages.replace("-", "--"));
+      let val = match e.Fields_Values.get("pages"){
+        Some(v) => v,
+        None => "",
+      };
+      println!("pages: {} → {}", val, new_entry.Fields_Values["pages"]);
     },
     None => (),
   }
   match w.language{/////////////////////////////////////////////////////
     Some(langid) => {
-      println!("langid = {}", langid);
-      e.Fields_Values.insert("langid".to_string(), langid);
+      new_entry.Fields_Values.insert("langid".to_string(), langid);
+      let val = match e.Fields_Values.get("langid"){
+        Some(v) => v,
+        None => "",
+      };
+      println!("langid: {} → {}", val, new_entry.Fields_Values["langid"]);
     },
     None => (),
   }
   match w.journal_issue{/////////////////////////////////////////////////////
     Some(issue) => {
       let number = issue.issue.unwrap();
-      println!("number = {}", number);
-      e.Fields_Values.insert("number".to_string(), number);
+      new_entry.Fields_Values.insert("number".to_string(), number);
+      let val = match e.Fields_Values.get("number"){
+        Some(v) => v,
+        None => "",
+      };
+      println!("number: {} → {}", val, new_entry.Fields_Values["number"]);
     },
     None => (),
   }
-  match w.archive{/////////////////////////////////////////////////////
-    Some(archive) => {
-      println!("archive = {}", archive.join(","));
-    }
-    None => (),
-  }
+  // match w.archive{/////////////////////////////////////////////////////
+  //   Some(archive) => {
+  //     println!("archive = {}", archive.join(","));
+  //   }
+  //   None => (),
+  // }
   match w.subject{/////////////////////////////////////////////////////
     Some(keywords) => {
-      println!("keywords = {}", keywords.join(",").replace(" and ", ","));
+      new_entry.Fields_Values.insert("keywords".to_string(), keywords.join(",").replace(" and ", ","));
+      let val = match e.Fields_Values.get("keywords"){
+        Some(v) => v,
+        None => "",
+      };
+      println!("keywords: {} → {}", val, new_entry.Fields_Values["keywords"]);
     },
     None => (),
   }
   match w.abstract_{/////////////////////////////////////////////////////
     Some(abstr) => {
-      println!("abstract = {}", abstr);
+      new_entry.Fields_Values.insert("abstract".to_string(), abstr);
+      let val = match e.Fields_Values.get("abstract"){
+        Some(v) => v,
+        None => "",
+      };
+      println!("abstract: {} → {}", val, new_entry.Fields_Values["abstract"]);
     },
     None => (),
   }
-  println!("\n----------------------------------------------------------------------------")
+
+  let mut input = String::new();
+  let stdin = io::stdin(); // We get `Stdin` here.
+  let mut res = stdin.read_line(&mut input);
+  while res.is_err(){
+    let er = res.err().unwrap();
+    println!{"{}", er};
+    res = stdin.read_line(&mut input);
+  }
+  // println!("{:?}", input);
+  let res = match input.as_ref(){
+    "e\r\n" => {
+      println!("Exiting...");
+      true
+    },
+    "\r\n"  => {
+      *e = new_entry;
+      false
+    },
+    _       => {
+      println!("Skipping entry\n");
+      false
+    },
+  };
+ res
 }
 
 fn lookup(Entries:&mut Vec<Entry>) {
@@ -1168,30 +1254,14 @@ fn lookup(Entries:&mut Vec<Entry>) {
 
   println!("\nPress 'enter' to accept, enter any other input to skip current entry and 'e' to abort:\n");
   'outer:for e in Entries{
-    if e.Fields_Values.contains_key("doi") && e.Files.len() >0 && !e.Reviewed{
-      match client.work(&e.Fields_Values["doi"]){
-        Ok(w) => {
-          println!("original {}", e.Fields_Values["title"]);
-          println!("fetched  {}", w.title.join(" | "));
-          println!("file     {}", hashset_to_string(&e.Files));
-
-          let mut input = String::new();
-          let stdin = io::stdin(); // We get `Stdin` here.
-          let mut res = stdin.read_line(&mut input);
-          while res.is_err(){
-            let er = res.err().unwrap();
-            println!{"{}", er};
-            res = stdin.read_line(&mut input);
-          }
-          // println!("{:?}", input);
-          match input.as_ref(){
-            "e\r\n" => {println!("Exiting..."); break 'outer;},
-            "\r\n"  => {parse_crossref(w, e); println!("");},
-            _       => println!("Skipping entry\n"),
-          }
-        },
-        Err(er) => println!("{}\n----------------------------------------------------------------------------", er),
+    if e.Fields_Values.contains_key("doi") && !e.Tags.contains(RETRIEVED) && !e.Reviewed{
+      let res = match client.work(&e.Fields_Values["doi"]){
+        Ok(w) => parse_crossref(w, e),
+        Err(er) => {println!("\n{}\n", er); false},
       };
+      if res {
+        break 'outer;
+      }
     }
   }
 }
@@ -1278,8 +1348,10 @@ fn main() -> Result<()> {
     }
   }
 
-  // lookup(&mut main_entries);
-
+  if args.is_present("lookup"){
+    lookup(&mut main_entries);
+  }
+  
   // merge
   if args.is_present("merge"){
     remove_redundant_Entries(&mut main_entries);
