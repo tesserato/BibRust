@@ -38,7 +38,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-name: Windows_latest
-          # tag-name: 'v1.3-alpha'
+          tag-name: Windows_latest
           asset-name: release.zip
           file: release.zip
 
@@ -78,7 +78,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-name: Linux_latest
-          # tag-name: 'v1.3-alpha'
+          tag-name: Linux_latest
           asset-name: release.zip
           file: release.zip
 
