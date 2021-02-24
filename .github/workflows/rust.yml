@@ -1,9 +1,9 @@
-name: Windows
+name: Release
 on: [workflow_dispatch]
 
 jobs:
   build:
-    name: Rust project
+    name: Windows
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -38,6 +38,45 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-name: Windows_latest
+          # tag-name: 'v1.3-alpha'
+          asset-name: release.zip
+          file: release.zip
+
+    name: Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: ./
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+
+      - name: Zip files
+        uses: papeloto/action-zip@v1
+        with:
+          files:
+            ./00table.html
+            ./01table.css
+            ./02bundle.js
+            ./target/release/bibrust
+          dest: release.zip
+
+      - name: Release
+        uses: djnicholson/release-action@v2.11
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-name: Linux_latest
           # tag-name: 'v1.3-alpha'
           asset-name: release.zip
           file: release.zip
