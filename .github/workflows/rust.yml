@@ -28,8 +28,8 @@ jobs:
             00table.html
             01table.css
             02bundle.js
-            target/release/bibrust.exe
-          dest: result.zip
+            ./target/release/bibrust.exe
+          dest: release.zip
 
       # - name: Copy files to release folder
       # #   working-directory: ./
