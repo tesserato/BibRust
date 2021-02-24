@@ -22,8 +22,8 @@ jobs:
           args: --release
 
       - name: Zip files
-        uses: papeloto/action-zip@v1
         working-directory: ./
+        uses: papeloto/action-zip@v1
         with:
           files: |
             00table.html
