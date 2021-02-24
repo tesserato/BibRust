@@ -23,8 +23,8 @@ jobs:
 
       - name: Zip files
         uses: papeloto/action-zip@v1
+        working-directory: ./
         with:
-          working-directory: ./
           files: |
             00table.html
             01table.css
