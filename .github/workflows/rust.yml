@@ -24,7 +24,7 @@ jobs:
       - name: Zip files
         uses: papeloto/action-zip@v1
         with:
-          files: |
+          files:
             ${{ github.workspace }}/00table.html
             ${{ github.workspace }}/01table.css
             ${{ github.workspace }}/02bundle.js
