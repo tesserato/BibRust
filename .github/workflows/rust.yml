@@ -25,10 +25,10 @@ jobs:
         uses: papeloto/action-zip@v1
         with:
           files:
-            $GITHUB_WORKSPACE/00table.html
-            $GITHUB_WORKSPACE/01table.css
-            $GITHUB_WORKSPACE/02bundle.js
-            $GITHUB_WORKSPACE/target/release/bibrust.exe
+            ${{ github.workspace }}/repo/00table.html
+            ${{ github.workspace }}/repo/01table.css
+            ${{ github.workspace }}/repo/02bundle.js
+            ${{ github.workspace }}/repo/target/release/bibrust.exe
           dest: release.zip
 
       # - name: Copy files to release folder
