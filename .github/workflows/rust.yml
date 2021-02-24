@@ -33,23 +33,11 @@ jobs:
             ./target/release/bibrust.exe
           dest: release.zip
 
-      # - name: Copy files to release folder
-      # #   working-directory: ./
-      #   run: |
-      #     pwd
-      #     mkdir release -Force
-      #     cp 00table.html release
-      #     cp 01table.css release
-      #     cp 02bundle.js release
-      #     cp target/release/bibrust.exe release
-      #     zip ./release.zip ./release –m –r
-
       - name: Release
-        uses: softprops/action-gh-release@v1        
-        # if: startsWith(github.ref, 'refs/tags/')
+        uses: djnicholson/release-action@v2.11
         with:
-          tag_name: windows_latest
-          files: |
-            release.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-name: Windows_latest
+          # tag-name: 'v1.3-alpha'
+          asset-name: release.zip
+          file: release.zip
