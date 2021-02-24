@@ -23,12 +23,12 @@ jobs:
       - name: Step 1 - Create a temporary artifact downloads folder
         run: |
           pwd
-          mkdir ./release -Force
-          cp ./00table.html release
-          cp ./01table.css release
-          cp ./02bundle.js release
-          cp ./target/release/bibrust.exe release
-          zip ./release.zip ./release –m –r
+          mkdir release -Force
+          cp 00table.html release
+          cp 01table.css release
+          cp 02bundle.js release
+          cp target/release/bibrust.exe release
+          zip release.zip release –m –r
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
