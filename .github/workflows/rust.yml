@@ -24,11 +24,12 @@ jobs:
       - name: Zip files
         uses: papeloto/action-zip@v1
         with:
+          working-directory: ./
           files: |
             00table.html
             01table.css
             02bundle.js
-            ./target/release/bibrust.exe
+            target/release/bibrust.exe
           dest: release.zip
 
       # - name: Copy files to release folder
