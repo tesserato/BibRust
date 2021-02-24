@@ -30,7 +30,7 @@ jobs:
           cp 01table.css release
           cp 02bundle.js release
           cp target/release/bibrust.exe release
-          zip release.zip release –m –r
+          zip ./release.zip ./release –m –r
 
       - name: Release
         uses: softprops/action-gh-release@v1        
