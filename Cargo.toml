@@ -7,15 +7,15 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-nom-bibtex = "0.3.0"
+# nom-bibtex = "0.3.0"
 csv = "1"
 clap = "2.33.3"
 walkdir = "2"
 url = "2.2.0"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-html-minifier = "3.0.8"
-minifier = "0.0.36"
+# html-minifier = "3.0.8"
+# minifier = "0.0.36"
 unidecode = "0.3.0"
 crossref = "0.2.2"
 chrono = "0.4"

@@ -1,51 +1,45 @@
+name: Windows
 on: [workflow_dispatch]
 
-name: Windows
-
-defaults:
-  run:
-    working-directory: ./  
-
 jobs:
-  build_and_test:
+  build:
     name: Rust project
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
           override: true
-      - uses: actions-rs/cargo@v1
+
+      - name: Build
+        uses: actions-rs/cargo@v1
         with:
           command: build
           args: --release
-      - name: Step 1 - Create a temporary artifact downloads folder
-        run: |
-          pwd
-          mkdir release -Force
-          cp 00table.html release
-          cp 01table.css release
-          cp 02bundle.js release
-          cp target/release/bibrust.exe release
-          zip release.zip release –m –r
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+
+      # - name: Copy files to release folder
+      #   working-directory: ./
+      #   run: |
+      #     pwd
+      #     mkdir release -Force
+      #     cp 00table.html release
+      #     cp 01table.css release
+      #     cp 02bundle.js release
+      #     cp target/release/bibrust.exe release
+      #     zip release.zip release –m –r
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            bibrust.exe
+            00table.html
+            01table.css
+            02bundle.js 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: Windows_latest
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./release.zip
-          asset_name: release.zip
-          asset_content_type: application/zip
