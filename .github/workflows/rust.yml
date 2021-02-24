@@ -2,7 +2,7 @@ name: Release
 on: [workflow_dispatch]
 
 jobs:
-  build:
+  windows:
     name: Windows
     runs-on: windows-latest
     steps:
@@ -42,6 +42,7 @@ jobs:
           asset-name: release.zip
           file: release.zip
 
+  linux:
     name: Linux
     runs-on: ubuntu-latest
     steps:
@@ -80,3 +81,4 @@ jobs:
           # tag-name: 'v1.3-alpha'
           asset-name: release.zip
           file: release.zip
+
