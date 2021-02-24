@@ -21,16 +21,26 @@ jobs:
           command: build
           args: --release
 
-      - name: Copy files to release folder
-      #   working-directory: ./
-        run: |
-          pwd
-          mkdir release -Force
-          cp 00table.html release
-          cp 01table.css release
-          cp 02bundle.js release
-          cp target/release/bibrust.exe release
-          zip ./release.zip ./release –m –r
+      - name: Zip files
+        uses: papeloto/action-zip@v1
+        with:
+          files: |
+            00table.html
+            01table.css
+            02bundle.js
+            target/release/bibrust.exe
+          dest: result.zip
+
+      # - name: Copy files to release folder
+      # #   working-directory: ./
+      #   run: |
+      #     pwd
+      #     mkdir release -Force
+      #     cp 00table.html release
+      #     cp 01table.css release
+      #     cp 02bundle.js release
+      #     cp target/release/bibrust.exe release
+      #     zip ./release.zip ./release –m –r
 
       - name: Release
         uses: softprops/action-gh-release@v1        
