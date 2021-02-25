@@ -27,9 +27,9 @@ jobs:
         uses: papeloto/action-zip@v1
         with:
           files:
-            ./00table.html
-            ./01table.css
-            ./02bundle.js
+            # ./00table.html
+            # ./01table.css
+            # ./02bundle.js
             ./target/release/bibrust.exe
           dest: release.zip
 
@@ -67,9 +67,9 @@ jobs:
         uses: papeloto/action-zip@v1
         with:
           files:
-            ./00table.html
-            ./01table.css
-            ./02bundle.js
+            # ./00table.html
+            # ./01table.css
+            # ./02bundle.js
             ./target/release/bibrust
           dest: release.zip
 
@@ -107,9 +107,9 @@ jobs:
         uses: papeloto/action-zip@v1
         with:
           files:
-            ./00table.html
-            ./01table.css
-            ./02bundle.js
+            # ./00table.html
+            # ./01table.css
+            # ./02bundle.js
             ./target/release/bibrust
           dest: release.zip
 

@@ -475,11 +475,14 @@ fn write_csv(path: &PathBuf, entries: &Vec<Entry>, ordered_fields: &Vec<String>)
 }
 
 fn write_html(path: &PathBuf, entries: &Vec<Entry>){
-  // let mut html = String::new();
-  let mut html = std::fs::read_to_string("00table.html").expect("Something went wrong reading table.html");
-  let css = std::fs::read_to_string("01table.css").expect("Something went wrong reading 01table.css");
-  let js = std::fs::read_to_string("02bundle.js").expect("Something went wrong reading 02tabulator.js");
-  // let table = std::fs::read_to_string("04table.js").expect("Something went wrong reading 04table.js");
+  // let mut html = std::fs::read_to_string("00table.html").expect("Something went wrong reading table.html");
+  // let css = std::fs::read_to_string("01table.css").expect("Something went wrong reading 01table.css");
+//   let js = std::fs::read_to_string("02bundle.js").expect("Something went wrong reading 02tabulator.js");
+
+  let mut html = include_str!("00table.html").to_string();
+  let css = include_str!("01table.css").to_string();
+  let js = include_str!("02bundle.js").to_string();
+
 
   // let mut js = tabulator;
   // js.push_str(&entries_to_js_obj(entries));
