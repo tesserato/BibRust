@@ -1,6 +1,7 @@
 #![feature(str_split_once)]
 #![allow(non_snake_case)]
 
+use std::fs;
 use std::{cmp::Ordering, vec};
 use std::io::BufReader;
 use std::fs::File;
@@ -11,7 +12,7 @@ use std::collections::HashSet;
 use std::str;
 use std::env;
 // use std::ffi::OsStr;
-use std::io::{self, Read};
+use std::io;
 // use chrono::NaiveDate;
 
 extern crate csv;
@@ -662,11 +663,6 @@ fn read_and_parse_csv(path:PathBuf) -> Vec<Entry>{
   Entries
 }
 
-fn read_and_parse_json(path: &Path) -> Vec<Entry>{
-  let file = File::open(path).expect("File not found");
-  serde_json::from_reader(file).expect("Error while reading")
-}
-
 fn parse_cl_args() -> ArgMatches<'static> {
   App::new("SAMARA")
     .version("1.0")
@@ -863,6 +859,11 @@ fn get_statistics_and_clean(Entries:&mut Vec<Entry>, clean:bool) -> Statistics{
       }      
       entry.Key = key;
 
+
+      // for file in entry.Files.into() {
+
+      // }
+
       // date and year
       let mut date: Vec<String> = vec![];
       if entry.Fields_Values.contains_key("date"){
@@ -1010,10 +1011,26 @@ fn parse_crossref(w:Work, e: &mut Entry) -> bool{
 
   let new_type = match w.type_.as_ref() {
     "journal-article" => "article".to_string(),
-    "proceedings-article" =>  "inproceedings".to_string(),
-    "book" | "book-chapter" =>  "book".to_string(),
+    "proceedings-article" => "inproceedings".to_string(),
+    "book" | "reference-book" | "edited-book" => "book".to_string(),
+    "book-chapter" | "book-section" | "book-part" | "book-track" => "inbook".to_string(),
+    "dissertation" | "monograph" => "thesis".to_string(),
     _ =>  "misc".to_string(),
   };
+
+// {"id":"book-section","label":"Book Section"},
+// {"id":"book-part","label":"Part"}
+// {"id":"book-track","label":"Book Track"}
+// {"id":"journal-article","label":"Journal Article"}
+// ,{"id":"book","label":"Book"},
+// {"id":"proceedings-article","label":"Proceedings Article"}
+// {"id":"reference-book","label":"Reference Book"}
+// {"id":"book-chapter","label":"Book Chapter"}
+// {"id":"edited-book","label":"Edited Book"}
+// {"id":"dissertation","label":"Dissertation"}
+// {"id":"monograph","label":"Monograph"}
+
+// ,{"id":"report","label":"Report"},{"id":"peer-review","label":"Peer Review"},,,,{"id":"other","label":"Other"}{"id":"journal-volume","label":"Journal Volume"},{"id":"book-set","label":"Book Set"},{"id":"reference-entry","label":"Reference Entry"},,{"id":"journal","label":"Journal"},{"id":"component","label":"Component"},,{"id":"proceedings-series","label":"Proceedings Series"},{"id":"report-series","label":"Report Series"},{"id":"proceedings","label":"Proceedings"},{"id":"standard","label":"Standard"},,{"id":"posted-content","label":"Posted Content"},{"id":"journal-issue","label":"Journal Issue"},,{"id":"dataset","label":"Dataset"},{"id":"book-series","label":"Book Series"},,{"id":"standard-series","label":"Standard Series"}]}}
 
   let mut new_entry = Entry{Type: new_type, Key: e.Key.clone(),..Default::default()};
 
@@ -1287,22 +1304,57 @@ fn temp_clean(Entries:&mut Vec<Entry>){
 fn rename_files(Entries:&mut Vec<Entry>){
   for e in Entries{
     if !e.Files.is_empty() && e.Reviewed{
-      let key = generate_key(e);
+      let mut newnames:HashSet<String> = HashSet::new();
+      let mut oldnames:HashSet<String> = HashSet::new();
       let typ = match e.Type.as_ref() {
         "article" | "inproceedings" | "incollection" => "a",
+        "preprint" => "p",
         "book" | "collection" | "thesis" | "mvbook" | "phdthesis" => "b",
         _ => "r"
       };
       let tit = match e.Fields_Values["title"].split(":").next(){
-        Some(t) => t,
-        None => "NO_TITLE"
+        Some(t) => t.chars().filter(|x| x.is_alphanumeric() || x == &' ' || x == &'-' || x == &'_').collect::<String>(),
+        None => "NO_TITLE".to_string()
       };
-      let iterexts = e.Files.iter().map(|x| Path::new(x).extension());
+      let paths = e.Files.iter().map(|x| Path::new(x));
 
-      for ext in iterexts{
-        if ext.is_some(){
-          println!("!{} {{{}}} {}.{}", typ, key, tit, ext.unwrap().to_str().unwrap());
+      for path in paths{
+        if path.extension().is_some(){
+          let rt = path.parent().unwrap().to_str().unwrap();
+          let newname = format!("{}/!{} {{{}}} {}.{}", rt, typ, e.Key, tit, path.extension().unwrap().to_str().unwrap().trim()).replace("\\", "/");
+          // let newpath = Path::new(&newname);
+          // println!("\nold: {:?}", path);
+          // println!("new: {:?}", newpath);
+          if path.to_str().unwrap() != newname {
+            match fs::rename(path, &newname){
+              Ok(_) => {
+                println!("\nold: {}", path.to_str().unwrap());
+                println!("new: {}", newname);
+                newnames.insert(newname);
+                oldnames.insert(path.to_str().unwrap().to_string());
+              }
+              Err(e) => println!("{}", e)
+            }
+          }
         }
+      }
+      for name in oldnames{
+        e.Files.remove(&name);
+      }
+      for name in newnames{
+        e.Files.insert(name);
+      }
+    }
+  }
+}
+
+fn relink_files_from_paths(entries: &mut Vec<Entry>, doc_paths: &Vec<PathBuf>){
+  for e in entries{
+    for p in doc_paths{
+      if p.to_str().unwrap().contains(&format!("{{{}}}", e.Key)){
+        let path = p.to_str().unwrap().to_owned().trim().to_string().replace("\\", "/");
+        println!("Relinked: {}", path);
+        e.Files.insert(path);
       }
     }
   }
@@ -1345,16 +1397,17 @@ fn main() -> Result<()> {
   }
 
 
-  // file paths
+  // file paths to relink files
   if args.value_of("files").is_some(){
     let files_root_path = PathBuf::from(args.value_of("files").unwrap().to_string());
     let exts = vec!["pdf".to_string(), "epub".to_string(), "djvu".to_string()];
     let filepaths = find_paths_to_files_with_ext(&files_root_path, &exts);
     if !filepaths.is_empty() {
-      get_files_from_paths(&mut main_entries, &filepaths);
+      relink_files_from_paths(&mut main_entries, &filepaths);
     }
   }
 
+  // crossref lookup
   if args.is_present("lookup"){
     lookup(&mut main_entries);
   }
@@ -1434,30 +1487,6 @@ fn get_files_from_entries(entries: &mut Vec<Entry>, other_entries: &Vec<Entry>){
           e0.Files.extend(e1.Files.clone());
           break;
         }  
-      }
-    }
-  }
-}
-
-fn get_files_from_paths(entries: &mut Vec<Entry>, doc_paths: &Vec<PathBuf>){
-  println!("Fetching files in disc:");
-  let mut filename_path: HashMap<String, PathBuf> = HashMap::new();
-  for p in doc_paths{
-    filename_path.insert(
-      p.file_name().unwrap().to_str().unwrap().to_string().replace(":", ""),
-      p.to_path_buf()
-    );
-  }
-
-  for e in entries{
-    if !e.BrokenFiles.is_empty() {
-      for p in &e.BrokenFiles{
-        let filename = p.split("/").last().unwrap();
-        if filename_path.contains_key(filename){
-          // println!("{}", filename);
-          // e.has_file = true;
-          e.Files.insert(filename_path[filename].as_path().to_str().unwrap().to_string());
-        }
       }
     }
   }
@@ -1685,8 +1714,16 @@ for n in vec{
 assert_eq!(output, result);
 }
 
+
+
+
+fn read_and_parse_json(path: &Path) -> Vec<Entry>{
+  let file = File::open(path).expect("File not found");
+  serde_json::from_reader(file).expect("Error while reading")
+}
 #[test]
 fn test_json(){
+
   let path = Path::new("tests/res.json");
   let entries = read_and_parse_json(path);
   let path2 = Path::new("tests/res2.json").to_owned();
@@ -1771,125 +1808,34 @@ fn remove_redundant(){
 
 
 
-// fn merge(entries: &mut Vec<Entry>, i: usize, j: usize) -> bool{
-//   if entries[i].Creators != entries[j].Creators {
-//     return false
-//   }
-//   let f1:HashSet<String> = entries[i].Fields_Values.iter().filter(|x| !x.1.trim().is_empty()).map(|x| x.0.to_owned()).collect();
-//   let f2:HashSet<String> = entries[j].Fields_Values.iter().filter(|x| !x.1.trim().is_empty()).map(|x| x.0.to_owned()).collect();
-//   let intersection = f1.intersection(&f2).to_owned();
-//   let common_fields:Vec<&String> = intersection.collect();
-//   let mut eq = true;
-//   for field in common_fields{
-//     if entries[i].Fields_Values[field].to_lowercase() != entries[j].Fields_Values[field].to_lowercase(){
-//       eq = false;
-//       break;
-//     }
+
+
+
+// fn get_files_from_paths(entries: &mut Vec<Entry>, doc_paths: &Vec<PathBuf>){
+//   println!("Fetching files in disc:");
+//   let mut filename_path: HashMap<String, PathBuf> = HashMap::new();
+//   for p in doc_paths{
+//     filename_path.insert(
+//       p.file_name().unwrap().to_str().unwrap().to_string().replace(":", ""),
+//       p.to_path_buf()
+//     );
 //   }
 
-//   if eq{
-//     if entries[j].Reviewed{
-//       entries[j].Reviewed = true;
-//     }
-//     entries[i].Files = entries[i].Files.union(&entries[j].Files).map(|x| x.to_owned()).collect();
-//     entries[i].Tags = entries[i].Tags.union(&entries[j].Tags).map(|x| x.to_owned()).collect();
-//     entries[i].Tags.insert(MERGED.to_string());
-
-//     for field in f2.difference(&f1){
-//       let value = entries[j].Fields_Values.get_mut(field).unwrap().to_string();
-//       if let Some(x) = entries[i].Fields_Values.get_mut(field) {
-//         *x = value;
-//       }
-//     }
-//   }
-//   eq
-// }
-
-
-// fn read_and_parse_csv(path:PathBuf) -> Vec<Entry>{
-//   let mut rdr = csv::ReaderBuilder::new().from_path(path).unwrap();
-
-//   let keys:Vec<String> = rdr.headers().unwrap().into_iter().map(|x| x.to_string()).collect();
-//   let n = keys.len();
-//   println!("{:?}", keys);
-//   let mut Entries : Vec<Entry> = vec![];
-
-//   while let Some(result) = rdr.records().next() {
-//     match result {
-//       Ok(_) => (),
-//       Err(e) =>{
-//         println!("{:?}\n", e);
-//         continue
-//       },
-//     }
-//     let v:Vec<String> = result.unwrap().into_iter().map(|x| x.to_string()).collect();
-//     let mut e = Entry{Type: v[1].to_owned(), Key: v[2].to_owned(),..Default::default()};
-//     if !v[3].trim().is_empty(){
-//       e.Creators.insert("author".to_string(), parse_creators_field(&v[3]));
-//     }
-//     if !v[4].trim().is_empty(){
-//       e.Creators.insert("editor".to_string(), parse_creators_field(&v[4]));
-//     }
-//     if !v[5].trim().is_empty(){
-//       e.Creators.insert("translator".to_string(), parse_creators_field(&v[5]));
-//     }
-
-//     if !v[0].trim().is_empty() || !v[n-2].is_empty(){
-//       parse_tags_field(&mut e,&v[n-2]);
-//       if !v[0].is_empty(){
-//         e.Reviewed=true;
-//       }
-//     }
-
-//     for j in 6..n-2{
-//       if !v[j].trim().is_empty(){
-//         e.Fields_Values.insert(keys[j].to_owned(), v[j].to_owned());
-//       }
-//     }
-
-//     if !v[n-1].trim().is_empty(){
-//       e.Files = parse_file_field(&mut e,&v[n-1]);
-//     }
-//     Entries.push(e);
-//   }
-//   Entries
-// }
-
-
-// fn parse_bib_nom_bibtex(lines:&Vec<String> ) -> Vec<Entry>{
-//   let bibtex = Bibtex::parse(&lines.join("\n\n")).unwrap();
-//   let mut Entries : Vec<Entry> = vec![];
-//   // let patterns : &[_] = &['{', '}','\t',','];
-
-//   for e in bibtex.bibliographies(){
-//     let mut entry = Entry{Type:e.entry_type().to_string(), Key:e.citation_key().to_string(),..Default::default()};
-//     for (field, mut value) in e.tags().to_owned(){
-//       match field.as_ref() {
-//         "file" => {parse_file_field(&mut entry, &value.to_string());},
-//         "author" | "editor" | "translator" => {
-//             entry.Creators.insert(field.to_string(), parse_creators_field(&value));
-//           },
-//         "mendeley-tags"|"groups"|"tags" => parse_tags_field( &mut entry,&value),
-//         _ => {
-//           match field.as_ref() {
-//             "isbn" => value = value.chars().filter(|x| x.is_numeric()).collect::<String>(),
-//             "arxivid" | "eprint" => value = value.split(":").map(|x| x.to_string()).collect::<Vec<String>>().last().unwrap().to_string(),
-//             "url" => value = parse_url_field(&value),
-//             _ => value = parse_generic_field(&value),
-//           }
-//           if entry.Fields_Values.contains_key(&field){
-//             println!("Repeated entry at {}\n", e.citation_key());
-//           }
-//           else{
-//             entry.Fields_Values.insert(field.to_string(), value.clone());
-//           }
+//   for e in entries{
+//     if !e.BrokenFiles.is_empty() {
+//       for p in &e.BrokenFiles{
+//         let filename = p.split("/").last().unwrap();
+//         if filename_path.contains_key(filename){
+//           // println!("{}", filename);
+//           // e.has_file = true;
+//           e.Files.insert(filename_path[filename].as_path().to_str().unwrap().to_string());
 //         }
 //       }
 //     }
-//     Entries.push(entry);
 //   }
-//   Entries
 // }
+
+
 
 
 // fn write_raw_bib(path: &str, bib_vec : &Vec<String>){

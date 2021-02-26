@@ -1,9 +1,9 @@
-Found a total of 3468 entries
-(125 reviewed, 3468 with author, 1601 with doi, 1558 with files, 1041 whith url):
+Found a total of 3465 entries
+(122 reviewed, 3465 with author, 1600 with doi, 1557 with files, 1041 whith url):
 article 1972
-book 903
+book 902
 inproceedings 224
-misc 142
+misc 140
 collection 46
 unpublished 40
 online 30
@@ -26,17 +26,17 @@ proceedings paper 1
 reference 1
 
 Fields:
-title 3468
+title 3465
 year 3122
-journal 2314
-pages 2287
+journal 2313
+pages 2286
 abstract 1986
 volume 1705
-doi 1601
+doi 1600
 number 1391
-issn 1369
-isbn 1256
-publisher 1134
+issn 1368
+isbn 1255
+publisher 1132
 url 1041
 keywords 933
 langid 603

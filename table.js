@@ -68,7 +68,7 @@ function customHeaderFilter(headerValue, rowValue, rowData, filterParams) {
   }
 }
 ww = 200;
-var types = { values: ["article", "inproceedings", "unpublished", "incollection", "book", "report", "proceedings", "collection", "misc", "online", "thesis"] };
+var types = { values: ["article", "preprint", "inproceedings", "incollection", "inbook", "unpublished", "report", "proceedings", "collection", "book", "online", "thesis", "misc"] };
 
 var coldef = [                 //define the table columns
   {
