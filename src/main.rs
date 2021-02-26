@@ -732,8 +732,8 @@ fn parse_cl_args() -> ArgMatches<'static> {
       .short("l")
       .long("lookup")
       .value_name("lookup entries?")
-      .help("if set, searches for data from crossref for entries with doi and prompts the user to accept changes")
-      .takes_value(false)
+      .help("if set, searches for data from crossref for entries with doi and prompts the user to accept changes. An e-mail is needed as argument")
+      .takes_value(true)
       .required(false)
   )
     .arg(Arg::with_name("merge")
@@ -1279,12 +1279,12 @@ fn parse_crossref(w:Work, e: &mut Entry) -> bool{
  res
 }
 
-fn lookup(Entries:&mut Vec<Entry>) {
+fn lookup(Entries:&mut Vec<Entry>, email: &String) {
   let client = Crossref::builder()
-    .polite("tesserato@hotmail.com")
+    .polite(email)
     .build().expect("Couldn't build client");
 
-  println!("\nPress 'enter' to accept, enter any other input to skip current entry and 'e' to abort:\n");
+  println!("\nPress 'enter' to accept, enter any other input to skip current entry and 'e' to abort. using {}\n", email);
   'outer:for e in Entries{
     if e.Fields_Values.contains_key("doi") && !e.Tags.contains(RETRIEVED) && !e.Reviewed{
       let res = match client.work(&e.Fields_Values["doi"]){
@@ -1416,8 +1416,9 @@ fn main() -> Result<()> {
   }
 
   // crossref lookup
-  if args.is_present("lookup"){
-    lookup(&mut main_entries);
+  if args.value_of("lookup").is_some(){
+    let email = args.value_of("lookup").unwrap().to_string();
+    lookup(&mut main_entries, &email);
   }
 
   // merge
