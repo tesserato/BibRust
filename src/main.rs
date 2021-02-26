@@ -1121,7 +1121,11 @@ fn parse_crossref(w:Work, e: &mut Entry) -> bool{
   }
   match w.container_title{/////////////////////////////////////////////////////
     Some(journal) => {
-      new_entry.Fields_Values.insert("journal".to_string(), journal[0].clone());
+      let jn = match journal.get(0) {
+        Some(j) => j,
+        None => "",
+      };
+      new_entry.Fields_Values.insert("journal".to_string(), jn.to_string());
       let val = match e.Fields_Values.get("journal"){
         Some(v) => v,
         None => "",
@@ -1132,7 +1136,11 @@ fn parse_crossref(w:Work, e: &mut Entry) -> bool{
   }
   match w.link{/////////////////////////////////////////////////////
     Some(link) => {
-      new_entry.Fields_Values.insert("url".to_string(), link[0].url.clone());
+      let lk = match link.get(0) {
+        Some(l) => l.url.clone(),
+        None => "".to_string(),
+      };
+      new_entry.Fields_Values.insert("url".to_string(), lk);
       let val = match e.Fields_Values.get("url"){
         Some(v) => v,
         None => "",
@@ -1351,8 +1359,8 @@ fn rename_files(Entries:&mut Vec<Entry>){
 fn relink_files_from_paths(entries: &mut Vec<Entry>, doc_paths: &Vec<PathBuf>){
   for e in entries{
     for p in doc_paths{
-      if p.to_str().unwrap().contains(&format!("{{{}}}", e.Key)){
-        let path = p.to_str().unwrap().to_owned().trim().to_string().replace("\\", "/");
+      let path = p.to_str().unwrap().to_owned().trim().to_string().replace("\\", "/");
+      if path.contains(&format!("{{{}}}", e.Key)) && !e.Files.contains(&path){
         println!("Relinked: {}", path);
         e.Files.insert(path);
       }
