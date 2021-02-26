@@ -1,8 +1,8 @@
-Found a total of 3428 entries
-(171 reviewed, 3428 with author, 1580 with doi, 1557 with files, 1065 whith url):
-article 1944
-book 890
-inproceedings 227
+Found a total of 3419 entries
+(172 reviewed, 3419 with author, 1571 with doi, 1557 with files, 1066 whith url):
+article 1936
+book 887
+inproceedings 228
 misc 140
 collection 44
 unpublished 40
@@ -15,8 +15,8 @@ inreference 6
 resreport 6
 editorial material 5
 manual 5
+inbook 4
 techreport 4
-inbook 3
 software 3
 candthesis 2
 report 2
@@ -26,40 +26,40 @@ proceedings paper 1
 reference 1
 
 Fields:
-title 3428
-year 3089
-journal 2284
-pages 2254
-abstract 1937
-volume 1672
-doi 1580
-number 1377
-issn 1348
-isbn 1238
-publisher 1142
-url 1065
-keywords 913
-langid 615
-shorttitle 387
-urldate 369
-eprint 363
-arxivid 297
-archiveprefix 262
-edition 258
-location 255
-pmid 223
+title 3419
+year 3080
+journal 2275
+pages 2240
+abstract 1916
+volume 1663
+doi 1571
+number 1371
+issn 1340
+isbn 1234
+publisher 1147
+url 1066
+keywords 907
+langid 618
+shorttitle 383
+urldate 362
+eprint 355
+arxivid 290
+edition 256
+archiveprefix 255
+location 253
+pmid 217
 pagetotal 180
 address 147
-month 143
+month 142
 annote 133
-series 127
+series 126
 note 119
-eprinttype 98
+eprinttype 97
 institution 51
-__markedentry 45
+__markedentry 44
 howpublished 41
 organization 37
-eventtitle 26
+eventtitle 25
 booktitle 24
 ean 16
 biburl 15
