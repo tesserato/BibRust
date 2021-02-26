@@ -1,7 +1,7 @@
-Found a total of 3435 entries
-(138 reviewed, 3435 with author, 1583 with doi, 1549 with files, 1067 whith url):
-article 1949
-book 891
+Found a total of 3428 entries
+(171 reviewed, 3428 with author, 1580 with doi, 1557 with files, 1065 whith url):
+article 1944
+book 890
 inproceedings 227
 misc 140
 collection 44
@@ -18,31 +18,31 @@ manual 5
 techreport 4
 inbook 3
 software 3
-thesis 3
 candthesis 2
 report 2
+thesis 2
 mastersthesis 1
 proceedings paper 1
 reference 1
 
 Fields:
-title 3435
-year 3096
-journal 2291
-pages 2257
-abstract 1942
-volume 1675
-doi 1583
-number 1379
-issn 1352
-isbn 1240
-publisher 1145
-url 1067
-keywords 914
-langid 616
+title 3428
+year 3089
+journal 2284
+pages 2254
+abstract 1937
+volume 1672
+doi 1580
+number 1377
+issn 1348
+isbn 1238
+publisher 1142
+url 1065
+keywords 913
+langid 615
 shorttitle 387
-urldate 370
-eprint 364
+urldate 369
+eprint 363
 arxivid 297
 archiveprefix 262
 edition 258
@@ -50,13 +50,13 @@ location 255
 pmid 223
 pagetotal 180
 address 147
-month 144
+month 143
 annote 133
-series 129
+series 127
 note 119
-eprinttype 99
+eprinttype 98
 institution 51
-__markedentry 46
+__markedentry 45
 howpublished 41
 organization 37
 eventtitle 26
@@ -69,8 +69,8 @@ bibsource 14
 journaltitle 11
 rights 6
 school 6
-day 5
 eprintclass 5
+day 4
 editorb 4
 editorbtype 4
 date 3
