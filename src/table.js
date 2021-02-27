@@ -68,7 +68,7 @@ function customHeaderFilter(headerValue, rowValue, rowData, filterParams) {
   }
 }
 ww = 200;
-var types = { values: ["article", "preprint", "inproceedings", "incollection", "inbook", "unpublished", "report", "proceedings", "collection", "book", "online", "thesis", "misc"] };
+const entrytypes = { values: ["article", "preprint", "inproceedings", "incollection", "inbook", "unpublished", "report", "proceedings", "collection", "book", "online", "thesis", "misc"] };
 
 var coldef = [                 //define the table columns
   {
@@ -90,7 +90,7 @@ var coldef = [                 //define the table columns
     },
     headerFilterFunc: customHeaderFilter,
   },
-  { title: "Type", field: "type", titleDownload: "type", editor: "select", editorParams: types, headerFilter: "input", headerContextMenu: hcm, validator: "required" },
+  { title: "Type", field: "type", titleDownload: "type", editor:"select", editorParams: entrytypes, headerFilter: "input", headerContextMenu: hcm, validator: "required" },
   { title: "Key", field: "key", titleDownload: "key", editor: "input", headerFilter: "input", headerContextMenu: hcm, validator: "required", validator: "unique" },
   { title: "Author", field: "author", titleDownload: "author", width: ww, editor: "input", headerFilter: "input", headerContextMenu: hcm },
   { title: "Editor", field: "editor", titleDownload: "editor", width: ww, editor: "input", headerFilter: "input", headerContextMenu: hcm },
@@ -228,7 +228,9 @@ function updatealltags() {
   btn.innerHTML = "Download as .csv";                   // Insert text
   btn.classList.add("btn");
   btn.onclick = function (event) {
-    // var elem = document.documentElement;
+    for (col of table.getColumns()) {
+      col.show();
+    }
     table.download("csv", "bibliography.csv", { bom: true });
   }
   parentdiv.appendChild(btn);
@@ -294,6 +296,9 @@ var table = new Tabulator("#table", {
     {
       label: "Download data as .csv",
       action: function (e, row) {
+        for (col of table.getColumns()) {
+          col.show();
+        }
         table.download("csv", "bibliography.csv", { bom: true });
       }
     },
@@ -404,6 +409,9 @@ function hadleKey(e) {
       case "s":
         // console.log("redo");
         e.preventDefault();
+        for (col of table.getColumns()) {
+          col.show();
+        }
         table.download("csv", "bibliography.csv", { bom: true });
         break;
       default:
