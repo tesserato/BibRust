@@ -338,7 +338,7 @@ fn parse_field_value(field: &str, value: &mut String, last_entry: &mut Entry){
     "file" => last_entry.Files = parse_file_field(last_entry, &value.to_string()),
     "author" | "editor" | "translator" => {
       let creators =parse_creators_field(&value);
-      if creators.len() > 0{
+      if !creators.is_empty(){
       let _ = last_entry.Creators.insert(field.to_string(), creators);
       }
     },
