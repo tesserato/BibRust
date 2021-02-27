@@ -1,8 +1,8 @@
-Found a total of 3322 entries
-(263 reviewed, 3322 with author, 1513 with doi, 1544 with files, 1078 whith url):
+Found a total of 3320 entries
+(263 reviewed, 3320 with author, 1513 with doi, 1544 with files, 1078 whith url):
 article 1871
 book 860
-inproceedings 227
+inproceedings 225
 misc 132
 collection 41
 unpublished 38
@@ -26,27 +26,27 @@ proceedings paper 1
 reference 1
 
 Fields:
-title 3322
-year 2996
-journal 2191
-pages 2153
-abstract 1810
+title 3320
+year 2994
+journal 2189
+pages 2151
+abstract 1808
 volume 1598
 doi 1513
 number 1342
-issn 1306
+issn 1305
 isbn 1201
 publisher 1166
 url 1078
 keywords 869
-langid 612
+langid 611
 shorttitle 368
 urldate 335
-eprint 318
-arxivid 259
+eprint 317
+arxivid 258
 edition 247
 location 242
-archiveprefix 227
+archiveprefix 226
 pmid 204
 pagetotal 177
 address 146
