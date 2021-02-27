@@ -1086,36 +1086,40 @@ fn parse_crossref(w:Work, e: &mut Entry) -> bool{
     None => (),
   }
   match w.editor{/////////////////////////////////////////////////////
-    Some(editor) => {
-      let mut feditors:Vec<Name> = vec![];
-      print!("editor(s) = ");
-      for a in editor{
+    Some(author) => {
+      let mut fauthors:Vec<Name> = vec![];
+      for a in author{
         let first = match a.given {
           Some(n) => n,
           None => "".to_string(),
         };
-        print!(" {} {} |", first, a.family);
-        feditors.push(Name{first_name:first, last_name:a.family});
+        fauthors.push(Name{first_name:first, last_name:a.family});
       }
-      e.Creators.insert("editor".to_string(), feditors);
-      println!("");
+      new_entry.Creators.insert("editor".to_string(), fauthors);
+      let val = match e.Creators.get("editor"){
+        Some(v) => names_to_string(v),
+        None => "".to_string(),
+      };
+      println!("editor: {} → {}", val, names_to_string(new_entry.Creators.get("editor").unwrap()));
     }
     None => (),
   }
   match w.translator{/////////////////////////////////////////////////////
-    Some(translator) => {
-      let mut ftranslators:Vec<Name> = vec![];
-      print!("translator(s) = ");
-      for a in translator{
+    Some(author) => {
+      let mut fauthors:Vec<Name> = vec![];
+      for a in author{
         let first = match a.given {
           Some(n) => n,
           None => "".to_string(),
         };
-        print!(" {} {} |", first, a.family);
-        ftranslators.push(Name{first_name:first, last_name:a.family});
+        fauthors.push(Name{first_name:first, last_name:a.family});
       }
-      e.Creators.insert("translator".to_string(), ftranslators);
-      println!("");
+      new_entry.Creators.insert("translator".to_string(), fauthors);
+      let val = match e.Creators.get("translator"){
+        Some(v) => names_to_string(v),
+        None => "".to_string(),
+      };
+      println!("translator: {} → {}", val, names_to_string(new_entry.Creators.get("translator").unwrap()));
     }
     None => (),
   }
