@@ -829,7 +829,7 @@ fn generate_key(entry: &Entry) -> String{
   'outer:for role in roles{
     for name in &entry.Creators[&role]{
       if !name.last_name.trim().is_empty(){
-        creator = unidecode(&name.last_name);
+        creator = unidecode(&name.last_name).chars().filter(|x| x.is_alphabetic()).collect::<String>().to_lowercase();
         if entry.Creators[&role].len() > 1 {
           etal = "_etal";
         }
@@ -838,7 +838,18 @@ fn generate_key(entry: &Entry) -> String{
     }
   }
 
-  format!("{}_{}{}", year, creator.chars().filter(|x| x.is_alphabetic()).collect::<String>().to_lowercase(), etal)
+  let exclude: Vec<_> = ["o", "os", "a", "as", "an", "the", "on"].iter().map(|s| s.to_string()).collect();
+
+  let mut title = "title".to_string();
+  for t in entry.Fields_Values["title"].split(" "){
+    if !exclude.contains(&t.to_lowercase()){
+      title = unidecode(t).chars().filter(|x| x.is_alphabetic()).collect::<String>().to_lowercase();
+      break
+    }
+  }
+
+
+  format!("{}_{}{}_{}", year, creator, etal, title)
 }
 
 fn get_statistics_and_clean(Entries:&mut Vec<Entry>, clean:bool) -> Statistics{
