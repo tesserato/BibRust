@@ -1,6 +1,6 @@
-Found a total of 2984 entries
-(456 reviewed, 2984 with author, 1257 with doi, 1362 with files, 1091 whith url):
-article 1626
+Found a total of 2981 entries
+(456 reviewed, 2981 with author, 1256 with doi, 1361 with files, 1091 whith url):
+article 1624
 book 779
 inproceedings 214
 misc 127
@@ -11,7 +11,7 @@ inbook 27
 electronic 22
 thesis 15
 phdthesis 14
-incollection 12
+incollection 11
 inreference 6
 resreport 6
 editorial material 5
@@ -26,26 +26,26 @@ proceedings paper 1
 reference 1
 
 Fields:
-title 2984
-year 2659
-journal 1902
-pages 1814
-abstract 1367
-volume 1357
-doi 1257
-publisher 1205
-number 1180
+title 2981
+year 2656
+journal 1899
+pages 1811
+abstract 1366
+volume 1355
+doi 1256
+publisher 1203
+number 1178
 issn 1144
 url 1091
-isbn 1036
+isbn 1035
 keywords 669
-langid 608
-shorttitle 261
+langid 606
+shorttitle 260
 eprint 235
-urldate 205
+urldate 204
 edition 197
 arxivid 189
-location 186
+location 185
 pagetotal 164
 archiveprefix 162
 pmid 144
@@ -71,9 +71,9 @@ school 6
 eprintclass 5
 rights 5
 day 4
-editorb 4
-editorbtype 4
 date 3
+editorb 3
+editorbtype 3
 shortjournal 3
 editora 2
 editoratype 2
