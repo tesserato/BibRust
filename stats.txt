@@ -1,13 +1,13 @@
-Found a total of 2829 entries
-(486 reviewed, 2829 with author, 1193 with doi, 1356 with files, 1040 whith url):
-article 1540
-book 743
-inproceedings 204
+Found a total of 2848 entries
+(507 reviewed, 2848 with author, 1193 with doi, 1347 with files, 1030 whith url):
+article 1550
+book 747
+inproceedings 208
 misc 123
 unpublished 38
 collection 35
 online 30
-inbook 26
+inbook 27
 electronic 18
 thesis 14
 incollection 11
@@ -25,29 +25,29 @@ proceedings paper 1
 reference 1
 
 Fields:
-title 2829
-year 2519
-journal 1802
-pages 1717
-volume 1283
-abstract 1281
+title 2815
+year 2538
+journal 1817
+pages 1725
+abstract 1298
+volume 1291
 doi 1193
-publisher 1139
-number 1121
-issn 1095
-url 1040
-isbn 992
+publisher 1136
+number 1126
+issn 1099
+url 1030
+isbn 1000
 keywords 630
-langid 544
-shorttitle 241
-eprint 212
-arxivid 175
-edition 175
-urldate 165
-location 162
-archiveprefix 157
+langid 543
+shorttitle 242
+eprint 214
+arxivid 176
+edition 176
+location 172
+urldate 166
+archiveprefix 158
+pmid 157
 pagetotal 147
-pmid 134
 address 131
 month 107
 annote 99
@@ -59,12 +59,12 @@ howpublished 33
 institution 24
 organization 21
 titleaddon 15
+booktitle 14
 ean 13
+journaltitle 11
 bibsource 10
 biburl 10
-booktitle 10
 timestamp 10
-journaltitle 9
 eventtitle 5
 rights 5
 school 5
